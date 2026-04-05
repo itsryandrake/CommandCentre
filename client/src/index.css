@@ -1,0 +1,303 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Nunito", sans-serif;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+
+  --color-sage: #0E8A6E;
+  --color-terracotta: #E85D3A;
+  --color-amber-warm: #F2A93B;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --primary: #F2A93B;
+  --primary-foreground: #1C1C1C;
+
+  --background: #F5F3F0;
+  --foreground: #1C1C1C;
+
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1C;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1C;
+
+  --secondary: #EBF5F2;
+  --secondary-foreground: #1C1C1C;
+
+  --muted: #EDEAE6;
+  --muted-foreground: #6B6560;
+
+  --accent: #FFF4E0;
+  --accent-foreground: #1C1C1C;
+
+  --destructive: #E85D3A;
+  --destructive-foreground: #ffffff;
+
+  --border: #DDD9D4;
+  --input: #DDD9D4;
+  --ring: #F2A93B;
+
+  --chart-1: #F2A93B;
+  --chart-2: #0E8A6E;
+  --chart-3: #4A9FD9;
+  --chart-4: #E85D3A;
+  --chart-5: #F5C842;
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1C1C1C;
+  --sidebar-primary: #F2A93B;
+  --sidebar-primary-foreground: #1C1C1C;
+  --sidebar-accent: #FFF4E0;
+  --sidebar-accent-foreground: #1C1C1C;
+  --sidebar-border: #DDD9D4;
+  --sidebar-ring: #F2A93B;
+}
+
+.dark {
+  --primary: #F5B84D;
+  --primary-foreground: #1C1C1C;
+
+  --background: #1A1916;
+  --foreground: #E8E4DF;
+
+  --card: #262420;
+  --card-foreground: #E8E4DF;
+
+  --popover: #262420;
+  --popover-foreground: #E8E4DF;
+
+  --secondary: #2E3230;
+  --secondary-foreground: #E8E4DF;
+
+  --muted: #2E2C28;
+  --muted-foreground: #9B9590;
+
+  --accent: #3A3328;
+  --accent-foreground: #E8E4DF;
+
+  --destructive: #F07856;
+  --destructive-foreground: #ffffff;
+
+  --border: #3A3835;
+  --input: #3A3835;
+  --ring: #F5B84D;
+
+  --chart-1: #F5B84D;
+  --chart-2: #3BB894;
+  --chart-3: #6BB5E6;
+  --chart-4: #F07856;
+  --chart-5: #F7D45E;
+
+  --sidebar: #1A1916;
+  --sidebar-foreground: #E8E4DF;
+  --sidebar-primary: #F5B84D;
+  --sidebar-primary-foreground: #1C1C1C;
+  --sidebar-accent: #262420;
+  --sidebar-accent-foreground: #E8E4DF;
+  --sidebar-border: #3A3835;
+  --sidebar-ring: #F5B84D;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+      max-width: 1400px;
+    }
+  }
+
+  /* Whimsy card — flat offset shadow, illustration style */
+  .whimsy-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 1.25rem;
+    box-shadow: 3px 3px 0px var(--border);
+  }
+
+  .whimsy-card-elevated {
+    background: var(--card);
+    border: 2px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+    border-radius: 1.25rem;
+    box-shadow: 5px 5px 0px color-mix(in srgb, var(--foreground) 15%, transparent);
+  }
+
+
+  /* Stat number — bold whimsical style */
+  .stat-number {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* Small uppercase label */
+  .label-caps {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+}
+
+/* Whimsy animations */
+@keyframes card-pop {
+  0% { transform: scale(0.97); opacity: 0; }
+  60% { transform: scale(1.01); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes plane-fly-ltr {
+  0% {
+    transform: translateX(-60px) translateY(0px) rotate(-5deg);
+  }
+  25% {
+    transform: translateX(25vw) translateY(-12px) rotate(-3deg);
+  }
+  50% {
+    transform: translateX(50vw) translateY(6px) rotate(-7deg);
+  }
+  75% {
+    transform: translateX(75vw) translateY(-8px) rotate(-4deg);
+  }
+  100% {
+    transform: translateX(calc(100vw + 60px)) translateY(0px) rotate(-5deg);
+  }
+}
+
+.plane-fly {
+  animation: plane-fly-ltr 8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Weather icon animations */
+@keyframes cloudFloat {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(2px); }
+}
+
+@keyframes rainDrop {
+  0% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 0.3;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes snowFall {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(4px) translateX(2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px) translateX(-1px);
+  }
+}
+
+@keyframes lightningFlash {
+  0%, 88%, 92%, 100% { opacity: 0.1; }
+  90% { opacity: 1; }
+  91% { opacity: 0.3; }
+}
+
+@keyframes fogDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .plane-fly {
+    animation: none !important;
+  }
+}

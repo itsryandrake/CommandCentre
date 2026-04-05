@@ -1,0 +1,250 @@
+// Date Night Generator - Plans, conversations, and firestarters
+
+export type IntensityLevel = 'romantic' | 'playful' | 'passionate' | 'adventurous';
+export type LocationType = 'home' | 'out' | 'away';
+
+export interface DatePlan {
+  readonly title: string;
+  readonly desc: string;
+}
+
+export interface Firestarter {
+  readonly emoji: string;
+  readonly text: string;
+}
+
+export interface DateNightContent {
+  readonly plans: Record<LocationType, Record<IntensityLevel, readonly DatePlan[]>>;
+  readonly conversations: Record<IntensityLevel, readonly string[]>;
+  readonly firestarters: Record<IntensityLevel, readonly Firestarter[]>;
+}
+
+export const dateNightContent: DateNightContent = {
+  plans: {
+    home: {
+      romantic: [
+        { title: "Candlelit Dinner for Two", desc: "Cook a special meal together, set the table beautifully, and enjoy without phones or distractions." },
+        { title: "Spa Night at Home", desc: "Draw a bath, light candles, give each other massages. Create a relaxing sanctuary." },
+        { title: "Movie & Wine Night", desc: "Pick a romantic film neither of you have seen, prepare snacks, and cuddle up together." },
+        { title: "Love Letter Exchange", desc: "Each write a heartfelt letter to the other, then read them aloud by candlelight." },
+        { title: "Turn Your Bedroom Into a Fancy Hotel", desc: "Champagne on ice, flower petals, candles, room service breakfast. The full luxury experience at home." },
+        { title: "Slow Dance to Your Song", desc: "Create a playlist of your favorite slow-dance love songs and dance in the living room." },
+        { title: "Bubble Bath for Two", desc: "Light candles, drop in a bath bomb, get the robes ready. Total relaxation, couples style." },
+        { title: "Indoor Picnic", desc: "Spread a blanket on the living room floor, pack a basket with wine and finger foods." },
+        { title: "S'mores by the Fire", desc: "Snuggle up with a blanket and everything you need to make s'mores. Use the fireplace or stovetop." },
+        { title: "Read to Each Other", desc: "Read poetry, a novel, or song lyrics aloud. Escape together into words." },
+        { title: "Dream Together", desc: "Make a bucket list, write out dream travel plans, or list movies and books you want to experience together." },
+        { title: "Extended Intentional Touch", desc: "Hold each other for a full 60 seconds, trade 5-minute massages, or practice extended hugging and caressing." },
+      ],
+      playful: [
+        { title: "Game Night with Stakes", desc: "Play board games or cards where the loser has to do something for the winner..." },
+        { title: "Build a Blanket Fort", desc: "Create a cozy nest with fairy lights, pillows, and your favorite treats inside." },
+        { title: "Dance Party at Home", desc: "Create a playlist together, pour drinks, and dance like nobody's watching." },
+        { title: "Cook-off Challenge", desc: "Each make a dish with the same ingredients. Judge each other's creations." },
+        { title: "Karaoke Night at Home", desc: "Look up karaoke versions on YouTube and sing your hearts out. Winner picks the next activity." },
+        { title: "Tasting Party", desc: "Pick a theme: whiskey, chocolate, ice cream, cheese. Create tasting stations with notes." },
+        { title: "Travel-Themed Dinner", desc: "Pick a country and cook dinner inspired by it. Italy, Japan, Mexico, Greece..." },
+        { title: "DIY Wine and Paint Night", desc: "Buy cheap canvases and paints, follow a YouTube tutorial, and create art together." },
+        { title: "Play Interior Designer", desc: "Pick a room and redesign it together using only items you already have." },
+        { title: "Video Game Marathon", desc: "Challenge each other to video games. The expert can teach the other person new skills." },
+        { title: "Fight It Out", desc: "Pillow fight, water gun battle, or whipped cream war. Get silly and boost those endorphins!" },
+        { title: "DIY Chopped Competition", desc: "Each person gets mystery ingredients and 30 minutes to create something amazing." },
+        { title: "Virtual Museum Tour", desc: "Visit The Louvre, British Museum, or Vatican online. Play games like picking art for your dream house." },
+        { title: "Pretend the Electricity is Out", desc: "No devices! Light candles, tell stories, play guessing games, build a fort." },
+        { title: "Make a TikTok Together", desc: "Get creative making a video. Learn a trend, do a challenge, maybe go viral." },
+      ],
+      passionate: [
+        { title: "Sensory Exploration Night", desc: "Blindfolds, different textures, temperatures. Explore each other's senses slowly." },
+        { title: "Role Play Evening", desc: "Pick characters or a scenario you've both been curious about. Commit fully." },
+        { title: "Photography Session", desc: "Take turns being photographer and model. For your eyes only." },
+        { title: "Tantric Connection", desc: "Practice eye gazing, synchronized breathing, and slow intentional touch." },
+        { title: "Steamy Truth or Dare", desc: "Take turns with intimate truths and daring challenges. Build trust and communication." },
+        { title: "Mutual Exploration", desc: "Take turns guiding each other in giving exactly what you want. Full attention and presence." },
+        { title: "Blindfolded Feeding", desc: "One person blindfolded while the other feeds them different flavors. Sensual and playful." },
+        { title: "Ice and Fire", desc: "Use ice cubes and warm touches to trace each other's bodies. Add a blindfold for intensity." },
+        { title: "Change of Scenery", desc: "Once kids are asleep, throw blankets on the living room floor or clear off the kitchen counter..." },
+        { title: "Couples Massage Night", desc: "Take turns giving full body massages with warm oil. No rushing." },
+        { title: "Shower Together with Intention", desc: "Slow down, be present, explore. Make it about connection, not just getting clean." },
+        { title: "Dirty Text Night... While Sitting Together", desc: "Send each other increasingly bold messages while sitting right next to each other." },
+      ],
+      adventurous: [
+        { title: "New Toy Night", desc: "Try something from your collection you haven't used yet. Explore together." },
+        { title: "Fantasy Fulfillment", desc: "Each share one fantasy, then make one happen tonight." },
+        { title: "Sensation Play Experiment", desc: "Ice, wax, feathers, restraints. Push boundaries together safely." },
+        { title: "Power Exchange Evening", desc: "One person takes full control. Clear communication, then surrender." },
+        { title: "Spicy Would You Rather", desc: "Take turns asking increasingly bold 'would you rather' questions. Learn something new." },
+        { title: "Foreplay Without Kissing", desc: "Challenge yourselves to build anticipation without any kissing. See how long you can last." },
+        { title: "Strip Game Night", desc: "Turn any board game or card game into a strip version. Loser removes an item." },
+        { title: "Stay in Character", desc: "Pick personas and don't break character for the entire evening. Commit fully to the role." },
+        { title: "Naked Relaxation", desc: "Cuddle, nap, or watch TV completely naked with intention. Feel each other's skin." },
+        { title: "Request Something New", desc: "Each person asks for one thing they've never requested before. No judgment, just exploration." },
+        { title: "Edible Adventure", desc: "Body paint, chocolate sauce, whipped cream. Get messy together." },
+        { title: "Write on Each Other", desc: "Use your finger or a soft brush to write words, desires, or instructions on each other's skin." },
+      ],
+    },
+    out: {
+      romantic: [
+        { title: "Fancy Restaurant Date", desc: "Dress up, book somewhere special, and give each other your full attention." },
+        { title: "Sunset Picnic", desc: "Find a beautiful spot, pack champagne and finger foods, watch the colors change." },
+        { title: "Live Music Night", desc: "Find a jazz bar or live performance. Hold hands and let the music move you." },
+        { title: "Art Gallery Stroll", desc: "Wander through galleries together, discussing what moves you." },
+        { title: "Botanical Gardens Walk", desc: "Stroll through beautiful flowers, soak in fresh air, and chat while enjoying the scenery." },
+        { title: "Relive Your First Date", desc: "Go back to where you had your first date. Recreate the magic, including the first kiss." },
+        { title: "Stargazing Escape", desc: "Drive somewhere dark, lay out a blanket, and find constellations together." },
+        { title: "Couples Pottery Class", desc: "Get your hands dirty together. Ghost scene optional but encouraged." },
+        { title: "Wine Tasting Tour", desc: "Visit wineries or local wine bars. Learn about wine together." },
+        { title: "Horseback Riding at Sunset", desc: "Ride off into the sunset together. Ultimate romantic adventure." },
+      ],
+      playful: [
+        { title: "Mini Golf & Drinks", desc: "Some friendly competition followed by celebrating (or consoling) at a bar." },
+        { title: "Arcade Date", desc: "Hit up an arcade bar. Win each other prizes. Feel like teenagers again." },
+        { title: "Food Tour Adventure", desc: "Pick a neighborhood and hop between spots for drinks, apps, dessert." },
+        { title: "Karaoke Night Out", desc: "Find a private karaoke room. Sing terribly and wonderfully together." },
+        { title: "Go-Kart Racing", desc: "Test your driving skills with friendly competition on the track." },
+        { title: "Axe Throwing Date", desc: "Release some energy and discover hidden skills. Very satisfying." },
+        { title: "Escape Room Challenge", desc: "Work together to solve puzzles and break out. Great for teamwork." },
+        { title: "Indoor Rock Climbing", desc: "Get sweaty and challenge yourselves. Perfect trust exercise." },
+        { title: "Trivia Night at a Pub", desc: "Team up against other couples. Celebrate your combined knowledge." },
+        { title: "Vintage Shopping Spree", desc: "Browse thrift stores and antique shops. Find something weird together." },
+      ],
+      passionate: [
+        { title: "Hotel Staycation", desc: "Book a nice room. Pretend you're tourists. Order room service." },
+        { title: "Rooftop Bar & Views", desc: "Find the best view in the city. Dress up. Make others jealous." },
+        { title: "Dance the Night Away", desc: "Go somewhere you can move together. Salsa, swing, or just a club." },
+        { title: "Secret Rendezvous", desc: "Meet at a bar like strangers. Flirt like you just met. See what happens." },
+        { title: "Rent a Convertible", desc: "Cruise scenic roads with the top down. Wind in your hair, hand on their thigh." },
+        { title: "Couples Spa Day", desc: "Professional massages, treatments, complete relaxation together." },
+        { title: "Take a Dance Class", desc: "Salsa, tango, swing. Learning to move together is inherently sensual." },
+        { title: "Helicopter or Scenic Flight", desc: "For special occasions. Views from above, hearts racing." },
+      ],
+      adventurous: [
+        { title: "Mystery Bar Crawl", desc: "One person plans each stop secretly. The other just follows." },
+        { title: "Truth or Dare Date", desc: "Public-appropriate dares as you explore the city together." },
+        { title: "Late Night Skinny Dip", desc: "Find a secluded spot. Be brave together. Check legality first!" },
+        { title: "Drive-In Movie", desc: "Perfect for not actually watching the movie. Back seat adventures." },
+        { title: "Scavenger Hunt Date", desc: "Create a list of things to find around town. Or use an app like Let's Roam." },
+        { title: "Skydiving Together", desc: "The ultimate adrenaline rush. Or try indoor skydiving to start." },
+        { title: "Get Matching Tattoos", desc: "Permanent commitment to your love. Can be subtle or bold." },
+        { title: "Comedy Show Date", desc: "Laughter is bonding. Find an improv or stand-up show." },
+      ],
+    },
+    away: {
+      romantic: [
+        { title: "B&B Weekend", desc: "Find a charming bed & breakfast. Unplug completely for 24+ hours." },
+        { title: "Beach Getaway", desc: "Sunrise walks, seafood dinners, falling asleep to waves." },
+        { title: "Wine Country Escape", desc: "Tastings, beautiful scenery, long leisurely meals together." },
+        { title: "Mountain Cabin Retreat", desc: "Fire, hot tub, stars. Nothing else needed." },
+        { title: "Glamping Trip", desc: "Elegant camping with creature comforts. Nature without roughing it too much." },
+        { title: "City Couple's Weekend", desc: "Book a boutique hotel, explore neighborhoods, eat at places you've saved." },
+      ],
+      playful: [
+        { title: "Theme Park Adventure", desc: "Be kids again. Ride everything. Eat junk food. Laugh all day." },
+        { title: "Road Trip with No Plan", desc: "Pick a direction and drive. Stop whenever something looks interesting." },
+        { title: "City Exploration", desc: "Visit somewhere neither of you has been. Get lost together." },
+        { title: "Camping Under Stars", desc: "Just you two, nature, and a tent. Simple and connected." },
+        { title: "Food Destination Trip", desc: "Plan a trip around a cuisine. BBQ trail, pizza tour, seafood coast." },
+      ],
+      passionate: [
+        { title: "Boutique Hotel Night", desc: "Splurge on somewhere gorgeous. Don't leave the room much." },
+        { title: "Couples Spa Retreat", desc: "Professional massages, hot springs, complete relaxation." },
+        { title: "Private Villa Rental", desc: "Your own pool, your own rules, complete privacy." },
+        { title: "Surprise Destination", desc: "One partner plans everything. The other just packs and follows." },
+        { title: "Room Service Weekend", desc: "Book a nice hotel and barely leave the bed. Order everything in." },
+      ],
+      adventurous: [
+        { title: "Adult Resort Experience", desc: "Clothing-optional, couples-focused environment to explore." },
+        { title: "Adventure Sports Trip", desc: "Skydiving, bungee, something that gets adrenaline pumping together." },
+        { title: "Festival Weekend", desc: "Music, dancing, being part of something bigger together." },
+        { title: "Wilderness Isolation", desc: "Somewhere truly remote. Just the two of you for days." },
+      ],
+    },
+  },
+  conversations: {
+    romantic: [
+      "What's a moment from our relationship that still makes you feel turned on when you think about it?",
+      "What's something I do that makes you feel most desired and wanted?",
+      "If we could relive any intimate moment together, which would you choose and why?",
+      "What are you most excited to explore with me in our future?",
+      "When did you first feel that spark of desire for me?",
+      "What's your favorite memory of us being intimate?",
+      "What do you love most about how we connect physically?",
+      "What's something about my body that you can't stop thinking about?",
+      "How do you want to feel when we're together tonight?",
+      "What makes you feel most vulnerable and open with me?",
+    ],
+    playful: [
+      "What's the most ridiculous thing you find attractive about me that you're embarrassed to admit?",
+      "If we could have any superpower in the bedroom, what would it be?",
+      "What's the best way I could surprise you tonight?",
+      "If our love story was a movie, what would the steamiest scene be?",
+      "What's something in my search history that would make you blush?",
+      "What's the most playful thing you want me to do to you right now?",
+      "If we could switch bodies for a day, what would you do first?",
+      "What's the weirdest place you've fantasized about us being together?",
+      "What's one thing about me that always gets you going?",
+      "How would you describe what you want from me in three words?",
+    ],
+    passionate: [
+      "What's something you've always wanted to try with me but haven't had the courage to ask?",
+      "Describe in detail what your ideal intimate evening with me would look like...",
+      "What's the most attractive thing I do without realizing it turns you on?",
+      "What thought about us made you feel desire recently?",
+      "If you could have me anywhere right now, where would it be and what would we do?",
+      "When we're being intimate, what makes you feel most connected and alive?",
+      "What's your favorite way to receive pleasure, and what makes it so intense?",
+      "What's the fastest way to get you in the mood, and why does it work?",
+      "What type of foreplay gets you going the fastest?",
+      "What's something I could do right now that would drive you wild?",
+      "How do you want me to touch you tonight?",
+      "What makes you feel most desired when we're together?",
+    ],
+    adventurous: [
+      "What's on your secret bucket list that you haven't shared but want to try with me?",
+      "If we could break any rule tonight, what would it be and how would we do it?",
+      "What scenario have you fantasized about that surprised even you?",
+      "Where's the most daring place you'd want to be with me, and what would happen there?",
+      "What would make tonight unforgettable and push our boundaries?",
+      "What's one thing about your desires that you feel I haven't fully explored with you?",
+      "If you could introduce any scenario into our intimate life, what would it be?",
+      "What's the most adventurous thing you'd want to try with me that we haven't done?",
+      "Is there something you've been afraid to ask for but really want?",
+      "What's a fantasy you've had about us that might surprise or shock me?",
+      "What's the most intense experience you want to share with me?",
+      "How far are you willing to go with me tonight?",
+    ],
+  },
+  firestarters: {
+    romantic: [
+      { emoji: "💝", text: "Slow dance in the kitchen to your song" },
+      { emoji: "✨", text: "Trade 5-minute massages with no rush" },
+      { emoji: "💋", text: "Kiss for 60 seconds without breaking" },
+      { emoji: "👁️", text: "Eye gaze for 2 minutes in silence" },
+      { emoji: "🤗", text: "Hold each other for a full 60 seconds" },
+      { emoji: "💌", text: "Tell them 3 things you love about them" },
+    ],
+    playful: [
+      { emoji: "🎲", text: "Strip version of any game you're playing" },
+      { emoji: "🍓", text: "Feed each other with eyes closed" },
+      { emoji: "💌", text: "Write what you want on each other's skin" },
+      { emoji: "⏱️", text: "7 minutes in heaven - set a timer" },
+      { emoji: "🎯", text: "Take turns doing impressions of each other" },
+      { emoji: "📱", text: "Send each other flirty texts from across the room" },
+    ],
+    passionate: [
+      { emoji: "🔥", text: "Describe exactly what you want right now" },
+      { emoji: "👄", text: "Kiss every inch of exposed skin" },
+      { emoji: "🚿", text: "Shower together with intention" },
+      { emoji: "📱", text: "Send a dirty text... while sitting next to them" },
+      { emoji: "🧊", text: "Trace their body with an ice cube" },
+      { emoji: "🙈", text: "Blindfold them and tease with different textures" },
+    ],
+    adventurous: [
+      { emoji: "🎭", text: "Stay in character for the next hour" },
+      { emoji: "🖤", text: "Use something from your collection without warning" },
+      { emoji: "🙈", text: "Blindfold and lead them somewhere unexpected" },
+      { emoji: "⛓️", text: "Request one thing you've never asked for before" },
+      { emoji: "🎲", text: "Roll dice to decide who's in charge" },
+      { emoji: "📝", text: "Write a fantasy on paper, then act it out" },
+    ],
+  },
+} as const;
