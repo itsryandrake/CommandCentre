@@ -1,16 +1,16 @@
 import { useState } from "react";
-import type { Property, Loan, CreatePropertyInput, CreateLoanInput } from "@shared/types/finance";
+import type { Asset, Loan, CreateAssetInput, CreateLoanInput, AssetType } from "@shared/types/finance";
 import { X } from "lucide-react";
 
-interface PropertyFormProps {
-  existing?: Property;
-  onSubmit: (input: CreatePropertyInput) => Promise<any>;
+interface AssetFormProps {
+  existing?: Asset;
+  onSubmit: (input: CreateAssetInput) => Promise<any>;
   onClose: () => void;
 }
 
-export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps) {
+export function PropertyForm({ existing, onSubmit, onClose }: AssetFormProps) {
   const [name, setName] = useState(existing?.name || "");
-  const [type, setType] = useState<"primary" | "investment" | "other">(existing?.type || "primary");
+  const [type, setType] = useState<AssetType>(existing?.type || "property");
   const [address, setAddress] = useState(existing?.address || "");
   const [purchasePrice, setPurchasePrice] = useState(existing?.purchasePrice?.toString() || "");
   const [currentValue, setCurrentValue] = useState(existing?.currentValue?.toString() || "");
@@ -23,7 +23,7 @@ export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps)
     setIsSubmitting(true);
     await onSubmit({
       name,
-      type: type as any,
+      type,
       address: address || undefined,
       purchasePrice: purchasePrice ? parseFloat(purchasePrice) : undefined,
       currentValue: currentValue ? parseFloat(currentValue) : undefined,
@@ -37,7 +37,7 @@ export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps)
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-2xl border bg-card p-6 shadow-lg">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-medium">{existing ? "Edit Property" : "Add Property"}</h2>
+          <h2 className="text-xl font-medium">{existing ? "Edit Asset" : "Add Asset"}</h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted"><X className="size-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -47,9 +47,12 @@ export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps)
           </div>
           <div>
             <label className="text-sm font-medium text-muted-foreground mb-1 block">Type *</label>
-            <select value={type} onChange={(e) => setType(e.target.value as "primary" | "investment" | "other")} className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
-              <option value="primary">Primary Residence</option>
-              <option value="investment">Investment Property</option>
+            <select value={type} onChange={(e) => setType(e.target.value as AssetType)} className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+              <option value="property">Property</option>
+              <option value="vehicle">Vehicle</option>
+              <option value="investment">Investment</option>
+              <option value="retirement_fund">Superannuation</option>
+              <option value="bank">Bank</option>
               <option value="other">Other</option>
             </select>
           </div>
@@ -74,7 +77,7 @@ export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps)
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose} className="flex-1 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">Cancel</button>
             <button type="submit" disabled={isSubmitting || !name} className="flex-1 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 disabled:opacity-50">
-              {isSubmitting ? "Saving..." : existing ? "Update" : "Add Property"}
+              {isSubmitting ? "Saving..." : existing ? "Update" : "Add Asset"}
             </button>
           </div>
         </form>
@@ -85,14 +88,14 @@ export function PropertyForm({ existing, onSubmit, onClose }: PropertyFormProps)
 
 interface LoanFormProps {
   propertyId?: string;
-  properties: Property[];
+  properties: Asset[];
   existing?: Loan;
   onSubmit: (input: CreateLoanInput) => Promise<any>;
   onClose: () => void;
 }
 
 export function LoanForm({ propertyId, properties, existing, onSubmit, onClose }: LoanFormProps) {
-  const [selectedPropertyId, setSelectedPropertyId] = useState(existing?.propertyId || propertyId || "");
+  const [selectedAssetId, setSelectedAssetId] = useState(existing?.assetId || propertyId || "");
   const [name, setName] = useState(existing?.name || "");
   const [type, setType] = useState<"mortgage" | "personal" | "car" | "other">(existing?.type || "mortgage");
   const [lender, setLender] = useState(existing?.lender || "");
@@ -111,7 +114,7 @@ export function LoanForm({ propertyId, properties, existing, onSubmit, onClose }
     if (!name || !type) return;
     setIsSubmitting(true);
     await onSubmit({
-      propertyId: selectedPropertyId || undefined,
+      assetId: selectedAssetId || undefined,
       name,
       type: type as any,
       lender: lender || undefined,
@@ -137,9 +140,9 @@ export function LoanForm({ propertyId, properties, existing, onSubmit, onClose }
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-muted-foreground mb-1 block">Property</label>
-            <select value={selectedPropertyId} onChange={(e) => setSelectedPropertyId(e.target.value)} className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
-              <option value="">No property linked</option>
+            <label className="text-sm font-medium text-muted-foreground mb-1 block">Asset</label>
+            <select value={selectedAssetId} onChange={(e) => setSelectedAssetId(e.target.value)} className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+              <option value="">No asset linked</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>

@@ -25,6 +25,7 @@ import {
   Church,
   Home,
   TrendingUp,
+  Landmark,
   Smile,
   Award,
   ShoppingCart,
@@ -63,6 +64,7 @@ const healthItems = [
 
 const wealthItems = [
   { title: "Budget", icon: Wallet, href: "/budget" },
+  { title: "Net Worth", icon: Landmark, href: "/wealth/net-worth" },
   { title: "Investments", icon: TrendingUp, href: "/wealth/investments" },
   { title: "Loyalty", icon: Award, href: "/loyalty" },
 ];

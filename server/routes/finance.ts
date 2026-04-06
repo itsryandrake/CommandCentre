@@ -1,8 +1,9 @@
 import { Router, Request, Response } from "express";
 import {
-  listProperties,
-  createProperty,
-  updateProperty,
+  listAssets,
+  createAsset,
+  updateAsset,
+  deleteAsset,
   listLoans,
   createLoan,
   updateLoan,
@@ -11,49 +12,62 @@ import {
 
 const router = Router();
 
-// Properties
-router.get("/properties", async (_req: Request, res: Response) => {
+// Assets
+router.get("/assets", async (_req: Request, res: Response) => {
   try {
-    const properties = await listProperties();
-    res.json(properties);
+    const assets = await listAssets();
+    res.json(assets);
   } catch (error) {
-    console.error("[Finance] Error listing properties:", error);
-    res.status(500).json({ error: "Failed to list properties" });
+    console.error("[Finance] Error listing assets:", error);
+    res.status(500).json({ error: "Failed to list assets" });
   }
 });
 
-router.post("/properties", async (req: Request, res: Response) => {
+router.post("/assets", async (req: Request, res: Response) => {
   try {
     const { name, type } = req.body;
     if (!name || !type) {
       return res.status(400).json({ error: "name and type are required" });
     }
-    const property = await createProperty(req.body);
-    res.status(201).json(property);
+    const asset = await createAsset(req.body);
+    res.status(201).json(asset);
   } catch (error) {
-    console.error("[Finance] Error creating property:", error);
-    res.status(500).json({ error: "Failed to create property" });
+    console.error("[Finance] Error creating asset:", error);
+    res.status(500).json({ error: "Failed to create asset" });
   }
 });
 
-router.patch("/properties/:id", async (req: Request, res: Response) => {
+router.patch("/assets/:id", async (req: Request, res: Response) => {
   try {
-    const property = await updateProperty(req.params.id, req.body);
-    if (!property) {
-      return res.status(404).json({ error: "Property not found" });
+    const asset = await updateAsset(req.params.id, req.body);
+    if (!asset) {
+      return res.status(404).json({ error: "Asset not found" });
     }
-    res.json(property);
+    res.json(asset);
   } catch (error) {
-    console.error("[Finance] Error updating property:", error);
-    res.status(500).json({ error: "Failed to update property" });
+    console.error("[Finance] Error updating asset:", error);
+    res.status(500).json({ error: "Failed to update asset" });
+  }
+});
+
+router.delete("/assets/:id", async (req: Request, res: Response) => {
+  try {
+    const success = await deleteAsset(req.params.id);
+    if (!success) {
+      return res.status(404).json({ error: "Asset not found" });
+    }
+    res.json({ success: true });
+  } catch (error) {
+    console.error("[Finance] Error deleting asset:", error);
+    res.status(500).json({ error: "Failed to delete asset" });
   }
 });
 
 // Loans
 router.get("/loans", async (req: Request, res: Response) => {
   try {
-    const { propertyId } = req.query;
-    const loans = await listLoans(propertyId as string | undefined);
+    const { assetId } = req.query;
+    const loans = await listLoans(assetId as string | undefined);
     res.json(loans);
   } catch (error) {
     console.error("[Finance] Error listing loans:", error);

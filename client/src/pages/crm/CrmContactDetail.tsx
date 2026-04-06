@@ -341,7 +341,19 @@ export function CrmContactDetail({ params }: CrmContactDetailProps) {
                     <Heart className="size-3.5 text-pink-500" />
                     Partner
                   </h3>
-                  <p className="text-sm">{contact.spouseName}</p>
+                  {(() => {
+                    const partnerId = contact.spouseId || allContacts.find((c) => c.fullName === contact.spouseName)?.id;
+                    return partnerId ? (
+                      <button
+                        onClick={() => navigate(`/family/crm/${partnerId}`)}
+                        className="text-sm text-primary hover:underline text-left"
+                      >
+                        {contact.spouseName}
+                      </button>
+                    ) : (
+                      <p className="text-sm">{contact.spouseName}</p>
+                    );
+                  })()}
                   {contact.relationshipStatus && (
                     <p className="text-xs text-muted-foreground">
                       {contact.relationshipStatus}

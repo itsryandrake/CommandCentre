@@ -19,6 +19,7 @@ import { LifeScriptPage } from "@/pages/LifeScript";
 import { Documents } from "@/pages/Documents";
 import { Investments } from "@/pages/Investments";
 import { InvestmentDetail } from "@/pages/InvestmentDetail";
+import NetWorth from "@/pages/NetWorth";
 import { CrmHub } from "@/pages/CrmHub";
 import { CrmContactDetail } from "@/pages/crm/CrmContactDetail";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -65,6 +66,7 @@ function App() {
               <Route path="/home/equipment" component={EquipmentPage} />
               <Route path="/home/wardrobe" component={Wardrobe} />
               <Route path="/home/documents" component={Documents} />
+              <Route path="/wealth/net-worth" component={NetWorth} />
               <Route path="/wealth/investments" component={Investments} />
               <Route path="/wealth/investments/:id" component={InvestmentDetail} />
               <Route path="/happiness" component={Happiness} />

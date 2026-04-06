@@ -1,22 +1,24 @@
 import { getSupabase } from "./supabase.ts";
 import type {
-  Property,
+  Asset,
   Loan,
-  CreatePropertyInput,
-  UpdatePropertyInput,
+  CreateAssetInput,
+  UpdateAssetInput,
   CreateLoanInput,
   UpdateLoanInput,
 } from "../../shared/types/finance.ts";
 
-function dbToProperty(row: any): Property {
+function dbToAsset(row: any): Asset {
   return {
     id: row.id,
     name: row.name,
     type: row.type,
+    description: row.description,
     address: row.address,
     purchasePrice: row.purchase_price ? Number(row.purchase_price) : undefined,
     currentValue: row.current_value ? Number(row.current_value) : undefined,
     purchaseDate: row.purchase_date,
+    currency: row.currency || "AUD",
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -25,7 +27,7 @@ function dbToProperty(row: any): Property {
 function dbToLoan(row: any): Loan {
   return {
     id: row.id,
-    propertyId: row.property_id,
+    assetId: row.asset_id,
     name: row.name,
     type: row.type,
     lender: row.lender,
@@ -38,25 +40,28 @@ function dbToLoan(row: any): Loan {
     isFixedRate: row.is_fixed_rate,
     fixedRateExpiry: row.fixed_rate_expiry,
     notes: row.notes,
+    currency: row.currency || "AUD",
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-function propertyInputToDb(input: CreatePropertyInput | UpdatePropertyInput): any {
+function assetInputToDb(input: CreateAssetInput | UpdateAssetInput): any {
   const db: any = {};
   if (input.name !== undefined) db.name = input.name;
   if (input.type !== undefined) db.type = input.type;
+  if (input.description !== undefined) db.description = input.description;
   if (input.address !== undefined) db.address = input.address;
   if (input.purchasePrice !== undefined) db.purchase_price = input.purchasePrice;
   if (input.currentValue !== undefined) db.current_value = input.currentValue;
   if (input.purchaseDate !== undefined) db.purchase_date = input.purchaseDate;
+  if (input.currency !== undefined) db.currency = input.currency;
   return db;
 }
 
 function loanInputToDb(input: CreateLoanInput | UpdateLoanInput): any {
   const db: any = {};
-  if (input.propertyId !== undefined) db.property_id = input.propertyId;
+  if (input.assetId !== undefined) db.asset_id = input.assetId;
   if (input.name !== undefined) db.name = input.name;
   if (input.type !== undefined) db.type = input.type;
   if (input.lender !== undefined) db.lender = input.lender;
@@ -69,54 +74,65 @@ function loanInputToDb(input: CreateLoanInput | UpdateLoanInput): any {
   if (input.isFixedRate !== undefined) db.is_fixed_rate = input.isFixedRate;
   if (input.fixedRateExpiry !== undefined) db.fixed_rate_expiry = input.fixedRateExpiry;
   if (input.notes !== undefined) db.notes = input.notes;
+  if (input.currency !== undefined) db.currency = input.currency;
   return db;
 }
 
-// Properties
-export async function listProperties(): Promise<Property[]> {
+// Assets
+export async function listAssets(): Promise<Asset[]> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from("properties")
+    .from("assets")
     .select("*")
     .order("name", { ascending: true });
 
   if (error) throw error;
-  return (data || []).map(dbToProperty);
+  return (data || []).map(dbToAsset);
 }
 
-export async function createProperty(input: CreatePropertyInput): Promise<Property> {
+export async function createAsset(input: CreateAssetInput): Promise<Asset> {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from("properties")
-    .insert(propertyInputToDb(input))
+    .from("assets")
+    .insert(assetInputToDb(input))
     .select()
     .single();
 
   if (error) throw error;
-  return dbToProperty(data);
+  return dbToAsset(data);
 }
 
-export async function updateProperty(id: string, input: UpdatePropertyInput): Promise<Property | null> {
+export async function updateAsset(id: string, input: UpdateAssetInput): Promise<Asset | null> {
   const supabase = getSupabase();
-  const dbData = propertyInputToDb(input);
+  const dbData = assetInputToDb(input);
   dbData.updated_at = new Date().toISOString();
 
   const { data, error } = await supabase
-    .from("properties")
+    .from("assets")
     .update(dbData)
     .eq("id", id)
     .select()
     .single();
 
   if (error || !data) return null;
-  return dbToProperty(data);
+  return dbToAsset(data);
+}
+
+export async function deleteAsset(id: string): Promise<boolean> {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("assets")
+    .delete()
+    .eq("id", id);
+
+  return !error;
 }
 
 // Loans
-export async function listLoans(propertyId?: string): Promise<Loan[]> {
+export async function listLoans(assetId?: string): Promise<Loan[]> {
   const supabase = getSupabase();
   let query = supabase.from("loans").select("*").order("name", { ascending: true });
-  if (propertyId) query = query.eq("property_id", propertyId);
+  if (assetId) query = query.eq("asset_id", assetId);
 
   const { data, error } = await query;
   if (error) throw error;

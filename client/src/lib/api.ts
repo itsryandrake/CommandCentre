@@ -21,7 +21,7 @@ import type {
 import type { VisionBoardItem, Category } from "@shared/types/visionBoard";
 import type { AiConversation, AiConversationWithMessages } from "@shared/types/chat";
 import type { Equipment, CreateEquipmentInput, UpdateEquipmentInput, EquipmentNote, ScrapedProductInfo } from "@shared/types/equipment";
-import type { Property, Loan, CreatePropertyInput, UpdatePropertyInput, CreateLoanInput, UpdateLoanInput } from "@shared/types/finance";
+import type { Asset, Loan, CreateAssetInput, UpdateAssetInput, CreateLoanInput, UpdateLoanInput } from "@shared/types/finance";
 import type { ShoppingItem, CreateShoppingItemInput } from "@shared/types/shopping";
 import type { Task, CreateTaskInput, UpdateTaskInput, TaskAttachment, CreateAttachmentInput } from "@shared/types/task";
 import type { LoyaltyProgram } from "@shared/types/loyalty";
@@ -901,12 +901,12 @@ export async function scrapeProductUrl(url: string): Promise<ScrapedProductInfo 
 }
 
 // =============================================================================
-// Finance API Functions (Properties & Loans)
+// Finance API Functions (Assets & Loans)
 // =============================================================================
 
-export async function fetchProperties(): Promise<Property[]> {
+export async function fetchAssets(): Promise<Asset[]> {
   try {
-    const response = await fetch("/api/finance/properties");
+    const response = await fetch("/api/finance/assets");
     if (response.ok) {
       return response.json();
     }
@@ -916,9 +916,9 @@ export async function fetchProperties(): Promise<Property[]> {
   return [];
 }
 
-export async function createPropertyItem(input: CreatePropertyInput): Promise<Property | null> {
+export async function createAssetItem(input: CreateAssetInput): Promise<Asset | null> {
   try {
-    const response = await fetch("/api/finance/properties", {
+    const response = await fetch("/api/finance/assets", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
@@ -932,9 +932,9 @@ export async function createPropertyItem(input: CreatePropertyInput): Promise<Pr
   return null;
 }
 
-export async function updatePropertyItem(id: string, input: UpdatePropertyInput): Promise<Property | null> {
+export async function updateAssetItem(id: string, input: UpdateAssetInput): Promise<Asset | null> {
   try {
-    const response = await fetch(`/api/finance/properties/${id}`, {
+    const response = await fetch(`/api/finance/assets/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
@@ -948,9 +948,18 @@ export async function updatePropertyItem(id: string, input: UpdatePropertyInput)
   return null;
 }
 
-export async function fetchLoans(propertyId?: string): Promise<Loan[]> {
+export async function deleteAssetItem(id: string): Promise<boolean> {
   try {
-    const params = propertyId ? `?propertyId=${propertyId}` : "";
+    const response = await fetch(`/api/finance/assets/${id}`, { method: "DELETE" });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchLoans(assetId?: string): Promise<Loan[]> {
+  try {
+    const params = assetId ? `?assetId=${assetId}` : "";
     const response = await fetch(`/api/finance/loans${params}`);
     if (response.ok) {
       return response.json();

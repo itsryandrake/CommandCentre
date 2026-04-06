@@ -8,7 +8,7 @@ import { BudgetStatCard } from "@/components/budget/BudgetStatCard";
 import { PropertyForm, LoanForm } from "@/components/budget/PropertyLoanForm";
 import { useFinance } from "@/hooks/useFinance";
 import { Plus, Building2, Landmark } from "lucide-react";
-import type { Property, Loan } from "@shared/types/finance";
+import type { Asset, Loan } from "@shared/types/finance";
 
 // ── Months covered ──
 const MONTHS = ["Dec", "Jan", "Feb", "Mar"];
@@ -129,11 +129,11 @@ export function Budget() {
 
   // Finance state for Properties & Loans tab
   const finance = useFinance();
-  const [showPropertyForm, setShowPropertyForm] = useState(false);
+  const [showAssetForm, setShowAssetForm] = useState(false);
   const [showLoanForm, setShowLoanForm] = useState(false);
-  const [editingProperty, setEditingProperty] = useState<Property | undefined>();
+  const [editingAsset, setEditingAsset] = useState<Asset | undefined>();
   const [editingLoan, setEditingLoan] = useState<Loan | undefined>();
-  const [loanPropertyId, setLoanPropertyId] = useState<string | undefined>();
+  const [loanAssetId, setLoanAssetId] = useState<string | undefined>();
 
   return (
     <DashboardLayout title="Budget">
@@ -426,7 +426,7 @@ export function Budget() {
           <TabsContent value="properties" className="space-y-6 mt-4">
             {/* Summary cards */}
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-              <BudgetStatCard label="PROPERTIES" value={String(finance.properties.length)} accent="blue" />
+              <BudgetStatCard label="PROPERTIES" value={String(finance.assets.length)} accent="blue" />
               <BudgetStatCard label="ACTIVE LOANS" value={String(finance.loans.length)} accent="peach" />
               <BudgetStatCard label="TOTAL OUTSTANDING" value={fmt(finance.totalOutstanding)} accent="red" />
               <BudgetStatCard label="MONTHLY PAYMENTS" value={fmt(finance.totalMonthlyPayments)} sub="combined" accent="amber" />
@@ -437,7 +437,7 @@ export function Budget() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium">Properties</h3>
                 <button
-                  onClick={() => { setEditingProperty(undefined); setShowPropertyForm(true); }}
+                  onClick={() => { setEditingAsset(undefined); setShowAssetForm(true); }}
                   className="flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Plus className="size-4" />
@@ -447,7 +447,7 @@ export function Budget() {
 
               {finance.isLoading ? (
                 <p className="text-muted-foreground text-sm">Loading...</p>
-              ) : finance.properties.length === 0 ? (
+              ) : finance.assets.length === 0 ? (
                 <GlassCard>
                   <GlassCardContent className="py-8 text-center">
                     <Building2 className="size-8 text-muted-foreground/40 mx-auto mb-2" />
@@ -455,8 +455,8 @@ export function Budget() {
                   </GlassCardContent>
                 </GlassCard>
               ) : (
-                finance.properties.map((property) => {
-                  const propertyLoans = finance.getLoansForProperty(property.id);
+                finance.assets.map((property) => {
+                  const propertyLoans = finance.getLoansForAsset(property.id);
                   const totalOwed = propertyLoans.reduce((sum, l) => sum + (l.currentBalance || 0), 0);
                   const equity = (property.currentValue || 0) - totalOwed;
 
@@ -477,7 +477,7 @@ export function Budget() {
                             )}
                           </div>
                           <button
-                            onClick={() => { setEditingProperty(property); setShowPropertyForm(true); }}
+                            onClick={() => { setEditingAsset(property); setShowAssetForm(true); }}
                             className="text-xs text-primary hover:underline"
                           >
                             Edit
@@ -517,7 +517,7 @@ export function Budget() {
                                 Loans ({propertyLoans.length})
                               </p>
                               <button
-                                onClick={() => { setLoanPropertyId(property.id); setEditingLoan(undefined); setShowLoanForm(true); }}
+                                onClick={() => { setLoanAssetId(property.id); setEditingLoan(undefined); setShowLoanForm(true); }}
                                 className="text-xs text-primary hover:underline"
                               >
                                 + Add Loan
@@ -556,7 +556,7 @@ export function Budget() {
                         {propertyLoans.length === 0 && (
                           <div className="border-t pt-3">
                             <button
-                              onClick={() => { setLoanPropertyId(property.id); setEditingLoan(undefined); setShowLoanForm(true); }}
+                              onClick={() => { setLoanAssetId(property.id); setEditingLoan(undefined); setShowLoanForm(true); }}
                               className="text-sm text-primary hover:underline"
                             >
                               + Add a loan for this property
@@ -571,11 +571,11 @@ export function Budget() {
             </div>
 
             {/* Unlinked loans */}
-            {finance.loans.filter((l) => !l.propertyId).length > 0 && (
+            {finance.loans.filter((l) => !l.assetId).length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-medium">Other Loans</h3>
                 {finance.loans
-                  .filter((l) => !l.propertyId)
+                  .filter((l) => !l.assetId)
                   .map((loan) => (
                     <GlassCard key={loan.id}>
                       <GlassCardContent className="pt-4">
@@ -603,9 +603,9 @@ export function Budget() {
             )}
 
             {/* Add loan button (when no properties exist) */}
-            {finance.properties.length === 0 && finance.loans.length === 0 && (
+            {finance.assets.length === 0 && finance.loans.length === 0 && (
               <button
-                onClick={() => { setLoanPropertyId(undefined); setEditingLoan(undefined); setShowLoanForm(true); }}
+                onClick={() => { setLoanAssetId(undefined); setEditingLoan(undefined); setShowLoanForm(true); }}
                 className="text-sm text-primary hover:underline"
               >
                 + Add a standalone loan
@@ -615,28 +615,28 @@ export function Budget() {
         </Tabs>
 
         {/* Property form dialog */}
-        {showPropertyForm && (
+        {showAssetForm && (
           <PropertyForm
-            existing={editingProperty}
-            onSubmit={editingProperty
-              ? (input) => finance.editProperty(editingProperty.id, input)
-              : finance.addProperty
+            existing={editingAsset}
+            onSubmit={editingAsset
+              ? (input) => finance.editAsset(editingAsset.id, input)
+              : finance.addAsset
             }
-            onClose={() => { setShowPropertyForm(false); setEditingProperty(undefined); }}
+            onClose={() => { setShowAssetForm(false); setEditingAsset(undefined); }}
           />
         )}
 
         {/* Loan form dialog */}
         {showLoanForm && (
           <LoanForm
-            propertyId={loanPropertyId}
-            properties={finance.properties}
+            propertyId={loanAssetId as any}
+            properties={finance.assets}
             existing={editingLoan}
             onSubmit={editingLoan
               ? (input) => finance.editLoan(editingLoan.id, input)
               : finance.addLoan
             }
-            onClose={() => { setShowLoanForm(false); setEditingLoan(undefined); setLoanPropertyId(undefined); }}
+            onClose={() => { setShowLoanForm(false); setEditingLoan(undefined); setLoanAssetId(undefined); }}
           />
         )}
       </div>
