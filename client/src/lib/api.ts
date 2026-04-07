@@ -19,6 +19,7 @@ import type {
   CrmStats,
 } from "@shared/types/crm";
 import type { VisionBoardItem, Category } from "@shared/types/visionBoard";
+import type { DreamHomeImage, DreamHomeScrapeJob, DreamHomeTagCount } from "@shared/types/dreamHome";
 import type { AiConversation, AiConversationWithMessages } from "@shared/types/chat";
 import type { Equipment, CreateEquipmentInput, UpdateEquipmentInput, EquipmentNote, ScrapedProductInfo } from "@shared/types/equipment";
 import type { Asset, Loan, CreateAssetInput, UpdateAssetInput, CreateLoanInput, UpdateLoanInput } from "@shared/types/finance";
@@ -34,6 +35,7 @@ import type {
   InvestmentDocument, CreateDocumentInput as CreateInvDocInput,
   InvestmentTask, CreateTaskInput as CreateInvTaskInput,
 } from "@shared/types/investment";
+import type { Restaurant, CreateRestaurantInput, UpdateRestaurantInput, ScrapedRestaurantInfo, GoogleReview } from "@shared/types/restaurant";
 
 export class APIError extends Error {
   constructor(
@@ -721,6 +723,106 @@ export async function deleteVisionBoardItem(id: string): Promise<boolean> {
 }
 
 // =============================================================================
+// Dream Home API Functions
+// =============================================================================
+
+export async function fetchDreamHomeImages(tags?: string[]): Promise<DreamHomeImage[]> {
+  try {
+    const params = tags && tags.length > 0 ? `?tags=${tags.join(",")}` : "";
+    const response = await fetch(`/api/dream-home${params}`);
+    if (response.ok) return response.json();
+  } catch {}
+  return [];
+}
+
+export async function fetchDreamHomeTagCounts(): Promise<DreamHomeTagCount[]> {
+  try {
+    const response = await fetch("/api/dream-home/tags");
+    if (response.ok) return response.json();
+  } catch {}
+  return [];
+}
+
+export async function scrapeDreamHomeListing(url: string): Promise<{ jobId?: string; job?: DreamHomeScrapeJob }> {
+  const response = await fetch("/api/dream-home/scrape", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  });
+
+  if (response.status === 201) {
+    // Direct image — completed immediately
+    const job = await response.json();
+    return { job };
+  }
+
+  if (response.status === 202) {
+    const { jobId } = await response.json();
+    return { jobId };
+  }
+
+  const data = await response.json().catch(() => null);
+  throw new Error(data?.error || "Failed to scrape URL");
+}
+
+export async function pollDreamHomeJob(jobId: string): Promise<DreamHomeScrapeJob> {
+  const response = await fetch(`/api/dream-home/scrape/status/${jobId}`);
+  if (!response.ok) throw new Error("Failed to check job status");
+  return response.json();
+}
+
+export async function addDreamHomeDirectImage(imageUrl: string): Promise<DreamHomeImage> {
+  const response = await fetch("/api/dream-home/image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ imageUrl }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error || "Failed to add image");
+  }
+  return response.json();
+}
+
+export async function updateDreamHomeImage(
+  id: string,
+  fields: { title?: string; notes?: string }
+): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/dream-home/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fields),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function updateDreamHomeTags(id: string, tags: string[]): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/dream-home/${id}/tags`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteDreamHomeImage(id: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/dream-home/${id}`, { method: "DELETE" });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+// =============================================================================
 // AI Chat API Functions
 // =============================================================================
 
@@ -1387,4 +1489,87 @@ export async function updateInvestmentTaskApi(taskId: string, updates: any): Pro
 
 export async function deleteInvestmentTaskApi(taskId: string): Promise<boolean> {
   try { return (await fetch(`/api/investments/tasks/${taskId}`, { method: "DELETE" })).ok; } catch { return false; }
+}
+
+// =============================================================================
+// Restaurant API Functions
+// =============================================================================
+
+interface RestaurantFilters {
+  city?: string;
+  cuisine?: string;
+  status?: string;
+  priceRange?: number;
+  mealType?: string;
+}
+
+export async function fetchRestaurants(filters?: RestaurantFilters): Promise<Restaurant[]> {
+  try {
+    const params = new URLSearchParams();
+    if (filters?.city) params.set("city", filters.city);
+    if (filters?.cuisine) params.set("cuisine", filters.cuisine);
+    if (filters?.status) params.set("status", filters.status);
+    if (filters?.priceRange) params.set("priceRange", String(filters.priceRange));
+    if (filters?.mealType) params.set("mealType", filters.mealType);
+    const qs = params.toString();
+    const response = await fetch(`/api/restaurants${qs ? `?${qs}` : ""}`);
+    if (response.ok) return response.json();
+  } catch {}
+  return [];
+}
+
+export async function createRestaurantItem(input: CreateRestaurantInput): Promise<Restaurant | null> {
+  try {
+    const response = await fetch("/api/restaurants", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
+}
+
+export async function updateRestaurantItem(id: string, input: UpdateRestaurantInput): Promise<Restaurant | null> {
+  try {
+    const response = await fetch(`/api/restaurants/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
+}
+
+export async function deleteRestaurantItem(id: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/restaurants/${id}`, { method: "DELETE" });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function scrapeRestaurantInfo(url?: string, name?: string, city?: string): Promise<ScrapedRestaurantInfo | null> {
+  try {
+    const response = await fetch("/api/restaurants/scrape", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url, name, city }),
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
+}
+
+export async function scrapeRestaurantReviews(id: string): Promise<{ reviews: GoogleReview[]; restaurant: Restaurant } | null> {
+  try {
+    const response = await fetch(`/api/restaurants/${id}/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
 }

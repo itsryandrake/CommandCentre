@@ -33,6 +33,8 @@ import {
   Shirt,
   ScrollText,
   FileText,
+  Castle,
+  UtensilsCrossed,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { UserSelector } from "@/components/UserSelector";
@@ -56,6 +58,7 @@ const homeItems = [
   { title: "Equipment", icon: Wrench, href: "/home/equipment" },
   { title: "Documents", icon: FileText, href: "/home/documents" },
   { title: "Wardrobe", icon: Shirt, href: "/home/wardrobe" },
+  { title: "Dream Home", icon: Castle, href: "/home/dream-home" },
 ];
 
 const healthItems = [
@@ -71,6 +74,7 @@ const wealthItems = [
 
 const happinessItems = [
   { title: "Happiness", icon: Smile, href: "/happiness" },
+  { title: "Restaurants", icon: UtensilsCrossed, href: "/happiness/restaurants" },
 ];
 
 interface PillarGroup {

@@ -1,0 +1,119 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - generic:
+      - link "Skip to main content" [ref=e2] [cursor=pointer]
+      - link "Accessibility help" [ref=e3] [cursor=pointer]:
+        - /url: https://support.google.com/websearch/answer/181196?hl=en-AU
+      - link "Accessibility feedback" [ref=e4] [cursor=pointer]
+  - generic [ref=e9]:
+    - search [ref=e10]:
+      - generic [ref=e12]:
+        - link "Go to Google Home" [ref=e14] [cursor=pointer]:
+          - /url: https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQPAgJ
+          - img [ref=e15]
+        - generic [ref=e22]:
+          - generic [ref=e23]
+          - button "Search" [ref=e41] [cursor=pointer]
+    - generic [ref=e46]:
+      - button "Settings" [ref=e48] [cursor=pointer]:
+        - img [ref=e51]
+      - generic [ref=e54]:
+        - button "Google apps" [ref=e56] [cursor=pointer]:
+          - img [ref=e57]
+        - link "Sign in" [ref=e61] [cursor=pointer]:
+          - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https://www.google.com/search%3Fq%3D%252B81%2BSushi%2BKappo%2BBrisbane%2Breviews%26sei%3DxsnUablfws-Q8g_M0arxBQ&ec=futura_srp_og_si_72236_p
+  - generic [ref=e63]:
+    - navigation [ref=e69]:
+      - generic [ref=e73]:
+        - list [ref=e74]:
+          - listitem [ref=e75]
+          - listitem [ref=e82]
+          - listitem [ref=e86]
+          - listitem [ref=e90]
+          - listitem [ref=e94]
+          - listitem [ref=e98]
+          - listitem [ref=e102]
+          - listitem [ref=e106]
+        - button "Tools" [ref=e115] [cursor=pointer]:
+          - generic [ref=e117]
+    - heading "Search Results" [level=1] [ref=e122]
+    - main [ref=e128]:
+      - generic [ref=e134]:
+        - heading "Results for Brisbane QLD" [level=2] [ref=e135]:
+          - generic [ref=e136]
+        - generic [ref=e138]:
+          - text: ∙
+          - button "Choose area" [ref=e139] [cursor=pointer]
+        - button "How location is used" [ref=e142] [cursor=pointer]:
+          - img [ref=e144]
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - generic [ref=e153]
+          - generic [ref=e550]
+        - generic [ref=e584]:
+          - generic [ref=e587]
+          - generic [ref=e606]
+        - generic [ref=e612]:
+          - generic [ref=e615]
+          - generic [ref=e635]
+        - generic [ref=e640]:
+          - generic [ref=e643]
+          - generic [ref=e662]
+        - generic [ref=e670]:
+          - generic [ref=e673]
+          - generic [ref=e692]
+        - generic [ref=e699]:
+          - generic [ref=e702]
+          - generic [ref=e721]
+        - generic [ref=e728]:
+          - generic [ref=e731]
+          - generic [ref=e750]
+        - generic [ref=e757]:
+          - generic [ref=e760]
+          - generic [ref=e779]
+        - generic [ref=e789]:
+          - generic [ref=e792]
+          - generic [ref=e810]
+        - generic [ref=e826]:
+          - generic [ref=e829]
+          - generic [ref=e848]
+      - generic [ref=e853]:
+        - generic [ref=e858]:
+          - heading "People also search for" [level=2] [ref=e860]
+          - generic [ref=e862]
+        - navigation [ref=e985]:
+          - heading "Page navigation" [level=1] [ref=e986]
+          - text: "1"
+          - link "Page 2" [ref=e989] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=10&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAE
+          - link "Page 3" [ref=e991] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=20&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAG
+          - link "Page 4" [ref=e993] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=30&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAI
+          - link "Page 5" [ref=e995] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=40&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAK
+          - link "Page 6" [ref=e997] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=50&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAM
+          - link "Page 7" [ref=e999] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=60&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAO
+          - link "Page 8" [ref=e1001] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=70&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAQ
+          - link "Page 9" [ref=e1003] [cursor=pointer]:
+            - /url: /search?q=%2B81+Sushi+Kappo+Brisbane+reviews&sca_esv=d4a33b81dd8689c6&ei=xsnUaeyTNtShur8P6fDc4AM&start=80&sa=N&sstk=Af77f_frEEvP_YtiBQCWBRCHYHPUbW-sBDEQyG4p1UD3QkXSkeQD1LSqon3SbKR_dnM_aKZAYb735ROh7fQbnOsJ8DoWCIoYaCdD5g&ved=2ahUKEwjsjvyestuTAxXUkO4BHWk4FzwQ8tMDegQIJhAS
+          - heading "Next" [level=2] [ref=e1005]
+      - navigation
+    - contentinfo [ref=e1010]:
+      - heading "Footer links" [level=1] [ref=e1011]
+      - generic [ref=e1015]:
+        - generic [ref=e1017]:
+          - text: Australia
+          - generic [ref=e1019]
+        - generic [ref=e1030]:
+          - link "Help" [ref=e1031] [cursor=pointer]:
+            - /url: https://support.google.com/websearch/?p=ws_results_help&hl=en-AU&fg=1
+          - link "Send feedback" [ref=e1032] [cursor=pointer]:
+            - /url: "#"
+          - link "Privacy" [ref=e1033] [cursor=pointer]:
+            - /url: https://policies.google.com/privacy?hl=en-AU&fg=1
+          - link "Terms" [ref=e1034] [cursor=pointer]:
+            - /url: https://policies.google.com/terms?hl=en-AU&fg=1

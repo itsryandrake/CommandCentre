@@ -20,6 +20,8 @@ import { Documents } from "@/pages/Documents";
 import { Investments } from "@/pages/Investments";
 import { InvestmentDetail } from "@/pages/InvestmentDetail";
 import NetWorth from "@/pages/NetWorth";
+import { DreamHome } from "@/pages/DreamHome";
+import { Restaurants } from "@/pages/Restaurants";
 import { CrmHub } from "@/pages/CrmHub";
 import { CrmContactDetail } from "@/pages/crm/CrmContactDetail";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -66,10 +68,12 @@ function App() {
               <Route path="/home/equipment" component={EquipmentPage} />
               <Route path="/home/wardrobe" component={Wardrobe} />
               <Route path="/home/documents" component={Documents} />
+              <Route path="/home/dream-home" component={DreamHome} />
               <Route path="/wealth/net-worth" component={NetWorth} />
               <Route path="/wealth/investments" component={Investments} />
               <Route path="/wealth/investments/:id" component={InvestmentDetail} />
               <Route path="/happiness" component={Happiness} />
+              <Route path="/happiness/restaurants" component={Restaurants} />
               <Route path="/loyalty" component={Loyalty} />
               <Route path="/family/shopping" component={Shopping} />
               <Route path="/family/tasks" component={Tasks} />

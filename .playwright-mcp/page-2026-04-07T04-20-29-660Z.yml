@@ -1,0 +1,697 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - button "Menu" [ref=e7] [cursor=pointer]:
+          - generic [ref=e12]: Menu
+        - generic [ref=e13]:
+          - link "realestate.com.au homepage" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+          - generic [ref=e20]:
+            - button "Sign in" [ref=e22] [cursor=pointer]
+            - button "Join" [ref=e23] [cursor=pointer]
+    - generic [ref=e25]:
+      - navigation "breadcrumb" [ref=e28]:
+        - list [ref=e29]:
+          - listitem [ref=e30]:
+            - link "Buy" [ref=e31] [cursor=pointer]:
+              - /url: /buy/
+            - img [ref=e32]
+          - listitem [ref=e34]:
+            - link "QLD" [ref=e35] [cursor=pointer]:
+              - /url: /buy/in-qld/list-1
+            - img [ref=e36]
+          - listitem [ref=e38]:
+            - link "Farnborough" [ref=e39] [cursor=pointer]:
+              - /url: /buy/in-farnborough,+qld+4703/list-1
+            - img [ref=e40]
+          - listitem [ref=e42]:
+            - link "House" [ref=e43] [cursor=pointer]:
+              - /url: /buy/property-house-in-farnborough,+qld+4703/list-1
+            - img [ref=e44]
+          - listitem [ref=e46]:
+            - link "144 Howes Road" [ref=e47] [cursor=pointer]:
+              - /url: /property-house-qld-farnborough-150549372
+      - link "Ray White - Yeppoon" [ref=e51] [cursor=pointer]:
+        - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:header-logo&sourcePage=buy:property-details&sourceElement=agency-branding
+        - img "Ray White - Yeppoon" [ref=e53]
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e57]:
+            - generic [ref=e59]:
+              - generic [ref=e60]:
+                - generic [ref=e61]:
+                  - heading "144 Howes Road, Farnborough, Qld 4703" [level=1] [ref=e62]
+                  - generic [ref=e63]:
+                    - button "Share listing" [ref=e64] [cursor=pointer]:
+                      - img [ref=e65]
+                      - generic [ref=e67]: Share
+                    - button "Save property" [ref=e68] [cursor=pointer]:
+                      - img [ref=e69]
+                      - generic [ref=e71]: Save
+                - list "House with 7.83ha land size with 3 bedrooms 2 bathrooms 10 car spaces" [ref=e73]:
+                  - generic [ref=e74]:
+                    - listitem "3 bedrooms" [ref=e75]:
+                      - img [ref=e76]
+                      - paragraph [ref=e78]: "3"
+                    - listitem "2 bathrooms" [ref=e79]:
+                      - img [ref=e80]
+                      - paragraph [ref=e82]: "2"
+                    - listitem "10 car spaces" [ref=e83]:
+                      - img [ref=e84]
+                      - paragraph [ref=e86]: "10"
+                  - generic [ref=e87]:
+                    - listitem "7.83ha land size" [ref=e88]:
+                      - img [ref=e89]
+                      - paragraph [ref=e91]: 7.83ha
+                    - generic [ref=e92]: •
+                  - paragraph [ref=e93]: House
+              - generic [ref=e95]: Offers over $1,700,000
+            - generic [ref=e96]:
+              - button "Preview property images, 144 Howes Road, Farnborough, Qld 4703" [active] [ref=e98] [cursor=pointer]:
+                - img "144 Howes Road, Farnborough, Qld 4703, image 1 of 35" [ref=e100]
+              - generic [ref=e101]:
+                - button "Preview property floorplan" [ref=e102] [cursor=pointer]:
+                  - img "Property floorplan" [ref=e104]
+                - button "See property video" [ref=e105] [cursor=pointer]:
+                  - img "Property video" [ref=e107]
+                  - paragraph [ref=e109]: Property video
+                - button "Preview property image 2 of 35" [ref=e111] [cursor=pointer]:
+                  - img "144 Howes Road, Farnborough, Qld 4703, image 2 of 35" [ref=e113]
+                  - generic [ref=e115]: "+34"
+          - dialog [ref=e1004]:
+            - generic [ref=e1006]:
+              - generic [ref=e1007]:
+                - generic [ref=e1015]:
+                  - link [ref=e1016] [cursor=pointer]:
+                    - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?campaignType=internal&campaignChannel=in_product&campaignSource=rea&campaignName=sell_enq&campaignPlacement=property-carousel&campaignKeyword=early_seeker&campaignVariant=agent_elevate&sourcePage=buy:pdp&sourceElement=property-carousel
+                    - img [ref=e1017]
+                  - generic [ref=e1019]:
+                    - heading "Proudly represented by" [level=1] [ref=e1020]
+                    - link "Claudia Woods Sales and Marketing Consultant Ray White - Yeppoon View profile" [ref=e1022] [cursor=pointer]:
+                      - /url: https://www.realestate.com.au/agent/claudia-woods-3416244?campaignType=internal&campaignChannel=in_product&campaignSource=rea&campaignName=sell_enq&campaignPlacement=property-carousel&campaignKeyword=early_seeker&campaignVariant=agent_elevate&sourcePage=buy:pdp&sourceElement=property-carousel
+                      - generic [ref=e1024]:
+                        - generic [ref=e1025]: Claudia Woods
+                        - generic [ref=e1026]: Sales and Marketing Consultant
+                        - generic [ref=e1027]: Ray White - Yeppoon
+                      - generic [ref=e1028]: View profile
+                    - link "Enquire about this property" [ref=e1030] [cursor=pointer]:
+                      - /url: /property-house-qld-farnborough-150549372#contactAgent
+                - img [ref=e1034]
+                - img [ref=e1037]
+              - generic:
+                - generic [ref=e1038]:
+                  - generic [ref=e1039]: 1 / 38
+                  - button "Close (Esc)" [ref=e1040] [cursor=pointer]
+                  - generic [ref=e1045]:
+                    - button "Floorplan" [ref=e1046] [cursor=pointer]
+                    - button "Video" [ref=e1047] [cursor=pointer]
+                    - button "Virtual tour" [disabled] [ref=e1048]
+                - button "Previous (arrow left)" [ref=e1049] [cursor=pointer]
+                - button "Next (arrow right)" [ref=e1050] [cursor=pointer]
+        - generic [ref=e116]:
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - paragraph [ref=e121]: Can you afford this property?
+              - paragraph [ref=e124]: Understand your repayments to see if this property is right for you.
+              - button "Calculate" [ref=e126] [cursor=pointer]
+            - button "Expand to an interactive map" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+            - heading "See your travel time" [level=2] [ref=e138]:
+              - button "See your travel time" [ref=e139]:
+                - paragraph [ref=e140]: See your travel time
+                - img [ref=e142]
+            - generic [ref=e144]:
+              - generic [ref=e145]:
+                - heading "Property highlights" [level=2] [ref=e146]
+                - button "More information" [ref=e148] [cursor=pointer]:
+                  - img [ref=e149]
+              - generic [ref=e151]:
+                - img [ref=e153]
+                - generic [ref=e155]: AI-generated from property description. Highlights may differ from the actual property. Verify highlights against the property description and in person.
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - img [ref=e160]
+                  - generic [ref=e162]:
+                    - heading "Gourmet kitchen & butler's pantry" [level=3] [ref=e163]
+                    - paragraph [ref=e164]: Stone benchtops, 900mm gas stove, pyrolytic oven, drawer dishwashers
+                - generic [ref=e165]:
+                  - img [ref=e168]
+                  - generic [ref=e170]:
+                    - heading "Massive 6-bay high-clearance shed" [level=3] [ref=e171]
+                    - paragraph [ref=e172]: 322m2 shed with 4.125m high bays, mezzanine storage & 3-phase power
+                - generic [ref=e173]:
+                  - img [ref=e176]
+                  - generic [ref=e178]:
+                    - heading "Sustainable living & water" [level=3] [ref=e179]
+                    - paragraph [ref=e180]: 19.8kW solar system, bore, dam & 3 tanks (total 12,800 gallons)
+              - generic [ref=e181]:
+                - generic [ref=e182]: Was this helpful?
+                - generic [ref=e183]:
+                  - button "Mark as helpful" [ref=e184] [cursor=pointer]:
+                    - img [ref=e185]
+                  - button "Mark as not helpful" [ref=e187] [cursor=pointer]:
+                    - img [ref=e188]
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - heading "Dream Lifestyle Acreage on Prestigious Howes Road" [level=2] [ref=e192]
+                - generic [ref=e194]: "144 HOWES ROAD, FARNBOROUGH • DATE PUBLISHED: 11 MAR 2026"
+              - generic [ref=e196]:
+                - paragraph [ref=e199]: Nestled on the highly sought-after address of Howes Road, this 16.46 acre (6.663HA) property delivers the perfect blend of rural tranquility, coastal proximity, and the warmth and character of this charming cottage. Just minutes from pristine beaches like Farnborough Beach, Yeppoon's vibrant amenities, schools, and cafes, yet privately positioned amid improved pastures and mountain vistas - this is a sensational lifestyle acreage like no other. Step inside this beautifully restored home, where every detail reflects thought, style and comfort. The heart of the home is the stunning kitchen featuring premium stone benchtops, elegant brass handles and tapware, a 900mm 5-burner gas stove, pyrolytic self-cleaning oven, drawer dishwashers, fluted glass cupboards, 2-pac cabinetry, and a spacious butler's pantry with a second oven. There is an incredible amount of storage with soft-close drawers - designed for effortless entertaining and everyday indulgence. Contemporary bathrooms impress with brass tapware accents, luxurious rain showers, and a deluxe bathtub for ultimate relaxation. Stunning original timber floors, tongue and groove paneling, and plantation shutters add timeless charm, complemented by 9ft ceilings upstairs and a raked ceiling in the master suite. Stay comfortable year-round with air conditioning in the main living area and individual split systems in each of the 3 spacious bedrooms. Sustainability meets self-sufficiency with a powerful 19.8kW solar system, multiple water sources - including a 5,000 gallon house tank, additional 4,500 gallon and 3,300 gallon tanks, plus a reliable bore and a tree-lined dam. Entertain with friends on the expansive deck alongside the saltwater swimming pool or start your day with your morning coffee on the rear deck overlooking the serene paddock. A true lifestyle property offering a fenced paddock of improved pastures, feed shed, round yard, cattle run, and capacity to comfortably run 13 head of livestock. A standout is the impressive 6-bay 322m2 shed featuring high-clearance bays (2 at 4.125m height), mezzanine storage, and 3-phase power - ideal for vehicles, machinery, a workshop and plenty of room for the boat too. This rare gem on Howes Road combines peaceful living on acreage with the convenience of living only 10 minutes from the centre of Yeppoon. Don't miss out on securing your slice of one of the region's most desirable rural pockets. Properties of this calibre seldom become available - make your offer today!
+                - button "Read more" [ref=e200] [cursor=pointer]:
+                  - generic [ref=e201]: Read more
+                  - img [ref=e203]
+            - generic [ref=e205]:
+              - heading "Property features" [level=2] [ref=e206]
+              - generic [ref=e207]:
+                - generic [ref=e208]:
+                  - img [ref=e209]
+                  - paragraph [ref=e211]: "Garage spaces: 10"
+                - generic [ref=e212]:
+                  - img [ref=e213]
+                  - paragraph [ref=e215]: "Land size: 7.83ha"
+            - generic [ref=e216]:
+              - generic [ref=e217]:
+                - heading "nbn® availability" [level=3] [ref=e218]
+                - img [ref=e220]
+              - generic [ref=e224]:
+                - img [ref=e225]
+                - paragraph [ref=e231]: nbn unknown
+                - generic [ref=e232]: Looks like an nbn connection is unknown at this property.
+              - button "Learn more" [ref=e233] [cursor=pointer]:
+                - paragraph [ref=e234]: Learn more
+              - button "Disclaimer" [ref=e235] [cursor=pointer]:
+                - generic [ref=e236]: Disclaimer
+            - generic [ref=e237]:
+              - heading "144 Howes Road inspections" [level=2] [ref=e239]
+              - generic [ref=e241]:
+                - img [ref=e244]
+                - generic [ref=e246]:
+                  - paragraph [ref=e247]: No upcoming inspections
+                  - paragraph [ref=e248]: Reach out to the agent to request an inspection for 144 Howes Road.
+                - button "Request an inspection" [ref=e250] [cursor=pointer]
+              - link "See my inspection plan" [ref=e251] [cursor=pointer]:
+                - /url: https://www.realestate.com.au/planner?sourcePage=rea:buy:property_details&sourceElement=see_planned_inspections_pdp
+            - generic [ref=e252]:
+              - heading "For buyers" [level=2] [ref=e253]
+              - generic [ref=e258]:
+                - generic [ref=e259]:
+                  - paragraph [ref=e260]: Building and pest report
+                  - paragraph [ref=e261]: Gain peace of mind and confidence before buying with a detailed inspection report.
+                - link "Request a report" [ref=e262] [cursor=pointer]:
+                  - /url: https://www.beforeyoubuy.com.au/?partnerId=REA&partner_listing_id=150549372&utm_source=rea&utm_medium=web-large-screen
+                  - paragraph [ref=e264]: Request a report
+                  - img [ref=e265]
+            - generic [ref=e267]:
+              - heading "Floorplans and tours" [level=2] [ref=e268]
+              - list [ref=e269]:
+                - listitem [ref=e270]:
+                  - button "floorplan Floorplan" [ref=e271]:
+                    - generic "floorplan" [ref=e272]:
+                      - img [ref=e273]
+                    - generic [ref=e275]: Floorplan
+                - listitem [ref=e276]:
+                  - button "video Property video" [ref=e277]:
+                    - generic "video" [ref=e278]:
+                      - img [ref=e279]
+                    - generic [ref=e281]: Property video
+            - generic [ref=e282]:
+              - heading "Property video" [level=2] [ref=e283]
+              - button "videos available" [ref=e284] [cursor=pointer]:
+                - img "video" [ref=e285]
+            - generic [ref=e289]:
+              - generic [ref=e290]:
+                - generic [ref=e291]:
+                  - paragraph [ref=e292]: Your monthly budget
+                  - button "More information" [ref=e294] [cursor=pointer]:
+                    - img [ref=e295]
+                - generic [ref=e301]:
+                  - generic [ref=e302]:
+                    - paragraph [ref=e305]: Repayments
+                    - paragraph [ref=e306]:
+                      - strong [ref=e307]: $8,541
+                  - generic [ref=e308]:
+                    - paragraph [ref=e311]: Expenses
+                    - paragraph [ref=e312]:
+                      - strong [ref=e313]: $-
+                  - generic [ref=e314]:
+                    - paragraph [ref=e317]: Remaining
+                    - paragraph [ref=e318]:
+                      - strong [ref=e319]: $-
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - generic [ref=e322]:
+                    - heading "Find out if you can afford this property" [level=4] [ref=e323]
+                    - generic [ref=e324]: Enter your income and expenses to figure out your monthly budget/the affordability breakdown for this property.
+                  - button "Enter your details" [ref=e325] [cursor=pointer]
+                - generic [ref=e326]:
+                  - generic [ref=e327]:
+                    - generic [ref=e328]:
+                      - generic [ref=e329]:
+                        - generic [ref=e330]:
+                          - paragraph [ref=e332]: Estimated property price
+                          - generic [ref=e333]:
+                            - paragraph [ref=e334]: Listed price from $1,700,000
+                            - button "More information" [ref=e336] [cursor=pointer]:
+                              - img [ref=e337]
+                        - generic [ref=e339]:
+                          - generic [ref=e340]: currency - Estimated property price
+                          - generic [ref=e342]:
+                            - generic [ref=e344]: $
+                            - textbox "currency - Estimated property price" [ref=e345]: 1,700,000
+                      - generic [ref=e346]:
+                        - generic [ref=e347]: slider - Estimated property price
+                        - slider "slider - Estimated property price" [ref=e348] [cursor=pointer]: "1700000"
+                      - button "Loan amount $1,461,992" [ref=e349] [cursor=pointer]:
+                        - paragraph [ref=e350]: Loan amount $1,461,992
+                    - generic [ref=e351]:
+                      - generic [ref=e352]:
+                        - generic [ref=e354]:
+                          - paragraph [ref=e355]: Deposit
+                          - button "More information" [ref=e357] [cursor=pointer]:
+                            - img [ref=e358]
+                        - generic [ref=e360]:
+                          - generic [ref=e361]: currency - Deposit
+                          - generic [ref=e363]:
+                            - generic [ref=e365]: $
+                            - textbox "currency - Deposit" [ref=e366]: 340,000
+                      - generic [ref=e367]:
+                        - generic [ref=e368]: slider - Deposit
+                        - slider "slider - Deposit" [ref=e369] [cursor=pointer]: "340000"
+                      - button "Available deposit $261,814" [ref=e370] [cursor=pointer]:
+                        - paragraph [ref=e371]: Available deposit $261,814
+                    - generic [ref=e372]:
+                      - generic [ref=e373]:
+                        - generic [ref=e375]:
+                          - paragraph [ref=e376]: Interest rate
+                          - button "More information" [ref=e378] [cursor=pointer]:
+                            - img [ref=e379]
+                        - generic [ref=e381]:
+                          - generic [ref=e382]: percent - Interest rate
+                          - textbox "percent - Interest rate" [ref=e385]: 5.76%
+                      - generic [ref=e386]:
+                        - generic [ref=e387]: slider - Interest rate
+                        - slider "slider - Interest rate" [ref=e388] [cursor=pointer]: "5.76"
+                      - button "Reset to default" [ref=e389] [cursor=pointer]:
+                        - paragraph [ref=e390]: Reset to default
+                  - generic [ref=e391]:
+                    - generic [ref=e393]:
+                      - generic [ref=e394]:
+                        - heading "Your details" [level=1] [ref=e395]
+                        - button "Edit" [ref=e396] [cursor=pointer]
+                      - separator [ref=e397]
+                      - generic [ref=e398]:
+                        - paragraph [ref=e399]: Income
+                        - paragraph [ref=e400]: $0/m
+                      - separator [ref=e401]
+                      - generic [ref=e402]:
+                        - paragraph [ref=e403]: Expenses
+                        - paragraph [ref=e404]: $0/m
+                      - separator [ref=e405]
+                      - generic [ref=e406]:
+                        - paragraph [ref=e407]: Preferred loan
+                        - paragraph [ref=e408]:
+                          - text: Principal & interest
+                          - text: 30 years
+                      - separator [ref=e409]
+                      - generic [ref=e410]:
+                        - paragraph [ref=e411]: About you
+                        - paragraph [ref=e412]:
+                          - text: Owner occupier
+                          - text: First Home Buyer
+                    - button "View calculator assumptions" [ref=e413] [cursor=pointer]
+                - img [ref=e415]
+            - generic [ref=e436]:
+              - generic [ref=e437]:
+                - heading "Renovation estimator" [level=2] [ref=e438]
+                - paragraph [ref=e439]: Select the area you want to transform
+              - radiogroup "Select the area you want to transform" [ref=e440]:
+                - radio "Kitchen" [checked] [ref=e441] [cursor=pointer]:
+                  - generic [ref=e442]:
+                    - img [ref=e444]
+                    - generic [ref=e446]: Kitchen
+                - radio "Bathroom" [ref=e447] [cursor=pointer]:
+                  - generic [ref=e448]:
+                    - img [ref=e450]
+                    - generic [ref=e452]: Bathroom
+                - radio "Paint exterior" [ref=e453] [cursor=pointer]:
+                  - generic [ref=e454]:
+                    - img [ref=e456]
+                    - generic [ref=e458]: Paint exterior
+                - radio "Paint interior" [ref=e459] [cursor=pointer]:
+                  - generic [ref=e460]:
+                    - img [ref=e462]
+                    - generic [ref=e464]: Paint interior
+              - generic [ref=e465]:
+                - button "Continue" [ref=e467] [cursor=pointer]
+                - generic [ref=e469]:
+                  - paragraph [ref=e470]: Presented by
+                  - img "Logo of sponsor" [ref=e471]
+            - generic [ref=e472]:
+              - heading "Discover insights for 3 bed houses in Farnborough" [level=2] [ref=e473]:
+                - link "Discover insights for 3 bed houses in Farnborough" [ref=e474] [cursor=pointer]:
+                  - /url: https://www.realestate.com.au/qld/farnborough-4703/?sourcePage=rea:buy:pdp&sourceElement=suburb-profile&bed=3
+              - generic [ref=e475]:
+                - generic [ref=e476]:
+                  - img "Research suburbs" [ref=e477]
+                  - paragraph [ref=e478]: Elevate your property journey with the latest Farnborough market insights.
+                - link "Explore Farnborough" [ref=e479] [cursor=pointer]:
+                  - /url: https://www.realestate.com.au/qld/farnborough-4703/?sourcePage=rea:buy:pdp&sourceElement=suburb-profile&bed=3
+                  - paragraph [ref=e480]: Explore Farnborough
+            - generic [ref=e481]:
+              - heading "Nearby schools" [level=2] [ref=e482]
+              - tablist [ref=e485]:
+                - tab "Primary" [selected] [ref=e486] [cursor=pointer]
+                - tab "Secondary" [ref=e488] [cursor=pointer]
+              - tabpanel [ref=e489]:
+                - link "Farnborough State School Primary Government 1.98km" [ref=e490] [cursor=pointer]:
+                  - /url: http://www.farnboroughss.eq.edu.au
+                  - generic [ref=e491]:
+                    - generic [ref=e492]:
+                      - paragraph [ref=e494]: Farnborough State School
+                      - generic [ref=e495]:
+                        - paragraph [ref=e496]: Primary
+                        - paragraph [ref=e497]: Government
+                    - paragraph [ref=e499]: 1.98km
+                - link "St Benedict's Catholic Primary School Primary Independent 2.95km" [ref=e500] [cursor=pointer]:
+                  - /url: http://www.sbyrok.catholic.edu.au
+                  - generic [ref=e501]:
+                    - generic [ref=e502]:
+                      - paragraph [ref=e504]: St Benedict's Catholic Primary School
+                      - generic [ref=e505]:
+                        - paragraph [ref=e506]: Primary
+                        - paragraph [ref=e507]: Independent
+                    - paragraph [ref=e509]: 2.95km
+                - link "Yeppoon State School Primary Government 5.65km" [ref=e510] [cursor=pointer]:
+                  - /url: http://www.yeppoonss.eq.edu.au
+                  - generic [ref=e511]:
+                    - generic [ref=e512]:
+                      - paragraph [ref=e514]: Yeppoon State School
+                      - generic [ref=e515]:
+                        - paragraph [ref=e516]: Primary
+                        - paragraph [ref=e517]: Government
+                    - paragraph [ref=e519]: 5.65km
+                - link "Taranganba State School Primary Government 9.30km" [ref=e520] [cursor=pointer]:
+                  - /url: http://www.taranganbass.eq.edu.au
+                  - generic [ref=e521]:
+                    - generic [ref=e522]:
+                      - paragraph [ref=e524]: Taranganba State School
+                      - generic [ref=e525]:
+                        - paragraph [ref=e526]: Primary
+                        - paragraph [ref=e527]: Government
+                    - paragraph [ref=e529]: 9.30km
+                - link "Sacred Heart Catholic Primary School Primary Independent 10.18km" [ref=e530] [cursor=pointer]:
+                  - /url: http://www.shyrok.catholic.edu.au
+                  - generic [ref=e531]:
+                    - generic [ref=e532]:
+                      - paragraph [ref=e534]: Sacred Heart Catholic Primary School
+                      - generic [ref=e535]:
+                        - paragraph [ref=e536]: Primary
+                        - paragraph [ref=e537]: Independent
+                    - paragraph [ref=e539]: 10.18km
+              - button "\"Distance\" is a straight line calculation. See more about our child care and schools data." [ref=e542] [cursor=pointer]
+          - generic [ref=e545]:
+            - link "Ray White - Yeppoon" [ref=e547] [cursor=pointer]:
+              - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:contact-side-panel&sourcePage=buy:property-details&sourceElement=agency-branding
+              - img "Ray White - Yeppoon" [ref=e549]
+            - list [ref=e550]:
+              - listitem [ref=e551]:
+                - link "Claudia Woods" [ref=e552] [cursor=pointer]:
+                  - /url: https://www.realestate.com.au/agent/claudia-woods-3416244?cid=agent-profile-page|buy:pdp:contact-side-panel
+                  - img "Claudia Woods" [ref=e554]
+                - generic [ref=e555]:
+                  - generic [ref=e556]:
+                    - link "Claudia Woods" [ref=e557] [cursor=pointer]:
+                      - /url: https://www.realestate.com.au/agent/claudia-woods-3416244?cid=agent-profile-page|buy:pdp:contact-side-panel
+                    - generic [ref=e558]:
+                      - img [ref=e559]
+                      - generic [ref=e561]: "5.0"
+                      - generic [ref=e562]: (30 reviews)
+                  - button "04383368..." [ref=e564] [cursor=pointer]
+            - generic [ref=e565]:
+              - link "Ray White - Yeppoon" [ref=e566] [cursor=pointer]:
+                - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:contact-side-panel&sourcePage=buy:property-details&sourceElement=agency-branding
+              - generic [ref=e567]: 72 Queen Street, YEPPOON, QLD 4703
+            - generic [ref=e569]:
+              - button "Get in touch" [ref=e571] [cursor=pointer]
+              - button "Save property" [ref=e572] [cursor=pointer]:
+                - img [ref=e573]
+                - generic [ref=e575]: Save property
+      - generic [ref=e578]:
+        - generic [ref=e581]:
+          - generic [ref=e582]:
+            - generic [ref=e583]:
+              - link "Ray White - Yeppoon" [ref=e585] [cursor=pointer]:
+                - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:contact-form&sourcePage=buy:property-details&sourceElement=agency-branding
+                - img "Ray White - Yeppoon" [ref=e587]
+              - generic [ref=e588]:
+                - heading "What would you like to ask Claudia Woods?" [level=3] [ref=e589]
+                - list [ref=e590]:
+                  - listitem [ref=e591]:
+                    - link "Claudia Woods" [ref=e592] [cursor=pointer]:
+                      - /url: https://www.realestate.com.au/agent/claudia-woods-3416244?cid=agent-profile-page|buy:pdp:contact-form
+                      - img "Claudia Woods" [ref=e594]
+                    - generic [ref=e595]:
+                      - generic [ref=e596]:
+                        - link "Claudia Woods" [ref=e597] [cursor=pointer]:
+                          - /url: https://www.realestate.com.au/agent/claudia-woods-3416244?cid=agent-profile-page|buy:pdp:contact-form
+                        - generic [ref=e598]:
+                          - img [ref=e599]
+                          - generic [ref=e601]: "5.0"
+                          - generic [ref=e602]: (30 reviews)
+                      - button "04383368..." [ref=e604] [cursor=pointer]
+                - generic [ref=e605]:
+                  - generic [ref=e608]:
+                    - generic [ref=e609]: Message
+                    - textbox "Message" [disabled] [ref=e610]:
+                      - /placeholder: What would you like to ask the agent?
+                  - generic [ref=e614]:
+                    - img [ref=e615]
+                    - generic [ref=e674]:
+                      - heading "Sign in to enquire" [level=2] [ref=e675]
+                      - paragraph [ref=e676]: Sign in or join to speed up property enquiries and applications.
+                      - generic [ref=e677]:
+                        - button "Sign in" [ref=e678] [cursor=pointer]
+                        - button "Join" [ref=e679] [cursor=pointer]
+            - generic [ref=e680]:
+              - paragraph [ref=e681]: "Property ID: 150549372"
+              - link "Promote this property" [ref=e682] [cursor=pointer]:
+                - /url: https://customer.realestate.com.au/residential/property-advertising/
+              - generic [ref=e684]:
+                - paragraph [ref=e685]: 1,494 page views
+                - button "More information" [ref=e687] [cursor=pointer]:
+                  - img [ref=e688]
+          - generic [ref=e691]:
+            - link [ref=e692] [cursor=pointer]:
+              - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:contact-form&sourcePage=buy:property-details&sourceElement=agency-branding
+              - img [ref=e693]
+            - generic [ref=e694]:
+              - link "Ray White - Yeppoon" [ref=e695] [cursor=pointer]:
+                - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=agency-profile-page|buy:pdp:contact-form
+              - generic [ref=e696]: 72 Queen Street, YEPPOON, QLD 4703
+            - generic [ref=e698]: Welcome to Ray White Yeppoon, a locally owned and operated real estate office led by Riley Neaton and David Bell.With years of experience in the industry and a proven track record of success, our team is committed to providing unparalleled service to clients throughout Yeppoon and the surrounding areas.We are dedicated to providing our clients with the highest level of service and expertise. Our team of experienced sales specialists, property managers and support staff work closely with our clients to understand their needs and provide tailored solutions to achieve their goals.If you are looking to buy or sell a property in Yeppoon or the surrounding areas, we invite you to contact us today.
+        - generic [ref=e699]:
+          - generic [ref=e700]:
+            - generic [ref=e701]: More properties from Ray White - Yeppoon
+            - generic [ref=e702]: These properties from Ray White - Yeppoon are shown based on the property type and distance to this listing.
+            - link "View agency profile" [ref=e703] [cursor=pointer]:
+              - /url: https://www.realestate.com.au/agency/ray-white-yeppoon-XRWYEP?cid=nhbpp|buy:pdp:footer-overview
+          - generic [ref=e705]:
+            - link "39 Woodwind Valley Road, Farnborough" [ref=e706] [cursor=pointer]:
+              - /url: /property-acreage+semi-rural-qld-farnborough-150696372?sourcePage=rea:buy:pdp&sourceElement=related-properties
+              - generic [ref=e707]:
+                - img "39 Woodwind Valley Road, Farnborough" [ref=e709]
+                - img "Ray White - Yeppoon" [ref=e712]
+                - generic [ref=e713]:
+                  - paragraph [ref=e714]: Auction
+                  - paragraph [ref=e715]: 39 Woodwind Valley Road, Farnborough
+                  - list "3 bedrooms 2 bathrooms 2 car spaces" [ref=e716]:
+                    - generic [ref=e717]:
+                      - listitem "3 bedrooms" [ref=e718]:
+                        - img [ref=e719]
+                        - paragraph [ref=e721]: "3"
+                      - listitem "2 bathrooms" [ref=e722]:
+                        - img [ref=e723]
+                        - paragraph [ref=e725]: "2"
+                      - listitem "2 car spaces" [ref=e726]:
+                        - img [ref=e727]
+                        - paragraph [ref=e729]: "2"
+            - link "3 Swains Avenue, Pacific Heights" [ref=e730] [cursor=pointer]:
+              - /url: /property-house-qld-pacific+heights-150617148?sourcePage=rea:buy:pdp&sourceElement=related-properties
+              - generic [ref=e731]:
+                - img "3 Swains Avenue, Pacific Heights" [ref=e733]
+                - img "Ray White - Yeppoon" [ref=e736]
+                - generic [ref=e737]:
+                  - paragraph [ref=e738]: Offers over $1,075,000 considered
+                  - paragraph [ref=e739]: 3 Swains Avenue, Pacific Heights
+                  - list "4 bedrooms 2 bathrooms 2 car spaces" [ref=e740]:
+                    - generic [ref=e741]:
+                      - listitem "4 bedrooms" [ref=e742]:
+                        - img [ref=e743]
+                        - paragraph [ref=e745]: "4"
+                      - listitem "2 bathrooms" [ref=e746]:
+                        - img [ref=e747]
+                        - paragraph [ref=e749]: "2"
+                      - listitem "2 car spaces" [ref=e750]:
+                        - img [ref=e751]
+                        - paragraph [ref=e753]: "2"
+            - link "10 Priors Pocket, Pacific Heights" [ref=e754] [cursor=pointer]:
+              - /url: /property-house-qld-pacific+heights-150758804?sourcePage=rea:buy:pdp&sourceElement=related-properties
+              - generic [ref=e755]:
+                - img "10 Priors Pocket, Pacific Heights" [ref=e757]
+                - img "Ray White - Yeppoon" [ref=e760]
+                - generic [ref=e761]:
+                  - paragraph [ref=e762]: Offers over $990,000
+                  - paragraph [ref=e763]: 10 Priors Pocket, Pacific Heights
+                  - list "5 bedrooms 2 bathrooms 2 car spaces" [ref=e764]:
+                    - generic [ref=e765]:
+                      - listitem "5 bedrooms" [ref=e766]:
+                        - img [ref=e767]
+                        - paragraph [ref=e769]: "5"
+                      - listitem "2 bathrooms" [ref=e770]:
+                        - img [ref=e771]
+                        - paragraph [ref=e773]: "2"
+                      - listitem "2 car spaces" [ref=e774]:
+                        - img [ref=e775]
+                        - paragraph [ref=e777]: "2"
+    - contentinfo [ref=e778]:
+      - generic [ref=e780]:
+        - list [ref=e781]:
+          - listitem [ref=e782]:
+            - link "Facebook" [ref=e783] [cursor=pointer]:
+              - /url: https://www.facebook.com/realestateAus
+              - img [ref=e785]
+          - listitem [ref=e787]:
+            - link "Twitter" [ref=e788] [cursor=pointer]:
+              - /url: https://twitter.com/realestate_au
+              - img [ref=e790]
+          - listitem [ref=e792]:
+            - link "Pinterest" [ref=e793] [cursor=pointer]:
+              - /url: https://www.pinterest.com/realestateau
+              - img [ref=e795]
+          - listitem [ref=e797]:
+            - link "LinkedIn" [ref=e798] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/rea-group
+              - img [ref=e800]
+          - listitem [ref=e802]:
+            - link "YouTube" [ref=e803] [cursor=pointer]:
+              - /url: https://www.youtube.com/user/thereagroup
+              - img [ref=e805]
+        - list [ref=e807]:
+          - listitem [ref=e808]:
+            - link "Advertise with us" [ref=e809] [cursor=pointer]:
+              - /url: https://about.realestate.com.au/advertise/
+          - listitem [ref=e810]:
+            - link "Contact us" [ref=e811] [cursor=pointer]:
+              - /url: https://help.realestate.com.au/hc/en-us/
+          - listitem [ref=e812]:
+            - link "Ignite" [ref=e813] [cursor=pointer]:
+              - /url: https://ignite.realestate.com.au/
+          - listitem [ref=e814]:
+            - link "Agent admin" [ref=e815] [cursor=pointer]:
+              - /url: https://secure.realestate.com.au/sign_in
+          - listitem [ref=e816]:
+            - link "Media sales" [ref=e817] [cursor=pointer]:
+              - /url: https://media.realestate.com.au/
+          - listitem [ref=e818]:
+            - link "Legal" [ref=e819] [cursor=pointer]:
+              - /url: https://about.realestate.com.au/terms-use/
+          - listitem [ref=e820]:
+            - link "Privacy settings" [ref=e821] [cursor=pointer]:
+              - /url: https://www.realestate.com.au/my-real-estate/account/privacy/
+          - listitem [ref=e822]:
+            - link "Privacy centre" [ref=e823] [cursor=pointer]:
+              - /url: https://www.realestate.com.au/privacy-centre/
+          - listitem [ref=e824]:
+            - link "Site map" [ref=e825] [cursor=pointer]:
+              - /url: https://about.realestate.com.au/sitemap/
+          - listitem [ref=e826]:
+            - link "Careers" [ref=e827] [cursor=pointer]:
+              - /url: https://www.rea-group.com/careers/
+      - generic [ref=e829]:
+        - navigation "REA Group links" [ref=e830]:
+          - list [ref=e831]:
+            - listitem [ref=e832]:
+              - link "REA Group corporate website" [ref=e833] [cursor=pointer]:
+                - /url: https://www.rea-group.com
+                - img [ref=e834]
+            - listitem [ref=e846]:
+              - 'link "realestate.com.au: Real estate to buy and rent" [ref=e847] [cursor=pointer]':
+                - /url: https://www.realestate.com.au
+                - img [ref=e848]
+            - listitem [ref=e869]:
+              - 'link "realcommercial.com.au: Search for commercial real estate" [ref=e870] [cursor=pointer]':
+                - /url: https://www.realcommercial.com.au
+                - img [ref=e871]
+            - listitem [ref=e895]:
+              - 'link "proptrack.com.au: Where property data lives" [ref=e896] [cursor=pointer]':
+                - /url: https://www.proptrack.com.au
+                - img [ref=e897]
+            - listitem [ref=e910]:
+              - 'link "Flatmates.com.au: Australia''s biggest share accommodation site" [ref=e911] [cursor=pointer]':
+                - /url: https://flatmates.com.au/
+                - img [ref=e912]
+            - listitem [ref=e923]:
+              - 'link "mortgagechoice.com.au: Expert mortgage brokers you can trust" [ref=e924] [cursor=pointer]':
+                - /url: https://www.mortgagechoice.com.au/
+                - img [ref=e925]
+            - listitem [ref=e943]:
+              - 'link "property.com.au: Research any property" [ref=e944] [cursor=pointer]':
+                - /url: https://www.property.com.au
+                - img [ref=e945]
+        - navigation "International sites" [ref=e948]:
+          - generic [ref=e949]: International sites
+          - list [ref=e950]:
+            - listitem [ref=e951]:
+              - link "India" [ref=e952] [cursor=pointer]:
+                - /url: https://housing.com/
+            - listitem [ref=e953]:
+              - link "United States" [ref=e954] [cursor=pointer]:
+                - /url: https://www.realtor.com/
+            - listitem [ref=e955]:
+              - link "International properties" [ref=e956] [cursor=pointer]:
+                - /url: https://www.realestate.com.au/international/
+        - navigation "Partner sites" [ref=e957]:
+          - generic [ref=e958]: Partner sites
+          - list [ref=e959]:
+            - listitem [ref=e960]:
+              - link "news.com.au" [ref=e961] [cursor=pointer]:
+                - /url: https://news.com.au/
+            - listitem [ref=e962]:
+              - link "foxsports.com.au" [ref=e963] [cursor=pointer]:
+                - /url: https://www.foxsports.com.au/
+            - listitem [ref=e964]:
+              - link "Mansion Global" [ref=e965] [cursor=pointer]:
+                - /url: https://www.mansionglobal.com
+            - listitem [ref=e966]:
+              - link "askizzy.org.au" [ref=e967] [cursor=pointer]:
+                - /url: https://askizzy.org.au
+            - listitem [ref=e968]:
+              - link "proptiger.com" [ref=e969] [cursor=pointer]:
+                - /url: https://www.proptiger.com/
+        - generic [ref=e971]:
+          - text: realestate.com.au is owned and operated by ASX-listed REA Group Ltd (REA:ASX) © REA Group Ltd. By accessing or using our platform, you agree to our
+          - link "Terms of Use." [ref=e972] [cursor=pointer]:
+            - /url: https://about.realestate.com.au/terms-use/
+  - iframe [ref=e975]:
+    
+  - iframe [ref=e978]:
+    
+  - iframe [ref=e981]:
+    
+  - iframe [ref=e984]:
+    
+  - iframe [ref=e987]:
+    
+  - iframe [ref=e990]:
+    
+  - iframe [ref=e993]:
+    
+  - iframe [ref=e996]:
+    
+  - iframe [ref=e999]:
+    - generic [active]:
+      - iframe
+  - iframe [ref=e1001]:
+    
