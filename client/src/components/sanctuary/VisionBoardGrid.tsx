@@ -329,73 +329,134 @@ function AddItemDialog({
   onOpenChange: (open: boolean) => void;
   onItemAdded: (item: VisionBoardItem) => void;
 }) {
-  const [url, setUrl] = useState("");
+  const [urls, setUrls] = useState<string[]>([""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function updateUrl(index: number, value: string) {
+    setUrls((prev) => prev.map((u, i) => (i === index ? value : u)));
+    setError(null);
+  }
+
+  function addUrlField() {
+    if (urls.length < 10) {
+      setUrls((prev) => [...prev, ""]);
+    }
+  }
+
+  function removeUrlField(index: number) {
+    if (urls.length > 1) {
+      setUrls((prev) => prev.filter((_, i) => i !== index));
+    }
+  }
+
+  function normaliseUrl(raw: string): string {
+    const trimmed = raw.trim();
+    if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
+      return `https://${trimmed}`;
+    }
+    return trimmed;
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
-    const trimmed = url.trim();
-    if (!trimmed) {
-      setError("Please enter a URL.");
+    const validUrls = urls.map((u) => u.trim()).filter(Boolean);
+    if (validUrls.length === 0) {
+      setError("Please enter at least one URL.");
       return;
-    }
-
-    let fullUrl = trimmed;
-    if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
-      fullUrl = `https://${fullUrl}`;
     }
 
     setLoading(true);
     try {
-      const item = await scrapeVisionBoardItem(fullUrl);
-      if (item) {
-        onItemAdded(item);
-        setUrl("");
+      const results = await Promise.allSettled(
+        validUrls.map((u) => scrapeVisionBoardItem(normaliseUrl(u)))
+      );
+
+      let addedCount = 0;
+      const failures: string[] = [];
+
+      results.forEach((result, i) => {
+        if (result.status === "fulfilled" && result.value) {
+          onItemAdded(result.value);
+          addedCount++;
+        } else {
+          failures.push(validUrls[i]);
+        }
+      });
+
+      if (failures.length > 0 && addedCount === 0) {
+        setError(`Failed to scrape ${failures.length === 1 ? "this URL" : "all URLs"}. Please check and try again.`);
+      } else if (failures.length > 0) {
+        setUrls(failures);
+        setError(`Added ${addedCount} item${addedCount > 1 ? "s" : ""}, but ${failures.length} failed.`);
+      } else {
+        setUrls([""]);
         onOpenChange(false);
       }
     } catch (err: any) {
-      setError(err.message || "Failed to scrape this URL. Please try again.");
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) { setUrls([""]); setError(null); } onOpenChange(o); }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add to Vision Board</DialogTitle>
           <DialogDescription>
-            Paste a link to any product or experience you aspire to.
+            Paste links to products or experiences you aspire to.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Input
-              placeholder="https://example.com/product"
-              value={url}
-              onChange={(e) => {
-                setUrl(e.target.value);
-                setError(null);
-              }}
-              disabled={loading}
-              autoFocus
-            />
+          <div className="space-y-2">
+            {urls.map((url, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  placeholder="https://example.com/product"
+                  value={url}
+                  onChange={(e) => updateUrl(index, e.target.value)}
+                  disabled={loading}
+                  autoFocus={index === urls.length - 1}
+                />
+                {urls.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeUrlField(index)}
+                    disabled={loading}
+                    className="shrink-0 rounded-full p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            {urls.length < 10 && (
+              <button
+                type="button"
+                onClick={addUrlField}
+                disabled={loading}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors pt-1"
+              >
+                <Plus className="h-4 w-4" />
+                Add another URL
+              </button>
+            )}
             {error && (
-              <p className="mt-2 text-sm text-destructive">{error}</p>
+              <p className="text-sm text-destructive">{error}</p>
             )}
           </div>
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                Scraping...
+                Scraping {urls.filter((u) => u.trim()).length} URL{urls.filter((u) => u.trim()).length !== 1 ? "s" : ""}...
               </>
             ) : (
-              "Add to Board"
+              `Add ${urls.filter((u) => u.trim()).length > 1 ? `${urls.filter((u) => u.trim()).length} Items` : ""} to Board`
             )}
           </Button>
         </form>
