@@ -1,0 +1,250 @@
+- generic [ref=e3]:
+  - generic:
+    - img
+  - generic [ref=e4]:
+    - generic [ref=e7]:
+      - link "Drake Family" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e11]
+        - generic [ref=e16]: Drake Family
+      - generic [ref=e17]:
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "Dashboard" [ref=e22] [cursor=pointer]:
+              - /url: /
+              - img [ref=e23]
+              - generic [ref=e28]: Dashboard
+        - generic [ref=e29]:
+          - generic [ref=e30]: Faith
+          - list [ref=e32]:
+            - listitem [ref=e33]:
+              - link "Goals" [ref=e34] [cursor=pointer]:
+                - /url: /goals
+                - img [ref=e35]
+                - generic [ref=e39]: Goals
+            - listitem [ref=e40]:
+              - link "Life Script" [ref=e41] [cursor=pointer]:
+                - /url: /faith/life-script
+                - img [ref=e42]
+                - generic [ref=e45]: Life Script
+            - listitem [ref=e46]:
+              - link "Vision Board" [ref=e47] [cursor=pointer]:
+                - /url: /sanctuary/vision-board
+                - img [ref=e48]
+                - generic [ref=e53]: Vision Board
+        - generic [ref=e54]:
+          - generic [ref=e55]: Family
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - link "The Sanctuary" [ref=e59] [cursor=pointer]:
+                - /url: /sanctuary
+                - img [ref=e60]
+                - generic [ref=e62]: The Sanctuary
+            - listitem [ref=e63]:
+              - link "Profiles" [ref=e64] [cursor=pointer]:
+                - /url: /sanctuary/profiles
+                - img [ref=e65]
+                - generic [ref=e70]: Profiles
+            - listitem [ref=e71]:
+              - link "Intimacy" [ref=e72] [cursor=pointer]:
+                - /url: /sanctuary/intimacy
+                - img [ref=e73]
+                - generic [ref=e75]: Intimacy
+            - listitem [ref=e76]:
+              - link "CRM" [ref=e77] [cursor=pointer]:
+                - /url: /family/crm
+                - img [ref=e78]
+                - generic [ref=e82]: CRM
+            - listitem [ref=e83]:
+              - link "Shopping List" [ref=e84] [cursor=pointer]:
+                - /url: /family/shopping
+                - img [ref=e85]
+                - generic [ref=e89]: Shopping List
+            - listitem [ref=e90]:
+              - link "Tasks" [ref=e91] [cursor=pointer]:
+                - /url: /family/tasks
+                - img [ref=e92]
+                - generic [ref=e95]: Tasks
+        - generic [ref=e96]:
+          - generic [ref=e97]: Home
+          - list [ref=e99]:
+            - listitem [ref=e100]:
+              - link "Equipment" [ref=e101] [cursor=pointer]:
+                - /url: /home/equipment
+                - img [ref=e102]
+                - generic [ref=e104]: Equipment
+            - listitem [ref=e105]:
+              - link "Documents" [ref=e106] [cursor=pointer]:
+                - /url: /home/documents
+                - img [ref=e107]
+                - generic [ref=e110]: Documents
+            - listitem [ref=e111]:
+              - link "Wardrobe" [ref=e112] [cursor=pointer]:
+                - /url: /home/wardrobe
+                - img [ref=e113]
+                - generic [ref=e115]: Wardrobe
+            - listitem [ref=e116]:
+              - link "Dream Home" [ref=e117] [cursor=pointer]:
+                - /url: /home/dream-home
+                - img [ref=e118]
+                - generic [ref=e122]: Dream Home
+        - generic [ref=e123]:
+          - generic [ref=e124]: Health
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - link "Health" [ref=e128] [cursor=pointer]:
+                - /url: /health
+                - img [ref=e129]
+                - generic [ref=e131]: Health
+        - generic [ref=e132]:
+          - generic [ref=e133]: Wealth
+          - list [ref=e135]:
+            - listitem [ref=e136]:
+              - link "Budget" [ref=e137] [cursor=pointer]:
+                - /url: /budget
+                - img [ref=e138]
+                - generic [ref=e141]: Budget
+            - listitem [ref=e142]:
+              - link "Net Worth" [ref=e143] [cursor=pointer]:
+                - /url: /wealth/net-worth
+                - img [ref=e144]
+                - generic [ref=e146]: Net Worth
+            - listitem [ref=e147]:
+              - link "Investments" [ref=e148] [cursor=pointer]:
+                - /url: /wealth/investments
+                - img [ref=e149]
+                - generic [ref=e152]: Investments
+            - listitem [ref=e153]:
+              - link "Loyalty" [ref=e154] [cursor=pointer]:
+                - /url: /loyalty
+                - img [ref=e155]
+                - generic [ref=e158]: Loyalty
+        - generic [ref=e159]:
+          - generic [ref=e160]: Happiness
+          - list [ref=e162]:
+            - listitem [ref=e163]:
+              - link "Happiness" [ref=e164] [cursor=pointer]:
+                - /url: /happiness
+                - img [ref=e165]
+                - generic [ref=e168]: Happiness
+            - listitem [ref=e169]:
+              - link "Restaurants" [ref=e170] [cursor=pointer]:
+                - /url: /happiness/restaurants
+                - img [ref=e171]
+                - generic [ref=e176]: Restaurants
+      - generic [ref=e177]:
+        - list [ref=e178]:
+          - listitem [ref=e179]:
+            - link "Settings" [ref=e180] [cursor=pointer]:
+              - /url: /settings
+              - img [ref=e181]
+              - generic [ref=e184]: Settings
+        - generic [ref=e185]:
+          - button "RD Ryan" [ref=e186]:
+            - generic [ref=e187]: RD
+            - generic [ref=e188]: Ryan
+          - button "ED Emily" [ref=e189]:
+            - generic [ref=e190]: ED
+            - generic [ref=e191]: Emily
+    - main [ref=e192]:
+      - main [ref=e193]:
+        - generic [ref=e194]:
+          - button "Toggle Sidebar" [ref=e195]:
+            - img
+            - generic [ref=e196]: Toggle Sidebar
+          - heading "Dashboard" [level=1] [ref=e197]
+          - button [ref=e199]:
+            - img
+        - main [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - heading "Welcome back, Ryan." [level=1] [ref=e204]
+                - paragraph [ref=e205]: It's Sunday, April 26. How can we help?
+              - generic [ref=e207]:
+                - img [ref=e208]
+                - textbox "Ask a question, find a file, or make a request" [ref=e211]
+                - button [disabled] [ref=e212]:
+                  - img [ref=e213]
+              - generic [ref=e215]:
+                - paragraph [ref=e216]: Suggestions
+                - generic [ref=e217]:
+                  - button "Spring checklist" [ref=e218]:
+                    - img [ref=e219]
+                    - text: Spring checklist
+                  - button "Cancel a subscription" [ref=e222]:
+                    - img [ref=e223]
+                    - text: Cancel a subscription
+                  - button "Recommended projects" [ref=e225]:
+                    - img [ref=e226]
+                    - text: Recommended projects
+                  - button "Equipment tips" [ref=e228]:
+                    - img [ref=e229]
+                    - text: Equipment tips
+                  - button "Recommended services" [ref=e231]:
+                    - img [ref=e232]
+                    - text: Recommended services
+            - generic [ref=e234]:
+              - generic [ref=e237]:
+                - img [ref=e239]
+                - generic [ref=e241]:
+                  - paragraph [ref=e242]: Recovery Score
+                  - paragraph [ref=e243]: "--%"
+              - generic [ref=e246]:
+                - img [ref=e248]
+                - generic [ref=e250]:
+                  - paragraph [ref=e251]: Sleep Score
+                  - paragraph [ref=e252]: "--%"
+              - generic [ref=e255]:
+                - img [ref=e257]
+                - generic [ref=e261]:
+                  - paragraph [ref=e262]: Weight
+                  - paragraph [ref=e263]: "--kg"
+              - generic [ref=e266]:
+                - img [ref=e268]
+                - generic [ref=e271]:
+                  - paragraph [ref=e272]: Steps
+                  - paragraph [ref=e273]: "--"
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - heading "Weather" [level=3] [ref=e277]
+                - generic [ref=e279]:
+                  - img [ref=e280]
+                  - paragraph [ref=e282]: Weather data unavailable
+                  - paragraph [ref=e283]: API key may need activation
+              - generic [ref=e284]:
+                - heading "Tides" [level=3] [ref=e286]
+                - generic [ref=e288]:
+                  - img [ref=e289]
+                  - paragraph [ref=e293]: Tide data unavailable
+                  - paragraph [ref=e294]: API key may need configuration
+            - generic [ref=e295]:
+              - generic [ref=e296]:
+                - generic [ref=e297]:
+                  - heading "Today's Schedule" [level=3] [ref=e298]
+                  - generic [ref=e299]: 0 events
+                - generic [ref=e301]:
+                  - img [ref=e302]
+                  - paragraph [ref=e304]: No events today
+              - generic [ref=e305]:
+                - generic [ref=e306]:
+                  - heading "Reminders" [level=3] [ref=e307]
+                  - button [ref=e308]:
+                    - img
+                - generic [ref=e310]:
+                  - img [ref=e311]
+                  - paragraph [ref=e314]: No reminders
+            - generic [ref=e315]:
+              - generic [ref=e316]:
+                - heading "Health & Wellness" [level=3] [ref=e318]
+                - generic [ref=e320]:
+                  - img [ref=e321]
+                  - paragraph [ref=e323]: No health services connected
+                  - link "Configure integrations" [ref=e324] [cursor=pointer]:
+                    - /url: /health
+              - generic [ref=e325]:
+                - generic [ref=e326]:
+                  - heading "Recent Activity" [level=3] [ref=e327]
+                  - link "View details" [ref=e328] [cursor=pointer]:
+                    - /url: /health
+                - paragraph [ref=e332]: No activity data available
