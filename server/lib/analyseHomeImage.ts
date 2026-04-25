@@ -22,7 +22,7 @@ Otherwise classify using ONLY these tags:
 ${TAG_TAXONOMY_TEXT}
 
 RULES:
-- Pick 1 Room/Area tag, 0-2 Style tags, and 0-2 Colour tags (the dominant colours visible)
+- Pick 1 Rooms tag and 0-1 Design tags
 - Each tag must be EXACTLY from the taxonomy above (case-sensitive)
 - Include a confidence score from 0.0 to 1.0 for each tag
 - Only return tags you are genuinely confident about (confidence > 0.5)
@@ -31,8 +31,8 @@ RULES:
 Return valid JSON:
 {
   "isFloorplan": false,
-  "tags": [{ "tag": "Kitchen", "confidence": 0.95 }, { "tag": "Modern", "confidence": 0.8 }, { "tag": "White", "confidence": 0.7 }],
-  "description": "A spacious modern kitchen with white cabinetry and timber accents"
+  "tags": [{ "tag": "Kitchen", "confidence": 0.95 }, { "tag": "Contemporary", "confidence": 0.8 }],
+  "description": "A spacious contemporary kitchen with white cabinetry and timber accents"
 }`;
 
 export async function analyseHomeImage(

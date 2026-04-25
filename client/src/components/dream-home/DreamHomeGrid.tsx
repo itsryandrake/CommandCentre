@@ -8,6 +8,8 @@ import {
   X,
   Search,
   Castle,
+  Upload,
+  ImagePlus,
 } from "lucide-react";
 import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ import {
   updateDreamHomeImage,
   updateDreamHomeTags,
   deleteDreamHomeImage,
+  uploadDreamHomeFiles,
 } from "@/lib/api";
 import type { DreamHomeImage, DreamHomeScrapeJob } from "@shared/types/dreamHome";
 import { DREAMHOME_TAG_GROUPS, ALL_TAGS } from "@shared/types/dreamHome";
@@ -38,9 +41,8 @@ import { cn } from "@/lib/utils";
 // =============================================================================
 
 const TAG_GROUP_COLOURS: Record<DreamHomeTagGroup, string> = {
-  "Room / Area": "bg-blue-500/80",
-  Style: "bg-purple-500/80",
-  Colour: "bg-amber-500/80",
+  Rooms: "bg-blue-500/80",
+  Design: "bg-purple-500/80",
 };
 
 function getTagGroup(tag: string): DreamHomeTagGroup | null {
@@ -381,7 +383,10 @@ function AddInspirationDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [job, setJob] = useState<DreamHomeScrapeJob | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const cleanup = useCallback(() => {
     if (pollRef.current) {
@@ -398,13 +403,65 @@ function AddInspirationDialog({
         setError(null);
         setJob(null);
         setIsLoading(false);
+        setPendingFiles([]);
       }
       onOpenChange(open);
     },
     [onOpenChange, cleanup]
   );
 
+  const startPolling = useCallback(
+    (jobId: string) => {
+      pollRef.current = setInterval(async () => {
+        try {
+          const status = await pollDreamHomeJob(jobId);
+          setJob(status);
+
+          if (status.status === "complete" || status.status === "error") {
+            cleanup();
+            setIsLoading(false);
+            if (status.status === "complete" && status.images.length > 0) {
+              onImagesAdded(status.images);
+            }
+            if (status.status === "error") {
+              setError(status.error || "Processing failed");
+            }
+          }
+        } catch {
+          cleanup();
+          setIsLoading(false);
+          setError("Lost connection to processing job");
+        }
+      }, 2000);
+    },
+    [onImagesAdded, cleanup]
+  );
+
+  const handleUploadFiles = useCallback(
+    async (files: File[]) => {
+      if (files.length === 0) return;
+      setIsLoading(true);
+      setError(null);
+      setJob(null);
+
+      try {
+        const result = await uploadDreamHomeFiles(files);
+        startPolling(result.jobId);
+      } catch (err: any) {
+        setError(err.message || "Failed to upload files");
+        setIsLoading(false);
+      }
+    },
+    [startPolling]
+  );
+
   const handleSubmit = useCallback(async () => {
+    if (pendingFiles.length > 0) {
+      handleUploadFiles(pendingFiles);
+      setPendingFiles([]);
+      return;
+    }
+
     if (!url.trim()) return;
     setIsLoading(true);
     setError(null);
@@ -414,7 +471,6 @@ function AddInspirationDialog({
       const result = await scrapeDreamHomeListing(url.trim());
 
       if (result.job) {
-        // Direct image — completed immediately
         setJob(result.job);
         setIsLoading(false);
         if (result.job.images.length > 0) {
@@ -424,35 +480,46 @@ function AddInspirationDialog({
       }
 
       if (result.jobId) {
-        // Listing scrape — poll for progress
-        const jobId = result.jobId;
-        pollRef.current = setInterval(async () => {
-          try {
-            const status = await pollDreamHomeJob(jobId);
-            setJob(status);
-
-            if (status.status === "complete" || status.status === "error") {
-              cleanup();
-              setIsLoading(false);
-              if (status.status === "complete" && status.images.length > 0) {
-                onImagesAdded(status.images);
-              }
-              if (status.status === "error") {
-                setError(status.error || "Scraping failed");
-              }
-            }
-          } catch {
-            cleanup();
-            setIsLoading(false);
-            setError("Lost connection to scraping job");
-          }
-        }, 2000);
+        startPolling(result.jobId);
       }
     } catch (err: any) {
       setError(err.message || "Failed to process URL");
       setIsLoading(false);
     }
-  }, [url, onImagesAdded, cleanup]);
+  }, [url, pendingFiles, onImagesAdded, startPolling, handleUploadFiles]);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const files = Array.from(e.dataTransfer.files).filter((f) =>
+        f.type.startsWith("image/")
+      );
+      if (files.length === 0) {
+        setError("No image files found. Please drop image files (JPG, PNG, WebP).");
+        return;
+      }
+      setPendingFiles(files);
+      setError(null);
+    },
+    []
+  );
+
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length > 0) {
+        setPendingFiles(files);
+        setError(null);
+      }
+      e.target.value = "";
+    },
+    []
+  );
+
+  const removePendingFile = useCallback((index: number) => {
+    setPendingFiles((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -460,20 +527,24 @@ function AddInspirationDialog({
         <DialogHeader>
           <DialogTitle>Add Inspiration</DialogTitle>
           <DialogDescription>
-            Paste a real estate listing URL to import all photos, or a direct image URL.
+            Paste a listing URL, or drag and drop images to upload.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* URL input */}
           <div className="flex gap-2">
             <Input
               placeholder="https://realestate.com.au/property/..."
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-              disabled={isLoading}
+              disabled={isLoading || pendingFiles.length > 0}
             />
-            <Button onClick={handleSubmit} disabled={isLoading || !url.trim()}>
+            <Button
+              onClick={handleSubmit}
+              disabled={isLoading || (!url.trim() && pendingFiles.length === 0)}
+            >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -481,6 +552,99 @@ function AddInspirationDialog({
               )}
             </Button>
           </div>
+
+          {/* Divider */}
+          {!job && !isLoading && (
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-xs text-muted-foreground">or</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+          )}
+
+          {/* Drop zone */}
+          {!job && !isLoading && pendingFiles.length === 0 && (
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={cn(
+                "flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed py-8 transition-colors",
+                isDragging
+                  ? "border-primary bg-primary/5"
+                  : "border-border/50 hover:border-border hover:bg-muted/50"
+              )}
+            >
+              <Upload className={cn("h-8 w-8", isDragging ? "text-primary" : "text-muted-foreground/40")} />
+              <div className="text-center">
+                <p className="text-sm font-medium">
+                  {isDragging ? "Drop images here" : "Drag and drop images"}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  or click to browse — JPG, PNG, WebP
+                </p>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+            </div>
+          )}
+
+          {/* Pending files preview */}
+          {pendingFiles.length > 0 && !isLoading && !job && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  {pendingFiles.length} image{pendingFiles.length !== 1 ? "s" : ""} ready to upload
+                </p>
+                <button
+                  onClick={() => setPendingFiles([])}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Clear all
+                </button>
+              </div>
+              <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
+                {pendingFiles.map((file, i) => (
+                  <div key={i} className="group relative aspect-square overflow-hidden rounded-lg bg-muted">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      className="h-full w-full object-cover"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removePendingFile(i);
+                      }}
+                      className="absolute top-1 right-1 rounded-full bg-black/60 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-3 w-3 text-white" />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-border/50 hover:border-border hover:bg-muted/50 transition-colors"
+                >
+                  <ImagePlus className="h-5 w-5 text-muted-foreground/40" />
+                </button>
+              </div>
+              <Button onClick={handleSubmit} className="w-full gap-2">
+                <Upload className="h-4 w-4" />
+                Upload {pendingFiles.length} image{pendingFiles.length !== 1 ? "s" : ""}
+              </Button>
+            </div>
+          )}
 
           {error && (
             <p className="text-sm text-destructive">{error}</p>

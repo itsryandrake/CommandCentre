@@ -1,63 +1,23 @@
 export const DREAMHOME_TAG_GROUPS = {
-  "Room / Area": [
-    "Bedroom",
-    "Bathroom",
-    "Ensuite",
-    "Living Room",
-    "Dining Room",
-    "Kitchen",
-    "Laundry",
-    "Pantry",
-    "Home Office",
+  Rooms: [
     "Games Room",
-    "Sex Room",
-    "Theatre Room",
-    "Garage",
-    "Wine Cellar",
+    "Home Cinema",
+    "Home Office",
     "Gym",
-    "Walk-in Closet",
-    "Garden",
+    "Outdoor Area",
     "Pool",
-    "Yard",
-    "Patio",
-    "Deck",
-    "Balcony",
-    "Courtyard",
-    "Facade",
-    "Entrance",
-    "Driveway",
+    "Living Room",
+    "Kitchen",
+    "Bedrooms",
+    "Bathrooms",
+    "Home Library",
+    "Laundry",
   ],
-  Style: [
-    "Art Deco",
-    "Balinese",
-    "Coastal",
+  Design: [
     "Contemporary",
-    "Farmhouse",
-    "Hamptons",
-    "Industrial",
-    "Japanese",
-    "Mediterranean",
-    "Mid-Century Modern",
-    "Minimalist",
-    "Modern",
-    "Rustic",
-    "Scandinavian",
-    "Traditional",
-    "Tropical",
-  ],
-  Colour: [
-    "White",
-    "Black",
-    "Grey",
-    "Cream",
-    "Beige",
-    "Navy",
-    "Green",
-    "Blue",
-    "Terracotta",
-    "Timber Tones",
-    "Earth Tones",
-    "Monochrome",
+    "Mid Century Modern",
+    "European",
+    "Other",
   ],
 } as const;
 
@@ -67,9 +27,8 @@ type TagValues<G extends DreamHomeTagGroup> =
   (typeof DREAMHOME_TAG_GROUPS)[G][number];
 
 export type DreamHomeTag =
-  | TagValues<"Room / Area">
-  | TagValues<"Style">
-  | TagValues<"Colour">;
+  | TagValues<"Rooms">
+  | TagValues<"Design">;
 
 export const ALL_TAGS: DreamHomeTag[] = Object.values(
   DREAMHOME_TAG_GROUPS

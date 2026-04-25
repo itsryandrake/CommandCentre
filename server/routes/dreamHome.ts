@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import multer from "multer";
 import { getSupabase } from "../db/supabase.ts";
 import {
   scrapeListingImages,
@@ -12,6 +13,11 @@ import type {
   DreamHomeImage,
   DreamHomeScrapeJob,
 } from "../../shared/types/dreamHome.ts";
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 
 const router = Router();
 
@@ -140,6 +146,86 @@ async function processAndSaveImage(
     row.ai_description = analysis.description;
 
     // Insert tags
+    if (analysis.tags.length > 0) {
+      const tagRows = analysis.tags.map((t) => ({
+        image_id: row.id,
+        tag: t.tag,
+        confidence: t.confidence,
+      }));
+      await supabase.from("dreamhome_image_tags").insert(tagRows);
+    }
+
+    return dbToImage(row, analysis.tags);
+  }
+
+  return dbToImage(row);
+}
+
+async function processUploadedFile(
+  buffer: Buffer,
+  originalName: string,
+  mimeType: string
+): Promise<DreamHomeImage | null> {
+  const supabase = getSupabase();
+
+  const ext = mimeType.split("/")[1]?.replace("jpeg", "jpg") || "jpg";
+
+  const { data: row, error: insertError } = await supabase
+    .from("dreamhome_images")
+    .insert({
+      source_url: null,
+      image_url: "",
+      original_image_url: null,
+      title: originalName.replace(/\.[^.]+$/, ""),
+      source_domain: null,
+    })
+    .select()
+    .single();
+
+  if (insertError || !row) {
+    console.error("[DreamHome] Insert error:", insertError);
+    return null;
+  }
+
+  const storagePath = `${row.id}.${ext}`;
+  const { error: uploadError } = await supabase.storage
+    .from("dreamhome-images")
+    .upload(storagePath, buffer, {
+      contentType: mimeType,
+      upsert: true,
+    });
+
+  if (uploadError) {
+    console.error("[DreamHome] Storage upload error:", uploadError);
+    await supabase.from("dreamhome_images").delete().eq("id", row.id);
+    return null;
+  }
+
+  const { data: publicUrl } = supabase.storage
+    .from("dreamhome-images")
+    .getPublicUrl(storagePath);
+
+  const storageUrl = publicUrl.publicUrl;
+  await supabase
+    .from("dreamhome_images")
+    .update({ image_url: storageUrl })
+    .eq("id", row.id);
+  row.image_url = storageUrl;
+
+  const analysis = await analyseHomeImage(storageUrl);
+  if (analysis) {
+    if (analysis.isFloorplan) {
+      await supabase.storage.from("dreamhome-images").remove([storagePath]).catch(() => {});
+      await supabase.from("dreamhome_images").delete().eq("id", row.id);
+      return null;
+    }
+
+    await supabase
+      .from("dreamhome_images")
+      .update({ ai_description: analysis.description })
+      .eq("id", row.id);
+    row.ai_description = analysis.description;
+
     if (analysis.tags.length > 0) {
       const tagRows = analysis.tags.map((t) => ({
         image_id: row.id,
@@ -331,6 +417,47 @@ router.post("/image", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("[DreamHome] Error adding image:", error);
     res.status(500).json({ error: "Failed to add image" });
+  }
+});
+
+// POST /api/dream-home/upload — upload image files directly
+router.post("/upload", upload.any(), async (req: Request, res: Response) => {
+  try {
+    const files = req.files as Express.Multer.File[] | undefined;
+    if (!files || files.length === 0) {
+      return res.status(400).json({ error: "No files uploaded" });
+    }
+
+    const jobId = crypto.randomUUID();
+    const job: DreamHomeScrapeJob = {
+      status: "processing",
+      progress: { total: files.length, done: 0 },
+      images: [],
+    };
+    jobs.set(jobId, job);
+
+    res.status(202).json({ jobId });
+
+    (async () => {
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < files.length; i += BATCH_SIZE) {
+        const batch = files.slice(i, i + BATCH_SIZE);
+        const results = await Promise.all(
+          batch.map((file) =>
+            processUploadedFile(file.buffer, file.originalname, file.mimetype)
+          )
+        );
+
+        for (const image of results) {
+          if (image) job.images.push(image);
+        }
+        job.progress.done = Math.min(i + BATCH_SIZE, files.length);
+      }
+      job.status = "complete";
+    })();
+  } catch (error) {
+    console.error("[DreamHome] Error uploading files:", error);
+    res.status(500).json({ error: "Failed to upload files" });
   }
 });
 

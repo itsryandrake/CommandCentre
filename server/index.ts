@@ -26,12 +26,12 @@ import restaurantRoutes from "./routes/restaurants.ts";
 import { startHealthDataCron } from "./services/healthDataCron.ts";
 
 const app = express();
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 6101;
 
 // Configure CORS with allowed origins
 const allowedOrigins = [
-  'http://localhost:5174',      // Vite dev server
-  'http://localhost:3006',      // Local API
+  'http://localhost:6100',      // Vite dev server
+  'http://localhost:6101',      // Local API
   'https://family.drake.au',    // Production domain
 ];
 

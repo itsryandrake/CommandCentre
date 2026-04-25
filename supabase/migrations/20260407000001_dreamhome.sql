@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS dreamhome_image_tags (
   UNIQUE(image_id, tag)
 );
 
-CREATE INDEX idx_dreamhome_image_tags_image_id ON dreamhome_image_tags(image_id);
-CREATE INDEX idx_dreamhome_image_tags_tag ON dreamhome_image_tags(tag);
-CREATE INDEX idx_dreamhome_images_created_at ON dreamhome_images(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_dreamhome_image_tags_image_id ON dreamhome_image_tags(image_id);
+CREATE INDEX IF NOT EXISTS idx_dreamhome_image_tags_tag ON dreamhome_image_tags(tag);
+CREATE INDEX IF NOT EXISTS idx_dreamhome_images_created_at ON dreamhome_images(created_at DESC);

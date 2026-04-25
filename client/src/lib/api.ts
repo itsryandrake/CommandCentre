@@ -784,6 +784,22 @@ export async function addDreamHomeDirectImage(imageUrl: string): Promise<DreamHo
   return response.json();
 }
 
+export async function uploadDreamHomeFiles(files: File[]): Promise<{ jobId: string }> {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("images", file);
+  }
+  const response = await fetch("/api/dream-home/upload", {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error || "Failed to upload files");
+  }
+  return response.json();
+}
+
 export async function updateDreamHomeImage(
   id: string,
   fields: { title?: string; notes?: string }
