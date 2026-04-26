@@ -1,0 +1,488 @@
+- generic [ref=e3]:
+  - generic:
+    - img
+  - generic [ref=e4]:
+    - generic [ref=e7]:
+      - link "Drake Family" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e11]
+        - generic [ref=e16]: Drake Family
+      - generic [ref=e17]:
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "Dashboard" [ref=e22] [cursor=pointer]:
+              - /url: /
+              - img [ref=e23]
+              - generic [ref=e28]: Dashboard
+        - generic [ref=e29]:
+          - generic [ref=e30]: Faith
+          - list [ref=e32]:
+            - listitem [ref=e33]:
+              - link "Goals" [ref=e34] [cursor=pointer]:
+                - /url: /goals
+                - img [ref=e35]
+                - generic [ref=e39]: Goals
+            - listitem [ref=e40]:
+              - link "Life Script" [ref=e41] [cursor=pointer]:
+                - /url: /faith/life-script
+                - img [ref=e42]
+                - generic [ref=e45]: Life Script
+            - listitem [ref=e46]:
+              - link "Vision Board" [ref=e47] [cursor=pointer]:
+                - /url: /sanctuary/vision-board
+                - img [ref=e48]
+                - generic [ref=e53]: Vision Board
+        - generic [ref=e54]:
+          - generic [ref=e55]: Family
+          - list [ref=e57]:
+            - listitem [ref=e58]:
+              - link "The Sanctuary" [ref=e59] [cursor=pointer]:
+                - /url: /sanctuary
+                - img [ref=e60]
+                - generic [ref=e62]: The Sanctuary
+            - listitem [ref=e63]:
+              - link "Profiles" [ref=e64] [cursor=pointer]:
+                - /url: /sanctuary/profiles
+                - img [ref=e65]
+                - generic [ref=e70]: Profiles
+            - listitem [ref=e71]:
+              - link "Intimacy" [ref=e72] [cursor=pointer]:
+                - /url: /sanctuary/intimacy
+                - img [ref=e73]
+                - generic [ref=e75]: Intimacy
+            - listitem [ref=e76]:
+              - link "CRM" [ref=e77] [cursor=pointer]:
+                - /url: /family/crm
+                - img [ref=e78]
+                - generic [ref=e82]: CRM
+            - listitem [ref=e83]:
+              - link "Shopping List" [ref=e84] [cursor=pointer]:
+                - /url: /family/shopping
+                - img [ref=e85]
+                - generic [ref=e89]: Shopping List
+            - listitem [ref=e90]:
+              - link "Tasks" [ref=e91] [cursor=pointer]:
+                - /url: /family/tasks
+                - img [ref=e92]
+                - generic [ref=e95]: Tasks
+        - generic [ref=e96]:
+          - generic [ref=e97]: Home
+          - list [ref=e99]:
+            - listitem [ref=e100]:
+              - link "Equipment" [ref=e101] [cursor=pointer]:
+                - /url: /home/equipment
+                - img [ref=e102]
+                - generic [ref=e104]: Equipment
+            - listitem [ref=e105]:
+              - link "Documents" [ref=e106] [cursor=pointer]:
+                - /url: /home/documents
+                - img [ref=e107]
+                - generic [ref=e110]: Documents
+            - listitem [ref=e111]:
+              - link "Wardrobe" [ref=e112] [cursor=pointer]:
+                - /url: /home/wardrobe
+                - img [ref=e113]
+                - generic [ref=e115]: Wardrobe
+            - listitem [ref=e116]:
+              - link "Dream Home" [ref=e117] [cursor=pointer]:
+                - /url: /home/dream-home
+                - img [ref=e118]
+                - generic [ref=e122]: Dream Home
+        - generic [ref=e123]:
+          - generic [ref=e124]: Health
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - link "Health" [ref=e128] [cursor=pointer]:
+                - /url: /health
+                - img [ref=e129]
+                - generic [ref=e131]: Health
+        - generic [ref=e132]:
+          - generic [ref=e133]: Wealth
+          - list [ref=e135]:
+            - listitem [ref=e136]:
+              - link "Budget" [ref=e137] [cursor=pointer]:
+                - /url: /budget
+                - img [ref=e138]
+                - generic [ref=e141]: Budget
+            - listitem [ref=e142]:
+              - link "Net Worth" [ref=e143] [cursor=pointer]:
+                - /url: /wealth/net-worth
+                - img [ref=e144]
+                - generic [ref=e146]: Net Worth
+            - listitem [ref=e147]:
+              - link "Investments" [ref=e148] [cursor=pointer]:
+                - /url: /wealth/investments
+                - img [ref=e149]
+                - generic [ref=e152]: Investments
+            - listitem [ref=e153]:
+              - link "Loyalty" [ref=e154] [cursor=pointer]:
+                - /url: /loyalty
+                - img [ref=e155]
+                - generic [ref=e158]: Loyalty
+        - generic [ref=e159]:
+          - generic [ref=e160]: Happiness
+          - list [ref=e162]:
+            - listitem [ref=e163]:
+              - link "Happiness" [ref=e164] [cursor=pointer]:
+                - /url: /happiness
+                - img [ref=e165]
+                - generic [ref=e168]: Happiness
+            - listitem [ref=e169]:
+              - link "Restaurants" [ref=e170] [cursor=pointer]:
+                - /url: /happiness/restaurants
+                - img [ref=e171]
+                - generic [ref=e176]: Restaurants
+      - generic [ref=e177]:
+        - list [ref=e178]:
+          - listitem [ref=e179]:
+            - link "Settings" [ref=e180] [cursor=pointer]:
+              - /url: /settings
+              - img [ref=e181]
+              - generic [ref=e184]: Settings
+        - generic [ref=e185]:
+          - button "RD Ryan" [ref=e186]:
+            - generic [ref=e187]: RD
+            - generic [ref=e188]: Ryan
+          - button "ED Emily" [ref=e189]:
+            - generic [ref=e190]: ED
+            - generic [ref=e191]: Emily
+    - main [ref=e192]:
+      - main [ref=e193]:
+        - generic [ref=e194]:
+          - button "Toggle Sidebar" [ref=e195]:
+            - img
+            - generic [ref=e196]: Toggle Sidebar
+          - heading "Dream Home" [level=1] [ref=e197]
+          - button [ref=e199]:
+            - img
+        - main [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - heading "Dream Home" [level=1] [ref=e204]
+                - paragraph [ref=e205]: Collect inspiration for your dream house — rooms, styles, materials, and features
+              - button "Add Inspiration" [ref=e206]:
+                - img
+                - text: Add Inspiration
+            - generic [ref=e207]:
+              - paragraph [ref=e209]: Filter by tags
+              - generic [ref=e210]:
+                - paragraph [ref=e211]: By Room
+                - generic [ref=e212]:
+                  - button "Outdoor Area 7" [ref=e213]:
+                    - text: Outdoor Area
+                    - generic [ref=e214]: "7"
+                  - button "Living Room 6" [ref=e215]:
+                    - text: Living Room
+                    - generic [ref=e216]: "6"
+                  - button "Kitchen 4" [ref=e217]:
+                    - text: Kitchen
+                    - generic [ref=e218]: "4"
+                  - button "Bedrooms 3" [ref=e219]:
+                    - text: Bedrooms
+                    - generic [ref=e220]: "3"
+                  - button "Patio 2" [ref=e221]:
+                    - text: Patio
+                    - generic [ref=e222]: "2"
+                  - button "Pool 2" [ref=e223]:
+                    - text: Pool
+                    - generic [ref=e224]: "2"
+                  - button "Facade 1" [ref=e225]:
+                    - text: Facade
+                    - generic [ref=e226]: "1"
+                  - button "Gym 1" [ref=e227]:
+                    - text: Gym
+                    - generic [ref=e228]: "1"
+                  - button "Games Room 1" [ref=e229]:
+                    - text: Games Room
+                    - generic [ref=e230]: "1"
+                  - button "Theatre Room 1" [ref=e231]:
+                    - text: Theatre Room
+                    - generic [ref=e232]: "1"
+                  - button "Bedroom 1" [ref=e233]:
+                    - text: Bedroom
+                    - generic [ref=e234]: "1"
+                  - button "Home Office 1" [ref=e235]:
+                    - text: Home Office
+                    - generic [ref=e236]: "1"
+                  - button "Bathrooms 1" [ref=e237]:
+                    - text: Bathrooms
+                    - generic [ref=e238]: "1"
+                  - button "Laundry 1" [ref=e239]:
+                    - text: Laundry
+                    - generic [ref=e240]: "1"
+              - generic [ref=e241]:
+                - paragraph [ref=e242]: By Design
+                - generic [ref=e243]:
+                  - button "Contemporary 20" [ref=e244]:
+                    - text: Contemporary
+                    - generic [ref=e245]: "20"
+                  - button "Modern 5" [ref=e246]:
+                    - text: Modern
+                    - generic [ref=e247]: "5"
+                  - button "Timber Tones 3" [ref=e248]:
+                    - text: Timber Tones
+                    - generic [ref=e249]: "3"
+                  - button "Earth Tones 2" [ref=e250]:
+                    - text: Earth Tones
+                    - generic [ref=e251]: "2"
+                  - button "Beige 2" [ref=e252]:
+                    - text: Beige
+                    - generic [ref=e253]: "2"
+                  - button "Grey 1" [ref=e254]:
+                    - text: Grey
+                    - generic [ref=e255]: "1"
+                  - button "Black 1" [ref=e256]:
+                    - text: Black
+                    - generic [ref=e257]: "1"
+            - paragraph [ref=e258]: 48 images
+            - generic [ref=e259]:
+              - button [ref=e260] [cursor=pointer]:
+                - img [ref=e262]
+              - button [ref=e268] [cursor=pointer]:
+                - img [ref=e270]
+              - button [ref=e276] [cursor=pointer]:
+                - img [ref=e278]
+              - button [ref=e284] [cursor=pointer]:
+                - img [ref=e286]
+              - button [ref=e292] [cursor=pointer]:
+                - img [ref=e294]
+              - button [ref=e300] [cursor=pointer]:
+                - img [ref=e302]
+              - button [ref=e308] [cursor=pointer]:
+                - img [ref=e310]
+              - button [ref=e316] [cursor=pointer]:
+                - img [ref=e318]
+              - button [ref=e324] [cursor=pointer]:
+                - img [ref=e326]
+              - button [ref=e332] [cursor=pointer]:
+                - img [ref=e334]
+              - button "A contemporary bedroom with a seating area and large windows overlooking greenery. A contemporary bedroom with a seating area and large windows overlooking greenery. Bedrooms Contemporary" [ref=e340] [cursor=pointer]:
+                - img "A contemporary bedroom with a seating area and large windows overlooking greenery." [ref=e341]
+                - generic [ref=e343]:
+                  - paragraph [ref=e344]: A contemporary bedroom with a seating area and large windows overlooking greenery.
+                  - generic [ref=e345]:
+                    - generic [ref=e346]: Bedrooms
+                    - generic [ref=e347]: Contemporary
+              - button "A contemporary outdoor area with seating and a bar counter. A contemporary outdoor area with seating and a bar counter. Outdoor Area Contemporary" [ref=e348] [cursor=pointer]:
+                - img "A contemporary outdoor area with seating and a bar counter." [ref=e349]
+                - generic [ref=e351]:
+                  - paragraph [ref=e352]: A contemporary outdoor area with seating and a bar counter.
+                  - generic [ref=e353]:
+                    - generic [ref=e354]: Outdoor Area
+                    - generic [ref=e355]: Contemporary
+              - button "A covered outdoor area with a view of a garden and seating. A covered outdoor area with a view of a garden and seating. Outdoor Area" [ref=e356] [cursor=pointer]:
+                - img "A covered outdoor area with a view of a garden and seating." [ref=e357]
+                - generic [ref=e359]:
+                  - paragraph [ref=e360]: A covered outdoor area with a view of a garden and seating.
+                  - generic [ref=e362]: Outdoor Area
+              - button "A modern kitchen with white cabinetry and dark accent wall. A modern kitchen with white cabinetry and dark accent wall. Kitchen Contemporary" [ref=e363] [cursor=pointer]:
+                - img "A modern kitchen with white cabinetry and dark accent wall." [ref=e364]
+                - generic [ref=e366]:
+                  - paragraph [ref=e367]: A modern kitchen with white cabinetry and dark accent wall.
+                  - generic [ref=e368]:
+                    - generic [ref=e369]: Kitchen
+                    - generic [ref=e370]: Contemporary
+              - button "A contemporary living room with a stone fireplace and large windows opening to an outdoor area. A contemporary living room with a stone fireplace and large windows opening to an outdoor area. Living Room Contemporary" [ref=e371] [cursor=pointer]:
+                - img "A contemporary living room with a stone fireplace and large windows opening to an outdoor area." [ref=e372]
+                - generic [ref=e374]:
+                  - paragraph [ref=e375]: A contemporary living room with a stone fireplace and large windows opening to an outdoor area.
+                  - generic [ref=e376]:
+                    - generic [ref=e377]: Living Room
+                    - generic [ref=e378]: Contemporary
+              - button "A modern laundry room with dark cabinetry and a tiled backsplash. A modern laundry room with dark cabinetry and a tiled backsplash. Laundry Contemporary" [ref=e379] [cursor=pointer]:
+                - img "A modern laundry room with dark cabinetry and a tiled backsplash." [ref=e380]
+                - generic [ref=e382]:
+                  - paragraph [ref=e383]: A modern laundry room with dark cabinetry and a tiled backsplash.
+                  - generic [ref=e384]:
+                    - generic [ref=e385]: Laundry
+                    - generic [ref=e386]: Contemporary
+              - button "A modern bathroom with a glass shower enclosure and illuminated mirror. A modern bathroom with a glass shower enclosure and illuminated mirror. Bathrooms Contemporary" [ref=e387] [cursor=pointer]:
+                - img "A modern bathroom with a glass shower enclosure and illuminated mirror." [ref=e388]
+                - generic [ref=e390]:
+                  - paragraph [ref=e391]: A modern bathroom with a glass shower enclosure and illuminated mirror.
+                  - generic [ref=e392]:
+                    - generic [ref=e393]: Bathrooms
+                    - generic [ref=e394]: Contemporary
+              - button "A spacious walk-in closet with ample storage and mirrors. A spacious walk-in closet with ample storage and mirrors. Bedrooms" [ref=e395] [cursor=pointer]:
+                - img "A spacious walk-in closet with ample storage and mirrors." [ref=e396]
+                - generic [ref=e398]:
+                  - paragraph [ref=e399]: A spacious walk-in closet with ample storage and mirrors.
+                  - generic [ref=e401]: Bedrooms
+              - button "CleanShot 2026-04-26 at 08.45.12@2x" [ref=e402] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.45.12@2x" [ref=e403]
+              - button "A contemporary bedroom with a stone fireplace and seating area. A contemporary bedroom with a stone fireplace and seating area. Bedrooms Contemporary" [ref=e406] [cursor=pointer]:
+                - img "A contemporary bedroom with a stone fireplace and seating area." [ref=e407]
+                - generic [ref=e409]:
+                  - paragraph [ref=e410]: A contemporary bedroom with a stone fireplace and seating area.
+                  - generic [ref=e411]:
+                    - generic [ref=e412]: Bedrooms
+                    - generic [ref=e413]: Contemporary
+              - button "CleanShot 2026-04-26 at 08.44.30@2x" [ref=e414] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.44.30@2x" [ref=e415]
+              - button "A contemporary home office with dark cabinetry and garden view. A contemporary home office with dark cabinetry and garden view. Home Office Contemporary" [ref=e418] [cursor=pointer]:
+                - img "A contemporary home office with dark cabinetry and garden view." [ref=e419]
+                - generic [ref=e421]:
+                  - paragraph [ref=e422]: A contemporary home office with dark cabinetry and garden view.
+                  - generic [ref=e423]:
+                    - generic [ref=e424]: Home Office
+                    - generic [ref=e425]: Contemporary
+              - button "CleanShot 2026-04-26 at 08.44.12@2x" [ref=e426] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.44.12@2x" [ref=e427]
+              - button "CleanShot 2026-04-26 at 08.44.20@2x" [ref=e430] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.44.20@2x" [ref=e431]
+              - button "CleanShot 2026-04-26 at 08.43.40@2x" [ref=e434] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.43.40@2x" [ref=e435]
+              - button "A modern kitchen with white cabinetry and wooden flooring. A modern kitchen with white cabinetry and wooden flooring. Kitchen Contemporary" [ref=e438] [cursor=pointer]:
+                - img "A modern kitchen with white cabinetry and wooden flooring." [ref=e439]
+                - generic [ref=e441]:
+                  - paragraph [ref=e442]: A modern kitchen with white cabinetry and wooden flooring.
+                  - generic [ref=e443]:
+                    - generic [ref=e444]: Kitchen
+                    - generic [ref=e445]: Contemporary
+              - button "A spacious contemporary kitchen with white cabinetry and timber accents. A spacious contemporary kitchen with white cabinetry and timber accents. Kitchen Contemporary" [ref=e446] [cursor=pointer]:
+                - img "A spacious contemporary kitchen with white cabinetry and timber accents." [ref=e447]
+                - generic [ref=e449]:
+                  - paragraph [ref=e450]: A spacious contemporary kitchen with white cabinetry and timber accents.
+                  - generic [ref=e451]:
+                    - generic [ref=e452]: Kitchen
+                    - generic [ref=e453]: Contemporary
+              - button "A contemporary living room with a dining area and large windows overlooking a scenic view. A contemporary living room with a dining area and large windows overlooking a scenic view. Living Room Contemporary" [ref=e454] [cursor=pointer]:
+                - img "A contemporary living room with a dining area and large windows overlooking a scenic view." [ref=e455]
+                - generic [ref=e457]:
+                  - paragraph [ref=e458]: A contemporary living room with a dining area and large windows overlooking a scenic view.
+                  - generic [ref=e459]:
+                    - generic [ref=e460]: Living Room
+                    - generic [ref=e461]: Contemporary
+              - button "A contemporary living room with a stone fireplace and large windows. A contemporary living room with a stone fireplace and large windows. Living Room Contemporary" [ref=e462] [cursor=pointer]:
+                - img "A contemporary living room with a stone fireplace and large windows." [ref=e463]
+                - generic [ref=e465]:
+                  - paragraph [ref=e466]: A contemporary living room with a stone fireplace and large windows.
+                  - generic [ref=e467]:
+                    - generic [ref=e468]: Living Room
+                    - generic [ref=e469]: Contemporary
+              - button "A large outdoor area with a spacious house and surrounding greenery. A large outdoor area with a spacious house and surrounding greenery. Outdoor Area" [ref=e470] [cursor=pointer]:
+                - img "A large outdoor area with a spacious house and surrounding greenery." [ref=e471]
+                - generic [ref=e473]:
+                  - paragraph [ref=e474]: A large outdoor area with a spacious house and surrounding greenery.
+                  - generic [ref=e476]: Outdoor Area
+              - button "A luxurious outdoor area featuring a long pool with scenic views. A luxurious outdoor area featuring a long pool with scenic views. Outdoor Area" [ref=e477] [cursor=pointer]:
+                - img "A luxurious outdoor area featuring a long pool with scenic views." [ref=e478]
+                - generic [ref=e480]:
+                  - paragraph [ref=e481]: A luxurious outdoor area featuring a long pool with scenic views.
+                  - generic [ref=e483]: Outdoor Area
+              - button "A spacious contemporary kitchen and dining area with open access to an outdoor space. A spacious contemporary kitchen and dining area with open access to an outdoor space. Kitchen Contemporary" [ref=e484] [cursor=pointer]:
+                - img "A spacious contemporary kitchen and dining area with open access to an outdoor space." [ref=e485]
+                - generic [ref=e487]:
+                  - paragraph [ref=e488]: A spacious contemporary kitchen and dining area with open access to an outdoor space.
+                  - generic [ref=e489]:
+                    - generic [ref=e490]: Kitchen
+                    - generic [ref=e491]: Contemporary
+              - button "CleanShot 2026-04-26 at 08.43.18@2x" [ref=e492] [cursor=pointer]:
+                - img "CleanShot 2026-04-26 at 08.43.18@2x" [ref=e493]
+              - button "A luxurious outdoor area with a pool and seating space. A luxurious outdoor area with a pool and seating space. Outdoor Area" [ref=e496] [cursor=pointer]:
+                - img "A luxurious outdoor area with a pool and seating space." [ref=e497]
+                - generic [ref=e499]:
+                  - paragraph [ref=e500]: A luxurious outdoor area with a pool and seating space.
+                  - generic [ref=e502]: Outdoor Area
+              - button "A contemporary living and dining area with a wine display and large windows. A contemporary living and dining area with a wine display and large windows. Living Room Contemporary" [ref=e503] [cursor=pointer]:
+                - img "A contemporary living and dining area with a wine display and large windows." [ref=e504]
+                - generic [ref=e506]:
+                  - paragraph [ref=e507]: A contemporary living and dining area with a wine display and large windows.
+                  - generic [ref=e508]:
+                    - generic [ref=e509]: Living Room
+                    - generic [ref=e510]: Contemporary
+              - button "A contemporary indoor space with a view of a small outdoor garden area. A contemporary indoor space with a view of a small outdoor garden area. Outdoor Area Contemporary" [ref=e511] [cursor=pointer]:
+                - img "A contemporary indoor space with a view of a small outdoor garden area." [ref=e512]
+                - generic [ref=e514]:
+                  - paragraph [ref=e515]: A contemporary indoor space with a view of a small outdoor garden area.
+                  - generic [ref=e516]:
+                    - generic [ref=e517]: Outdoor Area
+                    - generic [ref=e518]: Contemporary
+              - button "A bright contemporary living room with an open layout and modern furnishings. A bright contemporary living room with an open layout and modern furnishings. Living Room Contemporary" [ref=e519] [cursor=pointer]:
+                - img "A bright contemporary living room with an open layout and modern furnishings." [ref=e520]
+                - generic [ref=e522]:
+                  - paragraph [ref=e523]: A bright contemporary living room with an open layout and modern furnishings.
+                  - generic [ref=e524]:
+                    - generic [ref=e525]: Living Room
+                    - generic [ref=e526]: Contemporary
+              - button "A large outdoor area with a pool and seating, surrounded by greenery. A large outdoor area with a pool and seating, surrounded by greenery. Outdoor Area" [ref=e527] [cursor=pointer]:
+                - img "A large outdoor area with a pool and seating, surrounded by greenery." [ref=e528]
+                - generic [ref=e530]:
+                  - paragraph [ref=e531]: A large outdoor area with a pool and seating, surrounded by greenery.
+                  - generic [ref=e533]: Outdoor Area
+              - button "A modern house exterior with a large pool and timber accents. A modern house exterior with a large pool and timber accents. Pool Modern Timber Tones" [ref=e534] [cursor=pointer]:
+                - img "A modern house exterior with a large pool and timber accents." [ref=e535]
+                - generic [ref=e537]:
+                  - paragraph [ref=e538]: A modern house exterior with a large pool and timber accents.
+                  - generic [ref=e539]:
+                    - generic [ref=e540]: Pool
+                    - generic [ref=e541]: Modern
+                    - generic [ref=e542]: Timber Tones
+              - button "A contemporary bedroom with earth-toned decor and large windows. A contemporary bedroom with earth-toned decor and large windows. Bedroom Contemporary Earth Tones" [ref=e543] [cursor=pointer]:
+                - img "A contemporary bedroom with earth-toned decor and large windows." [ref=e544]
+                - generic [ref=e546]:
+                  - paragraph [ref=e547]: A contemporary bedroom with earth-toned decor and large windows.
+                  - generic [ref=e548]:
+                    - generic [ref=e549]: Bedroom
+                    - generic [ref=e550]: Contemporary
+                    - generic [ref=e551]: Earth Tones
+              - button "A contemporary patio area with seating and a pool, surrounded by greenery. A contemporary patio area with seating and a pool, surrounded by greenery. Patio Contemporary Beige" [ref=e552] [cursor=pointer]:
+                - img "A contemporary patio area with seating and a pool, surrounded by greenery." [ref=e553]
+                - generic [ref=e555]:
+                  - paragraph [ref=e556]: A contemporary patio area with seating and a pool, surrounded by greenery.
+                  - generic [ref=e557]:
+                    - generic [ref=e558]: Patio
+                    - generic [ref=e559]: Contemporary
+                    - generic [ref=e560]: Beige
+              - button "A modern theatre room with black walls and a large screen. A modern theatre room with black walls and a large screen. Theatre Room Modern Black" [ref=e561] [cursor=pointer]:
+                - img "A modern theatre room with black walls and a large screen." [ref=e562]
+                - generic [ref=e564]:
+                  - paragraph [ref=e565]: A modern theatre room with black walls and a large screen.
+                  - generic [ref=e566]:
+                    - generic [ref=e567]: Theatre Room
+                    - generic [ref=e568]: Modern
+                    - generic [ref=e569]: Black
+              - button "A modern home gym with exercise equipment and grey flooring. A modern home gym with exercise equipment and grey flooring. Gym Modern Grey" [ref=e570] [cursor=pointer]:
+                - img "A modern home gym with exercise equipment and grey flooring." [ref=e571]
+                - generic [ref=e573]:
+                  - paragraph [ref=e574]: A modern home gym with exercise equipment and grey flooring.
+                  - generic [ref=e575]:
+                    - generic [ref=e576]: Gym
+                    - generic [ref=e577]: Modern
+                    - generic [ref=e578]: Grey
+              - button "A modern games room with arcade machines and a neon sign. A modern games room with arcade machines and a neon sign. Games Room Modern Timber Tones" [ref=e579] [cursor=pointer]:
+                - img "A modern games room with arcade machines and a neon sign." [ref=e580]
+                - generic [ref=e582]:
+                  - paragraph [ref=e583]: A modern games room with arcade machines and a neon sign.
+                  - generic [ref=e584]:
+                    - generic [ref=e585]: Games Room
+                    - generic [ref=e586]: Modern
+                    - generic [ref=e587]: Timber Tones
+              - button "A modern outdoor patio area with a pool and seating. A modern outdoor patio area with a pool and seating. Pool Patio Modern Beige" [ref=e588] [cursor=pointer]:
+                - img "A modern outdoor patio area with a pool and seating." [ref=e589]
+                - generic [ref=e591]:
+                  - paragraph [ref=e592]: A modern outdoor patio area with a pool and seating.
+                  - generic [ref=e593]:
+                    - generic [ref=e594]: Pool
+                    - generic [ref=e595]: Patio
+                    - generic [ref=e596]: Modern
+                    - generic [ref=e597]: Beige
+              - button "Inside the 'Hollywood Hills' Gold Coast home set to shatter records" [ref=e598] [cursor=pointer]:
+                - img "Inside the 'Hollywood Hills' Gold Coast home set to shatter records" [ref=e599]
+              - button "A contemporary facade with natural stone and earth tones. A contemporary facade with natural stone and earth tones. Facade Contemporary Earth Tones" [ref=e602] [cursor=pointer]:
+                - img "A contemporary facade with natural stone and earth tones." [ref=e603]
+                - generic [ref=e605]:
+                  - paragraph [ref=e606]: A contemporary facade with natural stone and earth tones.
+                  - generic [ref=e607]:
+                    - generic [ref=e608]: Facade
+                    - generic [ref=e609]: Contemporary
+                    - generic [ref=e610]: Earth Tones
+              - button "A contemporary living room with timber flooring and modern furnishings. A contemporary living room with timber flooring and modern furnishings. Living Room Contemporary Timber Tones" [ref=e611] [cursor=pointer]:
+                - img "A contemporary living room with timber flooring and modern furnishings." [ref=e612]
+                - generic [ref=e614]:
+                  - paragraph [ref=e615]: A contemporary living room with timber flooring and modern furnishings.
+                  - generic [ref=e616]:
+                    - generic [ref=e617]: Living Room
+                    - generic [ref=e618]: Contemporary
+                    - generic [ref=e619]: Timber Tones

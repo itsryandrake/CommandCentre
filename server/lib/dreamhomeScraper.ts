@@ -3,6 +3,28 @@ import FirecrawlApp from "@mendable/firecrawl-js";
 import * as cheerio from "cheerio";
 import type { DreamHomeListingScrapeResult } from "../../shared/types/dreamHome.ts";
 
+// Cache image buffers captured during Playwright scraping so we don't
+// need to re-download from CDNs that block server-side fetches.
+const imageBufferCache = new Map<string, Buffer>();
+
+export function getCachedImageBuffer(url: string): Buffer | undefined {
+  const exact = imageBufferCache.get(url);
+  if (exact) return exact;
+
+  // Match by reastatic hash — the captured URL might differ in resolution
+  const hashMatch = url.match(/([a-f0-9]{64})/);
+  if (hashMatch) {
+    for (const [cachedUrl, buffer] of imageBufferCache) {
+      if (cachedUrl.includes(hashMatch[1])) return buffer;
+    }
+  }
+  return undefined;
+}
+
+export function clearImageBufferCache(): void {
+  imageBufferCache.clear();
+}
+
 function getDomain(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
@@ -45,70 +67,111 @@ async function scrapeListingWithPlaywright(
 ): Promise<DreamHomeListingScrapeResult | null> {
   let browser;
   try {
-    browser = await chromium.launch({ headless: true });
-    const page = await browser.newPage();
+    browser = await chromium.launch({
+      channel: "chrome",
+      headless: false,
+      args: [
+        "--disable-blink-features=AutomationControlled",
+        "--window-position=9999,9999",
+      ],
+    });
 
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
-    // Wait for main content to render
-    await page.waitForTimeout(2000);
+    const context = await browser.newContext({
+      viewport: { width: 1920, height: 1080 },
+      locale: "en-AU",
+      timezoneId: "Australia/Brisbane",
+    });
+
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => false });
+    });
+
+    const page = await context.newPage();
+
+    // Intercept image responses to capture bytes for later Supabase upload
+    // (CDNs like reastatic.net block server-side re-downloads)
+    const downloadPromises: Promise<void>[] = [];
+    page.on("response", (response) => {
+      const respUrl = response.url();
+      const ct = response.headers()["content-type"] || "";
+      if (
+        response.status() === 200 &&
+        (ct.startsWith("image/") ||
+          /\.(jpe?g|png|webp|avif)(\?|$)/i.test(respUrl)) &&
+        !respUrl.includes("logo") &&
+        !respUrl.includes("avatar") &&
+        !respUrl.includes("icon") &&
+        !respUrl.includes("sprite") &&
+        !respUrl.includes("pixel") &&
+        !respUrl.includes("badge")
+      ) {
+        downloadPromises.push(
+          response
+            .body()
+            .then((body) => {
+              if (body.length > 10_000) {
+                imageBufferCache.set(respUrl, Buffer.from(body));
+              }
+            })
+            .catch(() => {})
+        );
+      }
+    });
+
+    // Use networkidle to wait for bot protection challenges to resolve
+    await page.goto(url, { waitUntil: "networkidle", timeout: 45000 });
+    // Extra wait for JS-rendered content
+    await page.waitForTimeout(3000);
+
+    // Check if we got past bot protection
+    const blocked = await page.evaluate(
+      `!!document.querySelector("script[src*='ips.js']") && !document.querySelector("h1")`
+    );
+    if (blocked) {
+      console.log("[DreamHome] Kasada bot protection detected, waiting longer...");
+      await page.waitForTimeout(5000);
+    }
 
     // Get the title
-    const title = await page.evaluate(() => {
-      return (
-        document
-          .querySelector('meta[property="og:title"]')
-          ?.getAttribute("content") ||
-        document.querySelector("title")?.textContent?.trim() ||
-        document.querySelector("h1")?.textContent?.trim() ||
-        null
-      );
-    });
+    const title = await page.evaluate(`
+      (document.querySelector('meta[property="og:title"]') || {}).content ||
+      (document.querySelector("title") || {}).textContent ||
+      (document.querySelector("h1") || {}).textContent ||
+      null
+    `) as string | null;
 
     // Try to open the image gallery by clicking common gallery triggers
-    const galleryOpened = await page.evaluate(() => {
-      // realestate.com.au pattern
-      const previewBtn = document.querySelector(
+    const galleryOpened = await page.evaluate(`(function() {
+      var previewBtn = document.querySelector(
         'button[class*="media-type-bar"], button[aria-label*="image"], button[aria-label*="photo"]'
       );
-      if (previewBtn) {
-        (previewBtn as HTMLElement).click();
-        return "media-bar";
-      }
+      if (previewBtn) { previewBtn.click(); return "media-bar"; }
 
-      // Generic: click main property image or gallery button
-      const galleryBtn = document.querySelector(
+      var galleryBtn = document.querySelector(
         '[class*="gallery"] button, [class*="photo-count"], [class*="image-count"], button[class*="preview"]'
       );
-      if (galleryBtn) {
-        (galleryBtn as HTMLElement).click();
-        return "gallery-btn";
-      }
+      if (galleryBtn) { galleryBtn.click(); return "gallery-btn"; }
 
-      // Try clicking the main hero image itself
-      const heroImg = document.querySelector(
+      var heroImg = document.querySelector(
         '[class*="hero"] img, [class*="main-image"] img, [class*="property-image"] img'
       );
-      if (heroImg) {
-        (heroImg as HTMLElement).click();
-        return "hero-img";
-      }
+      if (heroImg) { heroImg.click(); return "hero-img"; }
 
       return null;
-    });
+    })()`) as string | null;
 
     if (galleryOpened) {
       await page.waitForTimeout(1500);
     }
 
-    // Set up image collection via MutationObserver, then arrow through gallery
-    const imageHashes = await page.evaluate(async () => {
-      const collected = new Set<string>();
+    // Passed as a string to avoid tsx adding __name helpers that don't exist in browser context
+    const imageHashes = await page.evaluate(`(async () => {
+      var collected = new Set();
 
-      // Collect existing images
-      const collectFromDom = () => {
-        document.querySelectorAll("img").forEach((img) => {
-          const alt = (img.alt || "").toLowerCase();
-          const isFloorplan =
+      function collectFromDom() {
+        document.querySelectorAll("img").forEach(function(img) {
+          var alt = (img.alt || "").toLowerCase();
+          var isFloorplan =
             alt.includes("floorplan") ||
             alt.includes("floor plan") ||
             alt.includes("floor-plan") ||
@@ -123,22 +186,19 @@ async function scrapeListingWithPlaywright(
             !img.src.includes("pixel") &&
             !img.src.includes("badge")
           ) {
-            // Extract image hash (reastatic pattern)
-            const hashMatch = img.src.match(/([a-f0-9]{64})/);
+            var hashMatch = img.src.match(/([a-f0-9]{64})/);
             if (hashMatch) {
               collected.add(hashMatch[1]);
             } else if (img.naturalWidth > 200 || img.width > 200) {
-              // For non-hash URLs, use the full URL
               collected.add(img.src);
             }
           }
         });
-      };
+      }
 
       collectFromDom();
 
-      // Watch for new images via MutationObserver
-      const observer = new MutationObserver(() => collectFromDom());
+      var observer = new MutationObserver(function() { collectFromDom(); });
       observer.observe(document.body, {
         childList: true,
         subtree: true,
@@ -146,29 +206,26 @@ async function scrapeListingWithPlaywright(
         attributeFilter: ["src"],
       });
 
-      // Check if a lightbox/gallery is open (PhotoSwipe, etc.)
-      const hasLightbox = document.querySelector(
+      var hasLightbox = document.querySelector(
         '.pswp, [class*="lightbox"], [class*="gallery-viewer"], [role="dialog"]'
       );
 
       if (hasLightbox) {
-        // Arrow through all images
-        const totalMatch = document
-          .querySelector('[class*="counter"], [class*="count"]')
-          ?.textContent?.match(/(\d+)/g);
-        const estimatedTotal = totalMatch
-          ? Math.max(...totalMatch.map(Number))
+        var totalMatch = (document
+          .querySelector('[class*="counter"], [class*="count"]') || {})
+          .textContent;
+        var nums = totalMatch ? totalMatch.match(/(\\d+)/g) : null;
+        var estimatedTotal = nums
+          ? Math.max.apply(null, nums.map(Number))
           : 50;
-        const arrowPresses = Math.min(estimatedTotal + 5, 55);
+        var arrowPresses = Math.min(estimatedTotal + 5, 55);
 
-        for (let i = 0; i < arrowPresses; i++) {
-          // Try clicking next button
-          const nextBtn = document.querySelector(
+        for (var i = 0; i < arrowPresses; i++) {
+          var nextBtn = document.querySelector(
             '.pswp__button--arrow--right, [class*="arrow-right"], [aria-label="Next"], [class*="next"]'
           );
-          if (nextBtn) (nextBtn as HTMLElement).click();
+          if (nextBtn) nextBtn.click();
 
-          // Also dispatch keyboard event
           document.dispatchEvent(
             new KeyboardEvent("keydown", {
               key: "ArrowRight",
@@ -177,15 +234,20 @@ async function scrapeListingWithPlaywright(
             })
           );
 
-          // Wait for image to load
-          await new Promise((r) => setTimeout(r, 200));
+          await new Promise(function(r) { setTimeout(r, 200); });
           collectFromDom();
         }
       }
 
       observer.disconnect();
-      return [...collected];
-    });
+      return Array.from(collected);
+    })()`) as string[];
+
+    // Wait for all intercepted image downloads to finish
+    await Promise.all(downloadPromises);
+    console.log(
+      `[DreamHome] Captured ${imageBufferCache.size} image buffers from browser`
+    );
 
     await browser.close();
     browser = null;
@@ -273,7 +335,11 @@ async function scrapeListingWithFirecrawl(
     const metadata = result.metadata;
     const title = json?.title || metadata?.ogTitle || metadata?.title || null;
     const images = (json?.images || []).filter(
-      (u: string) => u && u.startsWith("http")
+      (u: string) =>
+        u &&
+        u.startsWith("http") &&
+        !u.includes("example.com") &&
+        !u.includes("placeholder")
     );
 
     if (metadata?.ogImage && !images.includes(metadata.ogImage)) {

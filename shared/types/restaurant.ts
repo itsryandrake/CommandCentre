@@ -72,6 +72,8 @@ export interface Restaurant {
   ratingRyan?: number;
   ratingEmily?: number;
   googleReviews?: GoogleReview[];
+  latitude?: number;
+  longitude?: number;
   addedBy?: string;
   createdAt: string;
   updatedAt: string;
@@ -93,6 +95,8 @@ export interface CreateRestaurantInput {
   ratingRyan?: number;
   ratingEmily?: number;
   googleReviews?: GoogleReview[];
+  latitude?: number;
+  longitude?: number;
   addedBy?: string;
 }
 

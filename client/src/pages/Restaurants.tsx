@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,10 +11,11 @@ import {
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { useRestaurants } from "@/hooks/useRestaurants";
 import { RestaurantForm } from "@/components/restaurants/RestaurantForm";
+import { RestaurantMap } from "@/components/restaurants/RestaurantMap";
 import { StarRating } from "@/components/restaurants/StarRating";
 import { RESTAURANT_CITIES, CUISINE_TYPES, MEAL_TYPES, PRICE_RANGE_LABELS } from "@shared/types/restaurant";
 import type { Restaurant, CreateRestaurantInput, UpdateRestaurantInput, RestaurantStatus } from "@shared/types/restaurant";
-import { scrapeRestaurantReviews } from "@/lib/api";
+import { scrapeRestaurantReviews, geocodeRestaurantsBatch } from "@/lib/api";
 import {
   Table,
   TableBody,
@@ -49,11 +50,8 @@ import {
   MessageSquareQuote,
 } from "lucide-react";
 
-const STATUS_LABELS: Record<string, string> = {
-  want_to_try: "Want to Try",
-  would_go_back: "Would Go Back",
-  would_not_go_back: "Wouldn't Go Back",
-};
+import { STATUS_LABELS } from "@/components/restaurants/mapConstants";
+
 
 const STATUS_STYLES: Record<string, string> = {
   want_to_try: "bg-amber-500/10 text-amber-600",
@@ -109,6 +107,22 @@ export function Restaurants() {
     await remove(id);
     setViewing(undefined);
   };
+
+  // Brisbane restaurants for the map (show regardless of filters)
+  const brisbaneRestaurants = useMemo(
+    () => restaurants.filter((r) => r.city === "Brisbane"),
+    [restaurants]
+  );
+
+  // Auto-geocode restaurants missing coordinates on first load
+  useEffect(() => {
+    const needsGeocode = restaurants.some((r) => r.address && !r.latitude);
+    if (needsGeocode && restaurants.length > 0) {
+      geocodeRestaurantsBatch().then(() => {
+        setTimeout(() => reload(), 5000);
+      });
+    }
+  }, [restaurants.length]);
 
   // Client-side filtering on top of server data
   const filtered = useMemo(() => {
@@ -440,6 +454,11 @@ export function Restaurants() {
             )}
           </div>
         </div>
+
+        {/* Map — Brisbane restaurants only */}
+        {!isLoading && brisbaneRestaurants.length > 0 && (
+          <RestaurantMap restaurants={brisbaneRestaurants} />
+        )}
 
         {/* Count */}
         <p className="text-sm text-muted-foreground">

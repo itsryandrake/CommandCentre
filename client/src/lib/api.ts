@@ -800,6 +800,23 @@ export async function uploadDreamHomeFiles(files: File[]): Promise<{ jobId: stri
   return response.json();
 }
 
+export async function importDreamHomeUrls(
+  urls: string[],
+  sourceUrl?: string,
+  title?: string
+): Promise<{ jobId: string }> {
+  const response = await fetch("/api/dream-home/import-urls", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ urls, sourceUrl, title }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error || "Failed to import URLs");
+  }
+  return response.json();
+}
+
 export async function updateDreamHomeImage(
   id: string,
   fields: { title?: string; notes?: string }
@@ -1573,6 +1590,17 @@ export async function scrapeRestaurantInfo(url?: string, name?: string, city?: s
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url, name, city }),
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
+}
+
+export async function geocodeRestaurantsBatch(): Promise<{ total: number } | null> {
+  try {
+    const response = await fetch("/api/restaurants/geocode/batch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) return response.json();
   } catch {}

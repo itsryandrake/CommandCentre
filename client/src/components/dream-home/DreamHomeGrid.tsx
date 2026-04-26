@@ -6,14 +6,17 @@ import {
   ExternalLink,
   Trash2,
   X,
-  Search,
   Castle,
   Upload,
   ImagePlus,
+  Link,
+  Copy,
+  Check,
 } from "lucide-react";
 import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +33,7 @@ import {
   updateDreamHomeTags,
   deleteDreamHomeImage,
   uploadDreamHomeFiles,
+  importDreamHomeUrls,
 } from "@/lib/api";
 import type { DreamHomeImage, DreamHomeScrapeJob } from "@shared/types/dreamHome";
 import { DREAMHOME_TAG_GROUPS, ALL_TAGS } from "@shared/types/dreamHome";
@@ -69,8 +73,6 @@ export function DreamHomeGrid() {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<DreamHomeImage | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [tagSearch, setTagSearch] = useState("");
-
   const loadData = useCallback(async () => {
     const [imgs, counts] = await Promise.all([
       fetchDreamHomeImages(activeTags.length > 0 ? activeTags : undefined),
@@ -143,11 +145,6 @@ export function DreamHomeGrid() {
   // Tags that actually have images
   const usedTags = Object.keys(tagCounts).filter((t) => tagCounts[t] > 0);
 
-  // Filter tags by search
-  const filteredUsedTags = tagSearch
-    ? usedTags.filter((t) => t.toLowerCase().includes(tagSearch.toLowerCase()))
-    : usedTags;
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -177,7 +174,7 @@ export function DreamHomeGrid() {
 
       {/* Tag filter */}
       {usedTags.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center gap-3">
             <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
               Filter by tags
@@ -190,36 +187,64 @@ export function DreamHomeGrid() {
                 Clear all
               </button>
             )}
-            {usedTags.length > 15 && (
-              <div className="relative ml-auto">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={tagSearch}
-                  onChange={(e) => setTagSearch(e.target.value)}
-                  placeholder="Search tags..."
-                  className="h-7 w-48 rounded-full border border-border/50 bg-background pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
-                />
+          </div>
+          {(["Rooms", "Design"] as const).map((group) => {
+            const groupTags = usedTags.filter(
+              (t) => getTagGroup(t) === group
+            );
+            if (groupTags.length === 0) return null;
+            return (
+              <div key={group} className="space-y-1.5">
+                <p className="text-[11px] text-muted-foreground/70 uppercase tracking-wider font-semibold">
+                  By {group === "Rooms" ? "Room" : "Design"}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {groupTags.map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => toggleTag(tag)}
+                      className={cn(
+                        "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
+                        activeTags.includes(tag)
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      )}
+                    >
+                      {tag}
+                      <span className="opacity-60">{tagCounts[tag]}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {filteredUsedTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={cn(
-                  "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
-                  activeTags.includes(tag)
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                )}
-              >
-                {tag}
-                <span className="opacity-60">{tagCounts[tag]}</span>
-              </button>
-            ))}
-          </div>
+            );
+          })}
+          {/* Uncategorised tags */}
+          {usedTags.filter((t) => !getTagGroup(t)).length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-[11px] text-muted-foreground/70 uppercase tracking-wider font-semibold">
+                Other
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {usedTags
+                  .filter((t) => !getTagGroup(t))
+                  .map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => toggleTag(tag)}
+                      className={cn(
+                        "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
+                        activeTags.includes(tag)
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      )}
+                    >
+                      {tag}
+                      <span className="opacity-60">{tagCounts[tag]}</span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -385,6 +410,8 @@ function AddInspirationDialog({
   const [job, setJob] = useState<DreamHomeScrapeJob | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const [showPasteUrls, setShowPasteUrls] = useState(false);
+  const [pasteUrls, setPasteUrls] = useState("");
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -404,6 +431,8 @@ function AddInspirationDialog({
         setJob(null);
         setIsLoading(false);
         setPendingFiles([]);
+        setShowPasteUrls(false);
+        setPasteUrls("");
       }
       onOpenChange(open);
     },
@@ -454,6 +483,27 @@ function AddInspirationDialog({
     },
     [startPolling]
   );
+
+  const handleImportPastedUrls = useCallback(async () => {
+    const urls = pasteUrls
+      .split(/[\n,]+/)
+      .map((u) => u.trim())
+      .filter((u) => u.startsWith("http"));
+    if (urls.length === 0) {
+      setError("No valid URLs found. Paste one URL per line.");
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    setJob(null);
+    try {
+      const result = await importDreamHomeUrls(urls);
+      startPolling(result.jobId);
+    } catch (err: any) {
+      setError(err.message || "Failed to import URLs");
+      setIsLoading(false);
+    }
+  }, [pasteUrls, startPolling]);
 
   const handleSubmit = useCallback(async () => {
     if (pendingFiles.length > 0) {
@@ -562,8 +612,41 @@ function AddInspirationDialog({
             </div>
           )}
 
-          {/* Drop zone */}
+          {/* Paste URLs toggle */}
           {!job && !isLoading && pendingFiles.length === 0 && (
+            <button
+              onClick={() => setShowPasteUrls(!showPasteUrls)}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Link className="h-3.5 w-3.5" />
+              {showPasteUrls ? "Hide" : "Paste multiple image URLs"}
+            </button>
+          )}
+
+          {/* Paste URLs textarea */}
+          {showPasteUrls && !job && !isLoading && pendingFiles.length === 0 && (
+            <div className="space-y-2">
+              <Textarea
+                placeholder={"Paste image URLs, one per line:\nhttps://i2.au.reastatic.net/...\nhttps://i2.au.reastatic.net/..."}
+                value={pasteUrls}
+                onChange={(e) => setPasteUrls(e.target.value)}
+                rows={5}
+                className="text-xs"
+              />
+              <Button
+                onClick={handleImportPastedUrls}
+                disabled={!pasteUrls.trim()}
+                className="w-full gap-2"
+                size="sm"
+              >
+                <ImagePlus className="h-4 w-4" />
+                Import {pasteUrls.split(/[\n,]+/).filter((u) => u.trim().startsWith("http")).length} URL{pasteUrls.split(/[\n,]+/).filter((u) => u.trim().startsWith("http")).length !== 1 ? "s" : ""}
+              </Button>
+            </div>
+          )}
+
+          {/* Drop zone */}
+          {!job && !isLoading && pendingFiles.length === 0 && !showPasteUrls && (
             <div
               onDragOver={(e) => {
                 e.preventDefault();

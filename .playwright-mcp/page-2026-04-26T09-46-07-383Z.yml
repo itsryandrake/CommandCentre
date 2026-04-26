@@ -1,0 +1,301 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - img
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - link:
+                  - /url: /
+                  - generic:
+                    - img
+                  - generic: Drake Family
+              - generic:
+                - generic:
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /
+                          - img
+                          - generic: Dashboard
+                - generic:
+                  - generic: Faith
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /goals
+                          - img
+                          - generic: Goals
+                      - listitem:
+                        - link:
+                          - /url: /faith/life-script
+                          - img
+                          - generic: Life Script
+                      - listitem:
+                        - link:
+                          - /url: /sanctuary/vision-board
+                          - img
+                          - generic: Vision Board
+                - generic:
+                  - generic: Family
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /sanctuary
+                          - img
+                          - generic: The Sanctuary
+                      - listitem:
+                        - link:
+                          - /url: /sanctuary/profiles
+                          - img
+                          - generic: Profiles
+                      - listitem:
+                        - link:
+                          - /url: /sanctuary/intimacy
+                          - img
+                          - generic: Intimacy
+                      - listitem:
+                        - link:
+                          - /url: /family/crm
+                          - img
+                          - generic: CRM
+                      - listitem:
+                        - link:
+                          - /url: /family/shopping
+                          - img
+                          - generic: Shopping List
+                      - listitem:
+                        - link:
+                          - /url: /family/tasks
+                          - img
+                          - generic: Tasks
+                - generic:
+                  - generic: Home
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /home/equipment
+                          - img
+                          - generic: Equipment
+                      - listitem:
+                        - link:
+                          - /url: /home/documents
+                          - img
+                          - generic: Documents
+                      - listitem:
+                        - link:
+                          - /url: /home/wardrobe
+                          - img
+                          - generic: Wardrobe
+                      - listitem:
+                        - link:
+                          - /url: /home/dream-home
+                          - img
+                          - generic: Dream Home
+                - generic:
+                  - generic: Health
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /health
+                          - img
+                          - generic: Health
+                - generic:
+                  - generic: Wealth
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /budget
+                          - img
+                          - generic: Budget
+                      - listitem:
+                        - link:
+                          - /url: /wealth/net-worth
+                          - img
+                          - generic: Net Worth
+                      - listitem:
+                        - link:
+                          - /url: /wealth/investments
+                          - img
+                          - generic: Investments
+                      - listitem:
+                        - link:
+                          - /url: /loyalty
+                          - img
+                          - generic: Loyalty
+                - generic:
+                  - generic: Happiness
+                  - generic:
+                    - list:
+                      - listitem:
+                        - link:
+                          - /url: /happiness
+                          - img
+                          - generic: Happiness
+                      - listitem:
+                        - link:
+                          - /url: /happiness/restaurants
+                          - img
+                          - generic: Restaurants
+              - generic:
+                - list:
+                  - listitem:
+                    - link:
+                      - /url: /settings
+                      - img
+                      - generic: Settings
+                - generic:
+                  - button:
+                    - generic: RD
+                    - generic: Ryan
+                  - button:
+                    - generic: ED
+                    - generic: Emily
+        - main:
+          - main:
+            - generic:
+              - button:
+                - img
+                - generic: Toggle Sidebar
+              - heading [level=1]: Josh
+              - generic:
+                - button:
+                  - img
+            - main:
+              - generic:
+                - generic:
+                  - button:
+                    - img
+                    - text: Back
+                  - generic:
+                    - button:
+                      - img
+                      - text: Log Interaction
+                    - button:
+                      - img
+                      - text: Edit
+                    - button:
+                      - img
+                      - text: Delete
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic: J
+                      - generic:
+                        - generic:
+                          - heading [level=1]: Josh
+                          - generic: Friend
+                          - generic: At Risk
+                        - generic:
+                          - link:
+                            - /url: mailto:josh@placeholder.com
+                            - img
+                            - text: josh@placeholder.com
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - heading [level=3]: Cadence
+                        - generic:
+                          - paragraph:
+                            - text: "Target: Every"
+                            - strong: "30"
+                            - text: days
+                          - paragraph:
+                            - text: "Last seen:"
+                            - strong: "78"
+                            - text: days ago
+                          - paragraph:
+                            - text: "Strength:"
+                            - strong: 5/10
+                  - generic:
+                    - generic:
+                      - generic:
+                        - heading [level=3]: Activity (0)
+                        - button:
+                          - img
+                          - text: Log
+                      - generic:
+                        - paragraph: No interactions logged yet.
+  - dialog "Edit Contact" [ref=e246]:
+    - generic [ref=e248]:
+      - heading "Edit Contact" [level=2] [ref=e249]
+      - button "Advanced" [ref=e250]
+    - generic [ref=e251]:
+      - generic [ref=e253]:
+        - generic [ref=e254]:
+          - generic [ref=e255]: Full Name *
+          - textbox "Name" [active] [ref=e256]: Josh
+        - generic [ref=e257]:
+          - generic [ref=e258]: Type
+          - combobox [ref=e259]:
+            - generic: Friend
+            - img [ref=e260]
+          - combobox [ref=e262]
+        - generic [ref=e263]:
+          - generic [ref=e264]: Birthday
+          - textbox [ref=e265]
+      - generic [ref=e266]:
+        - heading "Health Metrics" [level=4] [ref=e267]
+        - generic [ref=e268]:
+          - generic [ref=e269]:
+            - generic [ref=e270]: Strength
+            - generic [ref=e271]: 5/10
+          - slider [ref=e272] [cursor=pointer]: "5"
+        - generic [ref=e273]:
+          - generic [ref=e274]: Cadence Target
+          - combobox [ref=e275]:
+            - generic: Every 30 days
+            - img [ref=e276]
+          - combobox [ref=e278]
+      - generic [ref=e279]:
+        - heading "Contact Details" [level=4] [ref=e280]
+        - generic [ref=e281]:
+          - textbox "Email" [ref=e282]: josh@placeholder.com
+          - textbox "Phone" [ref=e283]
+          - textbox "Location" [ref=e284]
+          - textbox "Occupation" [ref=e285]
+      - generic [ref=e286]:
+        - heading "Social Media" [level=4] [ref=e287]
+        - generic [ref=e288]:
+          - textbox "Instagram" [ref=e289]
+          - textbox "Facebook" [ref=e290]
+          - textbox "LinkedIn" [ref=e291]
+          - textbox "X / Twitter" [ref=e292]
+          - textbox "TikTok" [ref=e293]
+      - generic [ref=e294]:
+        - heading "Groups / Communities" [level=4] [ref=e295]
+        - textbox "Type group name and press Enter..." [ref=e296]
+      - generic [ref=e297]:
+        - heading "Relationship Status" [level=4] [ref=e298]
+        - combobox [ref=e299]:
+          - generic: Select...
+          - img [ref=e300]
+        - combobox [ref=e302]
+        - textbox "Spouse / Partner Name" [ref=e303]
+      - button "Personality & Lifestyle" [ref=e305]:
+        - img [ref=e306]
+        - text: Personality & Lifestyle
+      - button "Family & Pets" [ref=e309]:
+        - img [ref=e310]
+        - text: Family & Pets
+      - generic [ref=e312]:
+        - heading "Context" [level=4] [ref=e313]
+        - textbox "How we met..." [ref=e314]
+        - textbox "General notes..." [ref=e315]
+      - generic [ref=e316]:
+        - generic [ref=e317]: Avatar URL
+        - textbox "https://example.com/photo.jpg" [ref=e318]
+      - button "Save Changes" [ref=e319]
+    - button "Close" [ref=e320]:
+      - img [ref=e321]
+      - generic [ref=e324]: Close

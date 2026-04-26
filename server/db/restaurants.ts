@@ -19,6 +19,8 @@ function dbToRestaurant(row: any): Restaurant {
     ratingRyan: row.rating_ryan ? Number(row.rating_ryan) : undefined,
     ratingEmily: row.rating_emily ? Number(row.rating_emily) : undefined,
     googleReviews: row.google_reviews || undefined,
+    latitude: row.latitude ? Number(row.latitude) : undefined,
+    longitude: row.longitude ? Number(row.longitude) : undefined,
     addedBy: row.added_by,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -42,6 +44,8 @@ function inputToDb(input: CreateRestaurantInput | UpdateRestaurantInput): any {
   if (input.ratingRyan !== undefined) db.rating_ryan = input.ratingRyan;
   if (input.ratingEmily !== undefined) db.rating_emily = input.ratingEmily;
   if (input.googleReviews !== undefined) db.google_reviews = input.googleReviews;
+  if (input.latitude !== undefined) db.latitude = input.latitude;
+  if (input.longitude !== undefined) db.longitude = input.longitude;
   if (input.addedBy !== undefined) db.added_by = input.addedBy;
   return db;
 }

@@ -85,6 +85,62 @@ async function scrapeGoogleReviews(
   }
 }
 
+/** Geocode an address using Nominatim (OpenStreetMap) */
+async function geocodeAddress(
+  address: string,
+  city: string
+): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const query = `${address}, ${city}, Australia`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`;
+    const response = await fetch(url, {
+      headers: { "User-Agent": "DrakeFamilyCommandCentre/1.0" },
+    });
+    if (!response.ok) return null;
+    const results = (await response.json()) as Array<{ lat: string; lon: string }>;
+    if (!results.length) return null;
+    return { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) };
+  } catch {
+    return null;
+  }
+}
+
+// POST /api/restaurants/geocode/batch - Geocode all restaurants missing coordinates
+router.post("/geocode/batch", async (_req: Request, res: Response) => {
+  try {
+    const all = await listRestaurants();
+    const needGeocode = all.filter((r) => r.address && !r.latitude);
+
+    res.json({
+      total: needGeocode.length,
+      message: `Geocoding ${needGeocode.length} restaurants in the background`,
+    });
+
+    (async () => {
+      for (const restaurant of needGeocode) {
+        try {
+          const coords = await geocodeAddress(restaurant.address!, restaurant.city);
+          if (coords) {
+            await updateRestaurant(restaurant.id, {
+              latitude: coords.lat,
+              longitude: coords.lng,
+            });
+            console.log(`[Restaurants] Geocoded ${restaurant.name}: ${coords.lat}, ${coords.lng}`);
+          }
+          // Nominatim rate limit: 1 request per second
+          await new Promise((r) => setTimeout(r, 1100));
+        } catch (err) {
+          console.error(`[Restaurants] Failed to geocode ${restaurant.name}:`, err);
+        }
+      }
+      console.log("[Restaurants] Batch geocoding complete");
+    })();
+  } catch (error) {
+    console.error("[Restaurants] Error starting batch geocode:", error);
+    res.status(500).json({ error: "Failed to start batch geocode" });
+  }
+});
+
 // GET /api/restaurants - List with optional filters
 router.get("/", async (req: Request, res: Response) => {
   try {
@@ -331,6 +387,16 @@ router.post("/", async (req: Request, res: Response) => {
     if (!name || !city) {
       return res.status(400).json({ error: "name and city are required" });
     }
+
+    // Auto-geocode if address provided and no coordinates
+    if (req.body.address && !req.body.latitude) {
+      const coords = await geocodeAddress(req.body.address, city);
+      if (coords) {
+        req.body.latitude = coords.lat;
+        req.body.longitude = coords.lng;
+      }
+    }
+
     const item = await createRestaurant(req.body);
     res.status(201).json(item);
   } catch (error) {

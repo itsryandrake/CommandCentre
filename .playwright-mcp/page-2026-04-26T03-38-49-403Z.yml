@@ -1,0 +1,231 @@
+- generic [ref=e3]:
+  - generic:
+    - img
+  - generic [ref=e5]:
+    - heading "Welcome" [level=2] [ref=e6]
+    - paragraph [ref=e7]: Who's using the CommandCentre?
+    - generic [ref=e8]:
+      - button "RD Ryan" [ref=e9]:
+        - generic [ref=e10]: RD
+        - generic [ref=e11]: Ryan
+      - button "ED Emily" [ref=e12]:
+        - generic [ref=e13]: ED
+        - generic [ref=e14]: Emily
+  - generic [ref=e15]:
+    - generic [ref=e18]:
+      - link "Drake Family" [ref=e20] [cursor=pointer]:
+        - /url: /
+        - img [ref=e22]
+        - generic [ref=e27]: Drake Family
+      - generic [ref=e28]:
+        - list [ref=e31]:
+          - listitem [ref=e32]:
+            - link "Dashboard" [ref=e33] [cursor=pointer]:
+              - /url: /
+              - img [ref=e34]
+              - generic [ref=e39]: Dashboard
+        - generic [ref=e40]:
+          - generic [ref=e41]: Faith
+          - list [ref=e43]:
+            - listitem [ref=e44]:
+              - link "Goals" [ref=e45] [cursor=pointer]:
+                - /url: /goals
+                - img [ref=e46]
+                - generic [ref=e50]: Goals
+            - listitem [ref=e51]:
+              - link "Life Script" [ref=e52] [cursor=pointer]:
+                - /url: /faith/life-script
+                - img [ref=e53]
+                - generic [ref=e56]: Life Script
+            - listitem [ref=e57]:
+              - link "Vision Board" [ref=e58] [cursor=pointer]:
+                - /url: /sanctuary/vision-board
+                - img [ref=e59]
+                - generic [ref=e64]: Vision Board
+        - generic [ref=e65]:
+          - generic [ref=e66]: Family
+          - list [ref=e68]:
+            - listitem [ref=e69]:
+              - link "The Sanctuary" [ref=e70] [cursor=pointer]:
+                - /url: /sanctuary
+                - img [ref=e71]
+                - generic [ref=e73]: The Sanctuary
+            - listitem [ref=e74]:
+              - link "Profiles" [ref=e75] [cursor=pointer]:
+                - /url: /sanctuary/profiles
+                - img [ref=e76]
+                - generic [ref=e81]: Profiles
+            - listitem [ref=e82]:
+              - link "Intimacy" [ref=e83] [cursor=pointer]:
+                - /url: /sanctuary/intimacy
+                - img [ref=e84]
+                - generic [ref=e86]: Intimacy
+            - listitem [ref=e87]:
+              - link "CRM" [ref=e88] [cursor=pointer]:
+                - /url: /family/crm
+                - img [ref=e89]
+                - generic [ref=e93]: CRM
+            - listitem [ref=e94]:
+              - link "Shopping List" [ref=e95] [cursor=pointer]:
+                - /url: /family/shopping
+                - img [ref=e96]
+                - generic [ref=e100]: Shopping List
+            - listitem [ref=e101]:
+              - link "Tasks" [ref=e102] [cursor=pointer]:
+                - /url: /family/tasks
+                - img [ref=e103]
+                - generic [ref=e106]: Tasks
+        - generic [ref=e107]:
+          - generic [ref=e108]: Home
+          - list [ref=e110]:
+            - listitem [ref=e111]:
+              - link "Equipment" [ref=e112] [cursor=pointer]:
+                - /url: /home/equipment
+                - img [ref=e113]
+                - generic [ref=e115]: Equipment
+            - listitem [ref=e116]:
+              - link "Documents" [ref=e117] [cursor=pointer]:
+                - /url: /home/documents
+                - img [ref=e118]
+                - generic [ref=e121]: Documents
+            - listitem [ref=e122]:
+              - link "Wardrobe" [ref=e123] [cursor=pointer]:
+                - /url: /home/wardrobe
+                - img [ref=e124]
+                - generic [ref=e126]: Wardrobe
+            - listitem [ref=e127]:
+              - link "Dream Home" [ref=e128] [cursor=pointer]:
+                - /url: /home/dream-home
+                - img [ref=e129]
+                - generic [ref=e133]: Dream Home
+        - generic [ref=e134]:
+          - generic [ref=e135]: Health
+          - list [ref=e137]:
+            - listitem [ref=e138]:
+              - link "Health" [ref=e139] [cursor=pointer]:
+                - /url: /health
+                - img [ref=e140]
+                - generic [ref=e142]: Health
+        - generic [ref=e143]:
+          - generic [ref=e144]: Wealth
+          - list [ref=e146]:
+            - listitem [ref=e147]:
+              - link "Budget" [ref=e148] [cursor=pointer]:
+                - /url: /budget
+                - img [ref=e149]
+                - generic [ref=e152]: Budget
+            - listitem [ref=e153]:
+              - link "Net Worth" [ref=e154] [cursor=pointer]:
+                - /url: /wealth/net-worth
+                - img [ref=e155]
+                - generic [ref=e157]: Net Worth
+            - listitem [ref=e158]:
+              - link "Investments" [ref=e159] [cursor=pointer]:
+                - /url: /wealth/investments
+                - img [ref=e160]
+                - generic [ref=e163]: Investments
+            - listitem [ref=e164]:
+              - link "Loyalty" [ref=e165] [cursor=pointer]:
+                - /url: /loyalty
+                - img [ref=e166]
+                - generic [ref=e169]: Loyalty
+        - generic [ref=e170]:
+          - generic [ref=e171]: Happiness
+          - list [ref=e173]:
+            - listitem [ref=e174]:
+              - link "Happiness" [ref=e175] [cursor=pointer]:
+                - /url: /happiness
+                - img [ref=e176]
+                - generic [ref=e179]: Happiness
+            - listitem [ref=e180]:
+              - link "Restaurants" [ref=e181] [cursor=pointer]:
+                - /url: /happiness/restaurants
+                - img [ref=e182]
+                - generic [ref=e187]: Restaurants
+      - generic [ref=e188]:
+        - list [ref=e189]:
+          - listitem [ref=e190]:
+            - link "Settings" [ref=e191] [cursor=pointer]:
+              - /url: /settings
+              - img [ref=e192]
+              - generic [ref=e195]: Settings
+        - generic [ref=e196]:
+          - button "RD Ryan" [ref=e197]:
+            - generic [ref=e198]: RD
+            - generic [ref=e199]: Ryan
+          - button "ED Emily" [ref=e200]:
+            - generic [ref=e201]: ED
+            - generic [ref=e202]: Emily
+    - main [ref=e203]:
+      - main [ref=e204]:
+        - generic [ref=e205]:
+          - button "Toggle Sidebar" [ref=e206]:
+            - img
+            - generic [ref=e207]: Toggle Sidebar
+          - heading "Restaurants" [level=1] [ref=e208]
+          - button [ref=e210]:
+            - img
+        - main [ref=e211]:
+          - generic [ref=e212]:
+            - generic [ref=e213]:
+              - generic [ref=e214]:
+                - heading "Restaurants" [level=1] [ref=e215]
+                - paragraph [ref=e216]: Track restaurants you love and places you want to try
+              - button "Add Restaurant" [ref=e217]:
+                - img [ref=e218]
+                - text: Add Restaurant
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - img [ref=e221]
+                - textbox "Search restaurants..." [ref=e224]
+              - generic [ref=e225]:
+                - combobox [ref=e226]:
+                  - option "All statuses" [selected]
+                  - option "Want to Try"
+                  - option "Would Go Back"
+                  - option "Wouldn't Go Back"
+                - combobox [ref=e227]:
+                  - option "All cities" [selected]
+                  - option "Brisbane"
+                  - option "Melbourne"
+                  - option "Sydney"
+                  - option "New York"
+                  - option "London"
+                  - option "Paris"
+                  - option "Dubai"
+                  - option "Bali"
+                - combobox [ref=e228]:
+                  - option "All cuisines" [selected]
+                  - option "Italian"
+                  - option "Japanese"
+                  - option "Chinese"
+                  - option "Thai"
+                  - option "Indian"
+                  - option "Mexican"
+                  - option "French"
+                  - option "Korean"
+                  - option "Vietnamese"
+                  - option "Greek"
+                  - option "Lebanese"
+                  - option "American"
+                  - option "Seafood"
+                  - option "Steakhouse"
+                  - option "Cafe"
+                  - option "Brunch"
+                  - option "Pub"
+                  - option "Pizza"
+                  - option "Burger"
+                  - option "Other"
+                - combobox [ref=e229]:
+                  - option "All budgets" [selected]
+                  - option "$"
+                  - option "$$"
+                  - option "$$$"
+                  - option "$$$$"
+                - combobox [ref=e230]:
+                  - option "All meals" [selected]
+                  - option "Breakfast"
+                  - option "Lunch"
+                  - option "Dinner"
+            - paragraph [ref=e231]: 0 restaurants
+            - paragraph [ref=e232]: Loading restaurants...

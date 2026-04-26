@@ -4,6 +4,8 @@ import { getSupabase } from "../db/supabase.ts";
 import {
   scrapeListingImages,
   isDirectImageUrl,
+  getCachedImageBuffer,
+  clearImageBufferCache,
 } from "../lib/dreamhomeScraper.ts";
 import {
   analyseHomeImage,
@@ -41,18 +43,38 @@ function dbToImage(row: any, tags: any[] = []): DreamHomeImage {
 
 async function uploadImageToStorage(
   imageUrl: string,
-  imageId: string
+  imageId: string,
+  sourceUrl?: string | null
 ): Promise<string | null> {
   try {
-    const response = await fetch(imageUrl, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      },
-    });
-    if (!response.ok) return null;
+    // Use cached buffer from Playwright interception if available
+    let buffer = getCachedImageBuffer(imageUrl);
 
-    const buffer = Buffer.from(await response.arrayBuffer());
+    if (!buffer) {
+      const headers: Record<string, string> = {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept:
+          "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        "Accept-Language": "en-AU,en;q=0.9",
+        "Sec-Fetch-Dest": "image",
+        "Sec-Fetch-Mode": "no-cors",
+        "Sec-Fetch-Site": "cross-site",
+      };
+      if (sourceUrl) {
+        headers["Referer"] = sourceUrl;
+      }
+
+      const response = await fetch(imageUrl, { headers });
+      if (!response.ok) {
+        console.error(
+          `[DreamHome] Image download failed: ${response.status} for ${imageUrl}`
+        );
+        return null;
+      }
+      buffer = Buffer.from(await response.arrayBuffer());
+    }
+
     const ext =
       imageUrl.match(/\.(jpe?g|png|webp|gif|avif)/i)?.[1] || "jpg";
     const storagePath = `${imageId}.${ext === "jpeg" ? "jpg" : ext}`;
@@ -117,7 +139,7 @@ async function processAndSaveImage(
   }
 
   // Upload to storage
-  const storageUrl = await uploadImageToStorage(originalImageUrl, row.id);
+  const storageUrl = await uploadImageToStorage(originalImageUrl, row.id, sourceUrl);
   if (storageUrl) {
     await supabase
       .from("dreamhome_images")
@@ -342,7 +364,8 @@ router.post("/scrape", async (req: Request, res: Response) => {
         const listing = await scrapeListingImages(trimmedUrl);
         if (listing.imageUrls.length === 0) {
           job.status = "error";
-          job.error = "No images found on this page";
+          job.error =
+            "This site blocked automated scraping. Try pasting image URLs directly using the 'Paste multiple image URLs' option.";
           return;
         }
 
@@ -377,6 +400,8 @@ router.post("/scrape", async (req: Request, res: Response) => {
         console.error("[DreamHome] Background scrape error:", error);
         job.status = "error";
         job.error = "Scraping failed unexpectedly";
+      } finally {
+        clearImageBufferCache();
       }
     })();
   } catch (error) {
@@ -397,6 +422,62 @@ router.get("/scrape/status/:jobId", (req: Request, res: Response) => {
   // Clean up completed jobs after they're read
   if (job.status === "complete" || job.status === "error") {
     setTimeout(() => jobs.delete(req.params.jobId), 60_000);
+  }
+});
+
+// POST /api/dream-home/import-urls — batch import image URLs (for browser console extraction)
+router.post("/import-urls", async (req: Request, res: Response) => {
+  try {
+    const { urls, sourceUrl, title } = req.body;
+    if (!Array.isArray(urls) || urls.length === 0) {
+      return res.status(400).json({ error: "urls array is required" });
+    }
+
+    const validUrls = urls.filter(
+      (u: string) => typeof u === "string" && u.startsWith("http")
+    );
+    if (validUrls.length === 0) {
+      return res.status(400).json({ error: "No valid URLs provided" });
+    }
+
+    const jobId = crypto.randomUUID();
+    const domain = sourceUrl
+      ? new URL(sourceUrl).hostname.replace(/^www\./, "")
+      : null;
+    const job: DreamHomeScrapeJob = {
+      status: "processing",
+      progress: { total: validUrls.length, done: 0 },
+      images: [],
+    };
+    jobs.set(jobId, job);
+
+    res.status(202).json({ jobId });
+
+    (async () => {
+      try {
+        const BATCH_SIZE = 5;
+        for (let i = 0; i < validUrls.length; i += BATCH_SIZE) {
+          const batch = validUrls.slice(i, i + BATCH_SIZE);
+          const results = await Promise.all(
+            batch.map((imgUrl: string) =>
+              processAndSaveImage(imgUrl, sourceUrl || null, title || null, domain)
+            )
+          );
+          for (const image of results) {
+            if (image) job.images.push(image);
+          }
+          job.progress.done = Math.min(i + BATCH_SIZE, validUrls.length);
+        }
+        job.status = "complete";
+      } catch (error) {
+        console.error("[DreamHome] Import error:", error);
+        job.status = "error";
+        job.error = "Import failed unexpectedly";
+      }
+    })();
+  } catch (error) {
+    console.error("[DreamHome] Error importing URLs:", error);
+    res.status(500).json({ error: "Failed to import URLs" });
   }
 });
 
@@ -521,6 +602,51 @@ router.patch("/:id/tags", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("[DreamHome] Error updating tags:", error);
     res.status(500).json({ error: "Failed to update tags" });
+  }
+});
+
+// DELETE /api/dream-home/by-source — bulk delete all images from a source URL
+router.delete("/by-source", async (req: Request, res: Response) => {
+  try {
+    const { sourceUrl } = req.body;
+    if (!sourceUrl?.trim()) {
+      return res.status(400).json({ error: "sourceUrl is required" });
+    }
+
+    const supabase = getSupabase();
+
+    const { data: images } = await supabase
+      .from("dreamhome_images")
+      .select("id, image_url")
+      .eq("source_url", sourceUrl.trim());
+
+    if (!images || images.length === 0) {
+      return res.json({ ok: true, deleted: 0 });
+    }
+
+    // Clean up storage files
+    const storagePaths = images
+      .filter((img: any) => img.image_url?.includes("dreamhome-images"))
+      .map((img: any) => img.image_url.split("dreamhome-images/").pop())
+      .filter(Boolean);
+
+    if (storagePaths.length > 0) {
+      await supabase.storage
+        .from("dreamhome-images")
+        .remove(storagePaths)
+        .catch(() => {});
+    }
+
+    const { error } = await supabase
+      .from("dreamhome_images")
+      .delete()
+      .eq("source_url", sourceUrl.trim());
+
+    if (error) throw error;
+    res.json({ ok: true, deleted: images.length });
+  } catch (error) {
+    console.error("[DreamHome] Error bulk deleting:", error);
+    res.status(500).json({ error: "Failed to delete images" });
   }
 });
 
