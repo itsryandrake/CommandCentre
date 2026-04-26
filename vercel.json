@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    { "source": "/api/dream-home/tags", "destination": "/api/dream-home/tags" },
+    { "source": "/api/dream-home/:id/tags", "destination": "/api/dream-home/tags-update?id=:id" },
+    { "source": "/api/dream-home/:id", "destination": "/api/dream-home?id=:id" },
+    { "source": "/api/dream-home", "destination": "/api/dream-home" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

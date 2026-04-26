@@ -31,3 +31,4 @@ data/*.db
 
 # Vercel
 .vercel/
+.vercel
