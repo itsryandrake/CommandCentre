@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 6101;
 const allowedOrigins = [
   'http://localhost:6100',      // Vite dev server
   'http://localhost:6101',      // Local API
-  'https://family.drake.au',    // Production domain
+  'https://drakefamily-ential.vercel.app',
 ];
 
 app.use(cors({
