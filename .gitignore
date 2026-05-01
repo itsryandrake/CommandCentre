@@ -24,7 +24,12 @@ npm-debug.log*
 
 # Database files (local dev only)
 data/*.db
+data/*.db-shm
+data/*.db-wal
 *.db-journal
+
+# Playwright MCP artefacts
+.playwright-mcp/
 
 # TypeScript
 *.tsbuildinfo

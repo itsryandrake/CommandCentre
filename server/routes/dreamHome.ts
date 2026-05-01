@@ -605,6 +605,86 @@ router.patch("/:id/tags", async (req: Request, res: Response) => {
   }
 });
 
+// POST /api/dream-home/bulk/tags — bulk add/remove tags
+router.post("/bulk/tags", async (req: Request, res: Response) => {
+  try {
+    const { imageIds, addTags, removeTags } = req.body;
+    if (!Array.isArray(imageIds) || imageIds.length === 0) {
+      return res.status(400).json({ error: "imageIds must be a non-empty array" });
+    }
+
+    const supabase = getSupabase();
+
+    if (Array.isArray(removeTags) && removeTags.length > 0) {
+      await supabase
+        .from("dreamhome_image_tags")
+        .delete()
+        .in("image_id", imageIds)
+        .in("tag", removeTags);
+    }
+
+    if (Array.isArray(addTags) && addTags.length > 0) {
+      const tagRows = imageIds.flatMap((id: string) =>
+        addTags.map((tag: string) => ({
+          image_id: id,
+          tag,
+          confidence: 1.0,
+        }))
+      );
+      await supabase
+        .from("dreamhome_image_tags")
+        .upsert(tagRows, { onConflict: "image_id,tag" });
+    }
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error("[DreamHome] Error bulk updating tags:", error);
+    res.status(500).json({ error: "Failed to bulk update tags" });
+  }
+});
+
+// POST /api/dream-home/bulk/delete — bulk delete images
+router.post("/bulk/delete", async (req: Request, res: Response) => {
+  try {
+    const { imageIds } = req.body;
+    if (!Array.isArray(imageIds) || imageIds.length === 0) {
+      return res.status(400).json({ error: "imageIds must be a non-empty array" });
+    }
+
+    const supabase = getSupabase();
+
+    const { data: images } = await supabase
+      .from("dreamhome_images")
+      .select("id, image_url")
+      .in("id", imageIds);
+
+    if (images && images.length > 0) {
+      const storagePaths = images
+        .filter((img: any) => img.image_url?.includes("dreamhome-images"))
+        .map((img: any) => img.image_url.split("dreamhome-images/").pop())
+        .filter(Boolean);
+
+      if (storagePaths.length > 0) {
+        await supabase.storage
+          .from("dreamhome-images")
+          .remove(storagePaths)
+          .catch(() => {});
+      }
+    }
+
+    const { error } = await supabase
+      .from("dreamhome_images")
+      .delete()
+      .in("id", imageIds);
+
+    if (error) throw error;
+    res.json({ ok: true, deleted: images?.length || 0 });
+  } catch (error) {
+    console.error("[DreamHome] Error bulk deleting:", error);
+    res.status(500).json({ error: "Failed to bulk delete images" });
+  }
+});
+
 // DELETE /api/dream-home/by-source — bulk delete all images from a source URL
 router.delete("/by-source", async (req: Request, res: Response) => {
   try {

@@ -1,78 +1,41 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-import {
-  Plus,
-  Loader2,
-  Sparkles,
-  ExternalLink,
-  Trash2,
-  X,
-  Castle,
-  Upload,
-  ImagePlus,
-  Link,
-  Copy,
-  Check,
-} from "lucide-react";
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { Plus, Loader2, Castle, SlidersHorizontal } from "lucide-react";
 import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   fetchDreamHomeImages,
   fetchDreamHomeTagCounts,
-  scrapeDreamHomeListing,
-  pollDreamHomeJob,
-  updateDreamHomeImage,
   updateDreamHomeTags,
   deleteDreamHomeImage,
-  uploadDreamHomeFiles,
-  importDreamHomeUrls,
+  bulkUpdateDreamHomeTags,
+  bulkDeleteDreamHomeImages,
 } from "@/lib/api";
-import type { DreamHomeImage, DreamHomeScrapeJob } from "@shared/types/dreamHome";
-import { DREAMHOME_TAG_GROUPS, ALL_TAGS } from "@shared/types/dreamHome";
-import type { DreamHomeTag, DreamHomeTagGroup } from "@shared/types/dreamHome";
-import { cn } from "@/lib/utils";
-
-// =============================================================================
-// Tag colour map
-// =============================================================================
-
-const TAG_GROUP_COLOURS: Record<DreamHomeTagGroup, string> = {
-  Rooms: "bg-blue-500/80",
-  Design: "bg-purple-500/80",
-};
-
-function getTagGroup(tag: string): DreamHomeTagGroup | null {
-  for (const [group, tags] of Object.entries(DREAMHOME_TAG_GROUPS)) {
-    if ((tags as readonly string[]).includes(tag)) return group as DreamHomeTagGroup;
-  }
-  return null;
-}
-
-function getTagColour(tag: string): string {
-  const group = getTagGroup(tag);
-  return group ? TAG_GROUP_COLOURS[group] : "bg-neutral-500/80";
-}
-
-// =============================================================================
-// Main Grid
-// =============================================================================
+import type { DreamHomeImage, DreamHomeTag } from "@shared/types/dreamHome";
+import { DreamHomeSidebar, DreamHomeSidebarWrapper } from "./DreamHomeSidebar";
+import { DreamHomeSearchBar } from "./DreamHomeSearchBar";
+import { InspirationCard } from "./InspirationCard";
+import { BulkActionsToolbar } from "./BulkActionsToolbar";
+import { AddInspirationDialog } from "./AddInspirationDialog";
+import { ImageDetailDialog } from "./ImageDetailDialog";
 
 export function DreamHomeGrid() {
   const [images, setImages] = useState<DreamHomeImage[]>([]);
   const [tagCounts, setTagCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<DreamHomeImage | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
   const loadData = useCallback(async () => {
     const [imgs, counts] = await Promise.all([
       fetchDreamHomeImages(activeTags.length > 0 ? activeTags : undefined),
@@ -89,6 +52,29 @@ export function DreamHomeGrid() {
     loadData();
   }, [loadData]);
 
+  // Clear selection when filters or search change
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [activeTags, searchQuery]);
+
+  const filteredImages = useMemo(() => {
+    if (!searchQuery.trim()) return images;
+    const q = searchQuery.toLowerCase();
+    return images.filter(
+      (img) =>
+        img.aiDescription?.toLowerCase().includes(q) ||
+        img.title?.toLowerCase().includes(q) ||
+        img.tags.some((t) => t.tag.toLowerCase().includes(q))
+    );
+  }, [images, searchQuery]);
+
+  const selectionActive = selectedIds.size > 0;
+
+  const selectedImages = useMemo(
+    () => images.filter((img) => selectedIds.has(img.id)),
+    [images, selectedIds]
+  );
+
   const toggleTag = useCallback((tag: string) => {
     setActiveTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
@@ -99,7 +85,6 @@ export function DreamHomeGrid() {
 
   const handleImagesAdded = useCallback((newImages: DreamHomeImage[]) => {
     setImages((prev) => [...newImages, ...prev]);
-    // Refresh tag counts
     fetchDreamHomeTagCounts().then((counts) => {
       const countMap: Record<string, number> = {};
       for (const tc of counts) countMap[tc.tag] = tc.count;
@@ -107,19 +92,30 @@ export function DreamHomeGrid() {
     });
   }, []);
 
-  const handleDeleteImage = useCallback(async (id: string) => {
-    const success = await deleteDreamHomeImage(id);
-    if (success) {
-      setImages((prev) => prev.filter((img) => img.id !== id));
-      setDetailOpen(false);
-      setSelectedImage(null);
-      fetchDreamHomeTagCounts().then((counts) => {
-        const countMap: Record<string, number> = {};
-        for (const tc of counts) countMap[tc.tag] = tc.count;
-        setTagCounts(countMap);
-      });
-    }
+  const refreshTagCounts = useCallback(async () => {
+    const counts = await fetchDreamHomeTagCounts();
+    const countMap: Record<string, number> = {};
+    for (const tc of counts) countMap[tc.tag] = tc.count;
+    setTagCounts(countMap);
   }, []);
+
+  const handleDeleteImage = useCallback(
+    async (id: string) => {
+      const success = await deleteDreamHomeImage(id);
+      if (success) {
+        setImages((prev) => prev.filter((img) => img.id !== id));
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        setDetailOpen(false);
+        setSelectedImage(null);
+        refreshTagCounts();
+      }
+    },
+    [refreshTagCounts]
+  );
 
   const handleTagsChange = useCallback(
     async (id: string, tags: string[]) => {
@@ -142,8 +138,54 @@ export function DreamHomeGrid() {
     []
   );
 
-  // Tags that actually have images
-  const usedTags = Object.keys(tagCounts).filter((t) => tagCounts[t] > 0);
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  const selectAll = useCallback(() => {
+    setSelectedIds(new Set(filteredImages.map((img) => img.id)));
+  }, [filteredImages]);
+
+  const handleBulkAddTags = useCallback(
+    async (tags: string[]) => {
+      const ids = Array.from(selectedIds);
+      const success = await bulkUpdateDreamHomeTags(ids, tags);
+      if (success) {
+        clearSelection();
+        await loadData();
+      }
+    },
+    [selectedIds, clearSelection, loadData]
+  );
+
+  const handleBulkRemoveTags = useCallback(
+    async (tags: string[]) => {
+      const ids = Array.from(selectedIds);
+      const success = await bulkUpdateDreamHomeTags(ids, undefined, tags);
+      if (success) {
+        clearSelection();
+        await loadData();
+      }
+    },
+    [selectedIds, clearSelection, loadData]
+  );
+
+  const handleBulkDelete = useCallback(async () => {
+    const ids = Array.from(selectedIds);
+    const success = await bulkDeleteDreamHomeImages(ids);
+    if (success) {
+      setImages((prev) => prev.filter((img) => !selectedIds.has(img.id)));
+      clearSelection();
+      refreshTagCounts();
+    }
+  }, [selectedIds, clearSelection, refreshTagCounts]);
 
   if (isLoading) {
     return (
@@ -153,158 +195,169 @@ export function DreamHomeGrid() {
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-4xl font-normal">Dream Home</h1>
-          <p className="text-muted-foreground mt-1">
-            Collect inspiration for your dream house — rooms, styles, materials, and features
-          </p>
-        </div>
-        <Button
-          onClick={() => setAddDialogOpen(true)}
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Add Inspiration
-        </Button>
-      </div>
+  const hasUsedTags = Object.values(tagCounts).some((c) => c > 0);
 
-      {/* Tag filter */}
-      {usedTags.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
-              Filter by tags
+  return (
+    <div className="flex gap-6">
+      {/* Left sidebar — desktop */}
+      {hasUsedTags && (
+        <DreamHomeSidebarWrapper
+          tagCounts={tagCounts}
+          activeTags={activeTags}
+          onToggleTag={toggleTag}
+          onClearTags={clearTags}
+        />
+      )}
+
+      {/* Mobile filters sheet */}
+      <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+        <SheetContent side="left" className="w-72 p-4">
+          <SheetHeader>
+            <SheetTitle>Filters</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4">
+            <DreamHomeSidebar
+              tagCounts={tagCounts}
+              activeTags={activeTags}
+              onToggleTag={(tag) => {
+                toggleTag(tag);
+              }}
+              onClearTags={clearTags}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Main content */}
+      <div className="flex-1 min-w-0 space-y-6">
+        {/* Header */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-normal">Dream Home</h1>
+            <p className="text-muted-foreground mt-1">
+              Collect inspiration for your dream house — rooms, styles, materials, and features
             </p>
-            {activeTags.length > 0 && (
+          </div>
+          <Button onClick={() => setAddDialogOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Inspiration
+          </Button>
+        </div>
+
+        {/* Search + mobile filter toggle */}
+        <div className="flex items-center gap-3">
+          {hasUsedTags && (
+            <button
+              onClick={() => setMobileFiltersOpen(true)}
+              className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors lg:hidden"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              Filters
+              {activeTags.length > 0 && (
+                <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  {activeTags.length}
+                </span>
+              )}
+            </button>
+          )}
+          <DreamHomeSearchBar value={searchQuery} onChange={setSearchQuery} />
+        </div>
+
+        {/* Stats */}
+        {filteredImages.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            {filteredImages.length} image{filteredImages.length !== 1 ? "s" : ""}
+            {activeTags.length > 0 && ` matching ${activeTags.join(" + ")}`}
+            {searchQuery.trim() && ` for "${searchQuery.trim()}"`}
+          </p>
+        )}
+
+        {/* Empty state */}
+        {images.length === 0 && activeTags.length === 0 && (
+          <GlassCard className="py-16 text-center">
+            <GlassCardContent className="flex flex-col items-center gap-3">
+              <Castle className="h-12 w-12 text-muted-foreground/40" />
+              <h2 className="text-xl font-bold">Start building your dream</h2>
+              <p className="text-muted-foreground max-w-sm">
+                Paste a real estate listing URL or a direct image link to start
+                collecting inspiration for your dream home.
+              </p>
+              <Button onClick={() => setAddDialogOpen(true)} className="mt-2">
+                Add your first inspiration
+              </Button>
+            </GlassCardContent>
+          </GlassCard>
+        )}
+
+        {/* No results for filter/search */}
+        {filteredImages.length === 0 && (activeTags.length > 0 || searchQuery.trim()) && images.length > 0 && (
+          <div className="flex min-h-[40vh] items-center justify-center text-center">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                No images match your {searchQuery.trim() ? "search" : "filters"}
+              </p>
+              <button
+                onClick={() => {
+                  clearTags();
+                  setSearchQuery("");
+                }}
+                className="mt-2 text-xs text-primary hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* No results — tags active but no images returned from server */}
+        {images.length === 0 && activeTags.length > 0 && (
+          <div className="flex min-h-[40vh] items-center justify-center text-center">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                No images match {activeTags.join(" + ")}
+              </p>
               <button
                 onClick={clearTags}
-                className="text-xs text-primary hover:underline"
+                className="mt-2 text-xs text-primary hover:underline"
               >
-                Clear all
+                Clear filters
               </button>
-            )}
-          </div>
-          {(["Rooms", "Design"] as const).map((group) => {
-            const groupTags = usedTags.filter(
-              (t) => getTagGroup(t) === group
-            );
-            if (groupTags.length === 0) return null;
-            return (
-              <div key={group} className="space-y-1.5">
-                <p className="text-[11px] text-muted-foreground/70 uppercase tracking-wider font-semibold">
-                  By {group === "Rooms" ? "Room" : "Design"}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {groupTags.map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => toggleTag(tag)}
-                      className={cn(
-                        "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
-                        activeTags.includes(tag)
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                      )}
-                    >
-                      {tag}
-                      <span className="opacity-60">{tagCounts[tag]}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-          {/* Uncategorised tags */}
-          {usedTags.filter((t) => !getTagGroup(t)).length > 0 && (
-            <div className="space-y-1.5">
-              <p className="text-[11px] text-muted-foreground/70 uppercase tracking-wider font-semibold">
-                Other
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {usedTags
-                  .filter((t) => !getTagGroup(t))
-                  .map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => toggleTag(tag)}
-                      className={cn(
-                        "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all active:scale-95",
-                        activeTags.includes(tag)
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                      )}
-                    >
-                      {tag}
-                      <span className="opacity-60">{tagCounts[tag]}</span>
-                    </button>
-                  ))}
-              </div>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* Stats */}
-      {images.length > 0 && (
-        <p className="text-sm text-muted-foreground">
-          {images.length} image{images.length !== 1 ? "s" : ""}
-          {activeTags.length > 0 && ` matching ${activeTags.join(" + ")}`}
-        </p>
-      )}
-
-      {/* Empty state */}
-      {images.length === 0 && activeTags.length === 0 && (
-        <GlassCard className="py-16 text-center">
-          <GlassCardContent className="flex flex-col items-center gap-3">
-            <Castle className="h-12 w-12 text-muted-foreground/40" />
-            <h2 className="text-xl font-bold">Start building your dream</h2>
-            <p className="text-muted-foreground max-w-sm">
-              Paste a real estate listing URL or a direct image link to start
-              collecting inspiration for your dream home.
-            </p>
-            <Button onClick={() => setAddDialogOpen(true)} className="mt-2">
-              Add your first inspiration
-            </Button>
-          </GlassCardContent>
-        </GlassCard>
-      )}
-
-      {/* No results for filter */}
-      {images.length === 0 && activeTags.length > 0 && (
-        <div className="flex min-h-[40vh] items-center justify-center text-center">
-          <div>
-            <p className="text-sm text-muted-foreground">
-              No images match {activeTags.join(" + ")}
-            </p>
-            <button
-              onClick={clearTags}
-              className="mt-2 text-xs text-primary hover:underline"
-            >
-              Clear filters
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Masonry grid */}
-      {images.length > 0 && (
-        <div style={{ columns: "4 260px", columnGap: "16px" }}>
-          {images.map((img) => (
-            <InspirationCard
-              key={img.id}
-              image={img}
-              onSelect={() => {
-                setSelectedImage(img);
-                setDetailOpen(true);
-              }}
-            />
-          ))}
-        </div>
-      )}
+        {/* Masonry grid */}
+        {filteredImages.length > 0 && (
+          <div style={{ columns: "4 260px", columnGap: "16px" }}>
+            {filteredImages.map((img) => (
+              <InspirationCard
+                key={img.id}
+                image={img}
+                isSelected={selectedIds.has(img.id)}
+                selectionActive={selectionActive}
+                onToggleSelect={() => toggleSelect(img.id)}
+                onSelect={() => {
+                  setSelectedImage(img);
+                  setDetailOpen(true);
+                }}
+                onDelete={handleDeleteImage}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Bulk actions toolbar */}
+      <BulkActionsToolbar
+        selectedCount={selectedIds.size}
+        totalCount={filteredImages.length}
+        selectedImages={selectedImages}
+        onSelectAll={selectAll}
+        onClearSelection={clearSelection}
+        onBulkAddTags={handleBulkAddTags}
+        onBulkRemoveTags={handleBulkRemoveTags}
+        onBulkDelete={handleBulkDelete}
+      />
 
       {/* Add dialog */}
       <AddInspirationDialog
@@ -322,718 +375,5 @@ export function DreamHomeGrid() {
         onTagsChange={handleTagsChange}
       />
     </div>
-  );
-}
-
-// =============================================================================
-// InspirationCard
-// =============================================================================
-
-function InspirationCard({
-  image,
-  onSelect,
-}: {
-  image: DreamHomeImage;
-  onSelect: () => void;
-}) {
-  const [imageError, setImageError] = useState(false);
-
-  return (
-    <button
-      onClick={onSelect}
-      className="group relative mb-4 w-full cursor-pointer overflow-hidden rounded-xl bg-card shadow-sm transition-all duration-200 hover:shadow-lg active:scale-[0.98] text-left break-inside-avoid"
-    >
-      {!imageError ? (
-        <img
-          src={image.imageUrl}
-          alt={image.aiDescription || image.title || "Inspiration"}
-          className="w-full object-contain"
-          onError={() => setImageError(true)}
-          loading="lazy"
-        />
-      ) : (
-        <div className="flex h-48 items-center justify-center bg-muted">
-          <Castle className="h-8 w-8 text-muted-foreground/40" />
-        </div>
-      )}
-
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1.5">
-          {image.aiDescription && (
-            <p className="text-xs text-white/90 line-clamp-2">
-              {image.aiDescription}
-            </p>
-          )}
-          {image.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {image.tags.slice(0, 4).map((t) => (
-                <span
-                  key={t.tag}
-                  className={cn(
-                    "rounded-full px-1.5 py-0.5 text-[10px] font-medium text-white",
-                    getTagColour(t.tag)
-                  )}
-                >
-                  {t.tag}
-                </span>
-              ))}
-              {image.tags.length > 4 && (
-                <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] text-white">
-                  +{image.tags.length - 4}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    </button>
-  );
-}
-
-// =============================================================================
-// AddInspirationDialog
-// =============================================================================
-
-function AddInspirationDialog({
-  open,
-  onOpenChange,
-  onImagesAdded,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onImagesAdded: (images: DreamHomeImage[]) => void;
-}) {
-  const [url, setUrl] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [job, setJob] = useState<DreamHomeScrapeJob | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
-  const [showPasteUrls, setShowPasteUrls] = useState(false);
-  const [pasteUrls, setPasteUrls] = useState("");
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const cleanup = useCallback(() => {
-    if (pollRef.current) {
-      clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-  }, []);
-
-  const handleClose = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        cleanup();
-        setUrl("");
-        setError(null);
-        setJob(null);
-        setIsLoading(false);
-        setPendingFiles([]);
-        setShowPasteUrls(false);
-        setPasteUrls("");
-      }
-      onOpenChange(open);
-    },
-    [onOpenChange, cleanup]
-  );
-
-  const startPolling = useCallback(
-    (jobId: string) => {
-      pollRef.current = setInterval(async () => {
-        try {
-          const status = await pollDreamHomeJob(jobId);
-          setJob(status);
-
-          if (status.status === "complete" || status.status === "error") {
-            cleanup();
-            setIsLoading(false);
-            if (status.status === "complete" && status.images.length > 0) {
-              onImagesAdded(status.images);
-            }
-            if (status.status === "error") {
-              setError(status.error || "Processing failed");
-            }
-          }
-        } catch {
-          cleanup();
-          setIsLoading(false);
-          setError("Lost connection to processing job");
-        }
-      }, 2000);
-    },
-    [onImagesAdded, cleanup]
-  );
-
-  const handleUploadFiles = useCallback(
-    async (files: File[]) => {
-      if (files.length === 0) return;
-      setIsLoading(true);
-      setError(null);
-      setJob(null);
-
-      try {
-        const result = await uploadDreamHomeFiles(files);
-        startPolling(result.jobId);
-      } catch (err: any) {
-        setError(err.message || "Failed to upload files");
-        setIsLoading(false);
-      }
-    },
-    [startPolling]
-  );
-
-  const handleImportPastedUrls = useCallback(async () => {
-    const urls = pasteUrls
-      .split(/[\n,]+/)
-      .map((u) => u.trim())
-      .filter((u) => u.startsWith("http"));
-    if (urls.length === 0) {
-      setError("No valid URLs found. Paste one URL per line.");
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    setJob(null);
-    try {
-      const result = await importDreamHomeUrls(urls);
-      startPolling(result.jobId);
-    } catch (err: any) {
-      setError(err.message || "Failed to import URLs");
-      setIsLoading(false);
-    }
-  }, [pasteUrls, startPolling]);
-
-  const handleSubmit = useCallback(async () => {
-    if (pendingFiles.length > 0) {
-      handleUploadFiles(pendingFiles);
-      setPendingFiles([]);
-      return;
-    }
-
-    if (!url.trim()) return;
-    setIsLoading(true);
-    setError(null);
-    setJob(null);
-
-    try {
-      const result = await scrapeDreamHomeListing(url.trim());
-
-      if (result.job) {
-        setJob(result.job);
-        setIsLoading(false);
-        if (result.job.images.length > 0) {
-          onImagesAdded(result.job.images);
-        }
-        return;
-      }
-
-      if (result.jobId) {
-        startPolling(result.jobId);
-      }
-    } catch (err: any) {
-      setError(err.message || "Failed to process URL");
-      setIsLoading(false);
-    }
-  }, [url, pendingFiles, onImagesAdded, startPolling, handleUploadFiles]);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragging(false);
-      const files = Array.from(e.dataTransfer.files).filter((f) =>
-        f.type.startsWith("image/")
-      );
-      if (files.length === 0) {
-        setError("No image files found. Please drop image files (JPG, PNG, WebP).");
-        return;
-      }
-      setPendingFiles(files);
-      setError(null);
-    },
-    []
-  );
-
-  const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(e.target.files || []);
-      if (files.length > 0) {
-        setPendingFiles(files);
-        setError(null);
-      }
-      e.target.value = "";
-    },
-    []
-  );
-
-  const removePendingFile = useCallback((index: number) => {
-    setPendingFiles((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Add Inspiration</DialogTitle>
-          <DialogDescription>
-            Paste a listing URL, or drag and drop images to upload.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          {/* URL input */}
-          <div className="flex gap-2">
-            <Input
-              placeholder="https://realestate.com.au/property/..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-              disabled={isLoading || pendingFiles.length > 0}
-            />
-            <Button
-              onClick={handleSubmit}
-              disabled={isLoading || (!url.trim() && pendingFiles.length === 0)}
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-
-          {/* Divider */}
-          {!job && !isLoading && (
-            <div className="flex items-center gap-3">
-              <div className="h-px flex-1 bg-border" />
-              <span className="text-xs text-muted-foreground">or</span>
-              <div className="h-px flex-1 bg-border" />
-            </div>
-          )}
-
-          {/* Paste URLs toggle */}
-          {!job && !isLoading && pendingFiles.length === 0 && (
-            <button
-              onClick={() => setShowPasteUrls(!showPasteUrls)}
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Link className="h-3.5 w-3.5" />
-              {showPasteUrls ? "Hide" : "Paste multiple image URLs"}
-            </button>
-          )}
-
-          {/* Paste URLs textarea */}
-          {showPasteUrls && !job && !isLoading && pendingFiles.length === 0 && (
-            <div className="space-y-2">
-              <Textarea
-                placeholder={"Paste image URLs, one per line:\nhttps://i2.au.reastatic.net/...\nhttps://i2.au.reastatic.net/..."}
-                value={pasteUrls}
-                onChange={(e) => setPasteUrls(e.target.value)}
-                rows={5}
-                className="text-xs"
-              />
-              <Button
-                onClick={handleImportPastedUrls}
-                disabled={!pasteUrls.trim()}
-                className="w-full gap-2"
-                size="sm"
-              >
-                <ImagePlus className="h-4 w-4" />
-                Import {pasteUrls.split(/[\n,]+/).filter((u) => u.trim().startsWith("http")).length} URL{pasteUrls.split(/[\n,]+/).filter((u) => u.trim().startsWith("http")).length !== 1 ? "s" : ""}
-              </Button>
-            </div>
-          )}
-
-          {/* Drop zone */}
-          {!job && !isLoading && pendingFiles.length === 0 && !showPasteUrls && (
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-              className={cn(
-                "flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed py-8 transition-colors",
-                isDragging
-                  ? "border-primary bg-primary/5"
-                  : "border-border/50 hover:border-border hover:bg-muted/50"
-              )}
-            >
-              <Upload className={cn("h-8 w-8", isDragging ? "text-primary" : "text-muted-foreground/40")} />
-              <div className="text-center">
-                <p className="text-sm font-medium">
-                  {isDragging ? "Drop images here" : "Drag and drop images"}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  or click to browse — JPG, PNG, WebP
-                </p>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
-                multiple
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-            </div>
-          )}
-
-          {/* Pending files preview */}
-          {pendingFiles.length > 0 && !isLoading && !job && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                  {pendingFiles.length} image{pendingFiles.length !== 1 ? "s" : ""} ready to upload
-                </p>
-                <button
-                  onClick={() => setPendingFiles([])}
-                  className="text-xs text-primary hover:underline"
-                >
-                  Clear all
-                </button>
-              </div>
-              <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
-                {pendingFiles.map((file, i) => (
-                  <div key={i} className="group relative aspect-square overflow-hidden rounded-lg bg-muted">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      className="h-full w-full object-cover"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removePendingFile(i);
-                      }}
-                      className="absolute top-1 right-1 rounded-full bg-black/60 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3 w-3 text-white" />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-border/50 hover:border-border hover:bg-muted/50 transition-colors"
-                >
-                  <ImagePlus className="h-5 w-5 text-muted-foreground/40" />
-                </button>
-              </div>
-              <Button onClick={handleSubmit} className="w-full gap-2">
-                <Upload className="h-4 w-4" />
-                Upload {pendingFiles.length} image{pendingFiles.length !== 1 ? "s" : ""}
-              </Button>
-            </div>
-          )}
-
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
-
-          {/* Progress */}
-          {job && job.status === "processing" && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>Processing images...</span>
-                <span>
-                  {job.progress.done} / {job.progress.total}
-                </span>
-              </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                <div
-                  className="h-full bg-primary transition-all duration-300"
-                  style={{
-                    width: `${job.progress.total > 0 ? (job.progress.done / job.progress.total) * 100 : 0}%`,
-                  }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Completion */}
-          {job && job.status === "complete" && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                {job.images.length} image{job.images.length !== 1 ? "s" : ""} added to your board
-              </p>
-              {job.images.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 max-h-60 overflow-y-auto">
-                  {job.images.map((img) => (
-                    <div
-                      key={img.id}
-                      className="aspect-square overflow-hidden rounded-lg"
-                    >
-                      <img
-                        src={img.imageUrl}
-                        alt={img.aiDescription || ""}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => handleClose(false)}
-              >
-                Done
-              </Button>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-// =============================================================================
-// ImageDetailDialog
-// =============================================================================
-
-function ImageDetailDialog({
-  image,
-  open,
-  onOpenChange,
-  onDelete,
-  onTagsChange,
-}: {
-  image: DreamHomeImage | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: (id: string) => void;
-  onTagsChange: (id: string, tags: string[]) => void;
-}) {
-  const [editingNotes, setEditingNotes] = useState(false);
-  const [notesValue, setNotesValue] = useState("");
-  const [showTagPicker, setShowTagPicker] = useState(false);
-  const [tagPickerSearch, setTagPickerSearch] = useState("");
-
-  useEffect(() => {
-    if (image) {
-      setNotesValue(image.notes || "");
-      setEditingNotes(false);
-      setShowTagPicker(false);
-      setTagPickerSearch("");
-    }
-  }, [image]);
-
-  if (!image) return null;
-
-  const currentTags = image.tags.map((t) => t.tag);
-
-  const handleSaveNotes = async () => {
-    await updateDreamHomeImage(image.id, { notes: notesValue });
-    setEditingNotes(false);
-  };
-
-  const handleToggleTag = (tag: string) => {
-    const tagStrings = currentTags as string[];
-    const newTags = tagStrings.includes(tag)
-      ? tagStrings.filter((t) => t !== tag)
-      : [...tagStrings, tag];
-    onTagsChange(image.id, newTags);
-  };
-
-  const filteredTaxonomy = tagPickerSearch
-    ? ALL_TAGS.filter((t) => t.toLowerCase().includes(tagPickerSearch.toLowerCase()))
-    : ALL_TAGS;
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-lg">
-            {image.title || image.aiDescription || "Inspiration"}
-          </DialogTitle>
-          <DialogDescription className="sr-only">Image detail view</DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          {/* Image */}
-          <div className="overflow-hidden rounded-xl">
-            <img
-              src={image.imageUrl}
-              alt={image.aiDescription || ""}
-              className="w-full object-contain max-h-[50vh]"
-            />
-          </div>
-
-          {/* AI description */}
-          {image.aiDescription && (
-            <p className="text-sm text-muted-foreground italic">
-              {image.aiDescription}
-            </p>
-          )}
-
-          {/* Tags */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
-                Tags
-              </p>
-              <button
-                onClick={() => setShowTagPicker(!showTagPicker)}
-                className="text-xs text-primary hover:underline"
-              >
-                {showTagPicker ? "Done" : "Edit tags"}
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {currentTags.map((tag) => (
-                <span
-                  key={tag}
-                  className={cn(
-                    "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-white",
-                    getTagColour(tag)
-                  )}
-                >
-                  {tag}
-                  {showTagPicker && (
-                    <button
-                      onClick={() => handleToggleTag(tag)}
-                      className="ml-0.5 hover:text-white/70"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  )}
-                </span>
-              ))}
-              {currentTags.length === 0 && (
-                <span className="text-xs text-muted-foreground">No tags</span>
-              )}
-            </div>
-
-            {/* Tag picker */}
-            {showTagPicker && (
-              <div className="space-y-2 rounded-lg border p-3 bg-card">
-                <input
-                  type="text"
-                  value={tagPickerSearch}
-                  onChange={(e) => setTagPickerSearch(e.target.value)}
-                  placeholder="Search tags..."
-                  className="w-full rounded-md border border-border/50 bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <div className="max-h-48 overflow-y-auto space-y-3">
-                  {tagPickerSearch ? (
-                    <div className="flex flex-wrap gap-1">
-                      {filteredTaxonomy.map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => handleToggleTag(tag)}
-                          className={cn(
-                            "rounded-full px-2 py-0.5 text-xs transition-colors",
-                            currentTags.includes(tag)
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                          )}
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    Object.entries(DREAMHOME_TAG_GROUPS).map(
-                      ([group, tags]) => (
-                        <div key={group}>
-                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">
-                            {group}
-                          </p>
-                          <div className="flex flex-wrap gap-1">
-                            {tags.map((tag) => (
-                              <button
-                                key={tag}
-                                onClick={() => handleToggleTag(tag)}
-                                className={cn(
-                                  "rounded-full px-2 py-0.5 text-xs transition-colors",
-                                  currentTags.includes(tag)
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                                )}
-                              >
-                                {tag}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Notes */}
-          <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
-              Notes
-            </p>
-            {editingNotes ? (
-              <div className="flex gap-2">
-                <textarea
-                  value={notesValue}
-                  onChange={(e) => setNotesValue(e.target.value)}
-                  rows={3}
-                  className="flex-1 rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <div className="flex flex-col gap-1">
-                  <Button size="sm" onClick={handleSaveNotes}>
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      setEditingNotes(false);
-                      setNotesValue(image.notes || "");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={() => setEditingNotes(true)}
-                className="w-full text-left rounded-md border border-dashed border-border/50 px-3 py-2 text-sm text-muted-foreground hover:border-border hover:bg-muted/50 transition-colors"
-              >
-                {image.notes || "Click to add notes..."}
-              </button>
-            )}
-          </div>
-
-          {/* Source */}
-          {image.sourceUrl && (
-            <a
-              href={image.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-primary hover:underline"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              {image.sourceDomain || "View source"}
-            </a>
-          )}
-
-          {/* Actions */}
-          <div className="flex justify-end border-t pt-3">
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => onDelete(image.id)}
-              className="gap-1.5"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-              Delete
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 }

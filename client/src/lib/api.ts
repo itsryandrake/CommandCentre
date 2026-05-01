@@ -855,6 +855,36 @@ export async function deleteDreamHomeImage(id: string): Promise<boolean> {
   }
 }
 
+export async function bulkUpdateDreamHomeTags(
+  imageIds: string[],
+  addTags?: string[],
+  removeTags?: string[]
+): Promise<boolean> {
+  try {
+    const response = await fetch("/api/dream-home/bulk/tags", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageIds, addTags, removeTags }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function bulkDeleteDreamHomeImages(imageIds: string[]): Promise<boolean> {
+  try {
+    const response = await fetch("/api/dream-home/bulk/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageIds }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 // =============================================================================
 // AI Chat API Functions
 // =============================================================================
