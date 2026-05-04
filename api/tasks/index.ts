@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabase } from "../_lib/supabase.ts";
+import { getSupabase } from "../_lib/supabase.js";
 
 function dbToTask(row: any) {
   const task: any = {

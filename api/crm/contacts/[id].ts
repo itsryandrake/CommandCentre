@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabase } from "../../_lib/supabase.ts";
-import { contactToDb, dbToContact, dbToInteraction } from "../../_lib/crm.ts";
+import { getSupabase } from "../../_lib/supabase.js";
+import { contactToDb, dbToContact, dbToInteraction } from "../../_lib/crm.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const id = req.query.id as string;

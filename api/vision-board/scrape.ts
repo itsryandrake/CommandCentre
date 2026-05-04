@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabase } from "../_lib/supabase.ts";
-import { scrapeUrl } from "../../server/lib/scraper.ts";
-import { categorise } from "../../server/lib/categorise.ts";
+import { getSupabase } from "../_lib/supabase.js";
+import { scrapeUrl } from "../../server/lib/scraper.js";
+import { categorise } from "../../server/lib/categorise.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {

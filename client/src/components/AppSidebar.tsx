@@ -34,6 +34,7 @@ import {
   ScrollText,
   FileText,
   Castle,
+  ListChecks,
   UtensilsCrossed,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
@@ -59,6 +60,7 @@ const homeItems = [
   { title: "Documents", icon: FileText, href: "/home/documents" },
   { title: "Wardrobe", icon: Shirt, href: "/home/wardrobe" },
   { title: "Dream Home", icon: Castle, href: "/home/dream-home" },
+  { title: "Dream Home Wishlist", icon: ListChecks, href: "/home/wishlist" },
 ];
 
 const healthItems = [

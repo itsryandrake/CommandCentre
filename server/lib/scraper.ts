@@ -10,6 +10,123 @@ function getDomain(url: string): string {
   }
 }
 
+function currencySymbol(code: string | undefined): string {
+  switch (code) {
+    case "AUD": return "A$";
+    case "USD": return "$";
+    case "GBP": return "£";
+    case "EUR": return "€";
+    default: return code ? `${code} ` : "$";
+  }
+}
+
+function flattenJsonLdNodes(parsed: any): any[] {
+  const nodes: any[] = [];
+  const visit = (n: any) => {
+    if (!n) return;
+    if (Array.isArray(n)) { n.forEach(visit); return; }
+    if (typeof n !== "object") return;
+    nodes.push(n);
+    if (n["@graph"]) visit(n["@graph"]);
+  };
+  visit(parsed);
+  return nodes;
+}
+
+function isProductNode(node: any): boolean {
+  const t = node?.["@type"];
+  if (typeof t === "string") return t === "Product";
+  if (Array.isArray(t)) return t.includes("Product");
+  return false;
+}
+
+function pickImage(image: any, baseUrl: string): string | null {
+  let raw: string | null = null;
+  if (typeof image === "string") raw = image;
+  else if (Array.isArray(image) && image.length) {
+    const first = image[0];
+    raw = typeof first === "string" ? first : first?.url ?? null;
+  } else if (image && typeof image === "object") {
+    raw = image.url ?? image.contentUrl ?? null;
+  }
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  try {
+    return new URL(raw, baseUrl).href;
+  } catch {
+    return null;
+  }
+}
+
+function pickOffer(offers: any): any | null {
+  if (!offers) return null;
+  if (Array.isArray(offers)) return offers[0] ?? null;
+  if (typeof offers === "object") return offers;
+  return null;
+}
+
+function pickPrice(offers: any): string | null {
+  const offer = pickOffer(offers);
+  if (!offer) return null;
+  const raw = offer.price ?? offer.lowPrice ?? offer.priceSpecification?.price;
+  if (raw === undefined || raw === null || raw === "") return null;
+  return `${currencySymbol(offer.priceCurrency || offer.priceSpecification?.priceCurrency)} ${raw}`;
+}
+
+function extractJsonLdProduct($: cheerio.CheerioAPI, url: string): ScrapeResult | null {
+  const nodes: any[] = [];
+  $('script[type="application/ld+json"]').each((_, el) => {
+    const text = $(el).contents().text();
+    if (!text) return;
+    try {
+      nodes.push(...flattenJsonLdNodes(JSON.parse(text)));
+    } catch {
+      // some sites have multiple JSON objects in one block — try one more parse pass
+      try {
+        nodes.push(...flattenJsonLdNodes(JSON.parse(`[${text}]`)));
+      } catch {
+        // ignore
+      }
+    }
+  });
+
+  const product = nodes.find(isProductNode);
+  if (!product) return null;
+
+  const title = typeof product.name === "string" ? product.name.trim() : null;
+  if (!title) return null;
+
+  return {
+    title,
+    price: pickPrice(product.offers),
+    description:
+      typeof product.description === "string" ? product.description.trim() : null,
+    imageUrl: pickImage(product.image, url),
+    domain: getDomain(url),
+  };
+}
+
+async function scrapeWithJsonLd(url: string): Promise<ScrapeResult | null> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+      redirect: "follow",
+    });
+    if (!response.ok) return null;
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    return extractJsonLdProduct($, url);
+  } catch (error) {
+    console.error("JSON-LD scrape failed:", error);
+    return null;
+  }
+}
+
 async function scrapeWithFirecrawl(
   url: string
 ): Promise<ScrapeResult | null> {
@@ -36,10 +153,20 @@ async function scrapeWithFirecrawl(
             required: ["title"],
           },
         },
+        "html",
       ],
+      waitFor: 3000,
     });
 
     if (!result) return null;
+
+    // Prefer JSON-LD from the rendered HTML — most retailers inject Product schema
+    // after JS hydration, so the rendered DOM has it even when the raw HTML doesn't.
+    if (result.html) {
+      const $ = cheerio.load(result.html);
+      const jsonLd = extractJsonLdProduct($, url);
+      if (jsonLd) return jsonLd;
+    }
 
     const json = result.json as {
       title?: string;
@@ -165,9 +292,15 @@ async function scrapeWithCheerio(
 }
 
 export async function scrapeUrl(url: string): Promise<ScrapeResult> {
+  // 1. JSON-LD Product schema — most accurate when present (covers most major retailers)
+  const jsonLdResult = await scrapeWithJsonLd(url);
+  if (jsonLdResult) return jsonLdResult;
+
+  // 2. Firecrawl — handles JS-rendered pages without server-side schema
   const firecrawlResult = await scrapeWithFirecrawl(url);
   if (firecrawlResult) return firecrawlResult;
 
+  // 3. og-tags / generic HTML fallback
   const cheerioResult = await scrapeWithCheerio(url);
   if (cheerioResult) return cheerioResult;
 

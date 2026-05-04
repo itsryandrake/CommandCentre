@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabase } from "../_lib/supabase.js";
-import { dbToContact } from "../_lib/crm.js";
+import { getSupabase } from "../_lib/supabase.ts";
+import { dbToContact } from "../_lib/crm.ts";
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   const supabase = getSupabase();

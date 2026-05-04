@@ -20,6 +20,7 @@ import type {
 } from "@shared/types/crm";
 import type { VisionBoardItem, Category } from "@shared/types/visionBoard";
 import type { DreamHomeImage, DreamHomeScrapeJob, DreamHomeTagCount } from "@shared/types/dreamHome";
+import type { WishlistItem, UpdateWishlistInput } from "@shared/types/dreamHomeWishlist";
 import type { AiConversation, AiConversationWithMessages } from "@shared/types/chat";
 import type { Equipment, CreateEquipmentInput, UpdateEquipmentInput, EquipmentNote, ScrapedProductInfo } from "@shared/types/equipment";
 import type { Asset, Loan, CreateAssetInput, UpdateAssetInput, CreateLoanInput, UpdateLoanInput } from "@shared/types/finance";
@@ -878,6 +879,75 @@ export async function bulkDeleteDreamHomeImages(imageIds: string[]): Promise<boo
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageIds }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+// =============================================================================
+// Dream Home Wishlist API Functions
+// =============================================================================
+
+export async function fetchWishlistItems(filters?: {
+  room?: string;
+  status?: string;
+}): Promise<WishlistItem[]> {
+  try {
+    const params = new URLSearchParams();
+    if (filters?.room) params.set("room", filters.room);
+    if (filters?.status) params.set("status", filters.status);
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetch(`/api/dream-home-wishlist${qs}`);
+    if (response.ok) return response.json();
+  } catch {}
+  return [];
+}
+
+export async function scrapeWishlistItem(url: string): Promise<WishlistItem> {
+  const response = await fetch("/api/dream-home-wishlist/scrape", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error || "Failed to scrape URL");
+  }
+  return response.json();
+}
+
+export async function updateWishlistItem(
+  id: string,
+  patch: UpdateWishlistInput
+): Promise<WishlistItem | null> {
+  try {
+    const response = await fetch(`/api/dream-home-wishlist/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+    if (response.ok) return response.json();
+  } catch {}
+  return null;
+}
+
+export async function deleteWishlistItem(id: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/dream-home-wishlist/${id}`, { method: "DELETE" });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function bulkDeleteWishlistItems(ids: string[]): Promise<boolean> {
+  try {
+    const response = await fetch("/api/dream-home-wishlist/bulk/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
     });
     return response.ok;
   } catch {

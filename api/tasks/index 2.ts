@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabase } from "../_lib/supabase.js";
+import { getSupabase } from "../_lib/supabase.ts";
 
 function dbToTask(row: any) {
   const task: any = {
@@ -42,30 +42,41 @@ function inputToDb(input: any): any {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const id = req.query.id as string;
-  if (!id) return res.status(400).json({ error: "id is required" });
-
   const supabase = getSupabase();
 
-  if (req.method === "PATCH") {
-    const dbData = inputToDb(req.body || {});
-    dbData.updated_at = new Date().toISOString();
+  if (req.method === "GET") {
+    const { status, assigned, archived } = req.query;
+    let query = supabase
+      .from("tasks")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (archived === "false") query = query.eq("is_archived", false);
+    else if (archived === "true") query = query.eq("is_archived", true);
+
+    if (status) query = query.eq("status", status as string);
+
+    if (assigned) {
+      query = query.or(`assigned_to.eq.${assigned},assigned_to.eq.both`);
+    }
+
+    const { data, error } = await query;
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json((data || []).map(dbToTask));
+  }
+
+  if (req.method === "POST") {
+    const input = req.body || {};
+    if (!input.title) return res.status(400).json({ error: "title is required" });
 
     const { data, error } = await supabase
       .from("tasks")
-      .update(dbData)
-      .eq("id", id)
+      .insert(inputToDb(input))
       .select()
       .single();
 
-    if (error || !data) return res.status(404).json({ error: "Task not found" });
-    return res.json(dbToTask(data));
-  }
-
-  if (req.method === "DELETE") {
-    const { error } = await supabase.from("tasks").delete().eq("id", id);
     if (error) return res.status(500).json({ error: error.message });
-    return res.json({ success: true });
+    return res.status(201).json(dbToTask(data));
   }
 
   return res.status(405).json({ error: "Method not allowed" });

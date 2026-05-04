@@ -21,6 +21,7 @@ import { Investments } from "@/pages/Investments";
 import { InvestmentDetail } from "@/pages/InvestmentDetail";
 import NetWorth from "@/pages/NetWorth";
 import { DreamHome } from "@/pages/DreamHome";
+import { DreamHomeWishlist } from "@/pages/DreamHomeWishlist";
 import { Restaurants } from "@/pages/Restaurants";
 import { CrmHub } from "@/pages/CrmHub";
 import { CrmContactDetail } from "@/pages/crm/CrmContactDetail";
@@ -69,6 +70,7 @@ function App() {
               <Route path="/home/wardrobe" component={Wardrobe} />
               <Route path="/home/documents" component={Documents} />
               <Route path="/home/dream-home" component={DreamHome} />
+              <Route path="/home/wishlist" component={DreamHomeWishlist} />
               <Route path="/wealth/net-worth" component={NetWorth} />
               <Route path="/wealth/investments" component={Investments} />
               <Route path="/wealth/investments/:id" component={InvestmentDetail} />

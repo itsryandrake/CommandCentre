@@ -22,6 +22,7 @@ import lifeScriptRoutes from "./routes/lifeScripts.ts";
 import documentRoutes from "./routes/documents.ts";
 import investmentRoutes from "./routes/investments.ts";
 import dreamHomeRoutes from "./routes/dreamHome.ts";
+import dreamHomeWishlistRoutes from "./routes/dreamHomeWishlist.ts";
 import restaurantRoutes from "./routes/restaurants.ts";
 import { startHealthDataCron } from "./services/healthDataCron.ts";
 
@@ -70,6 +71,7 @@ app.use("/api/life-scripts", lifeScriptRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/investments", investmentRoutes);
 app.use("/api/dream-home", dreamHomeRoutes);
+app.use("/api/dream-home-wishlist", dreamHomeWishlistRoutes);
 app.use("/api/restaurants", restaurantRoutes);
 
 // Server status endpoint
