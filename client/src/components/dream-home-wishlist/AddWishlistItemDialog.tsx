@@ -66,13 +66,13 @@ export function AddWishlistItemDialog({ onClose, onAdded }: Props) {
       scrapeWishlistItem(url)
         .then((item) => {
           if (!aliveRef.current) return;
-          onAdded(item);
           setLines((prev) => {
             if (!prev) return prev;
             const next = [...prev];
             next[idx] = { url, status: "success", title: item.title };
             return next;
           });
+          onAdded(item);
         })
         .catch((err) => {
           if (!aliveRef.current) return;
